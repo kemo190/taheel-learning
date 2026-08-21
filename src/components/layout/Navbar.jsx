@@ -44,7 +44,7 @@ export default async function Navbar({ locale = 'ar' }) {
 
   return (
     <header className="bg-[#F2F7FF] sticky top-0 z-50 md:px-4">
-      <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] flex items-center justify-between gap-2 py-4 border-b border-[#e1e9ff]">
+      <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] flex items-center justify-between gap-2 py-4 border-b border-gray-300">
       
       {/* Right Section: Mobile Menu, Logo & Nav */}
       <div className="flex items-center gap-3 lg:gap-12">
@@ -98,12 +98,12 @@ export default async function Navbar({ locale = 'ar' }) {
           <CartIcon className="w-5 sm:w-5 h-5 sm:h-5" />
         </button>
         
-        {/* Auth Buttons - Small on mobile, normal on desktop */}
+        {/* Auth Buttons - Equal size on mobile and desktop */}
         <div className="flex items-center gap-1.5 sm:gap-3">
-          <button className="bg-transparent border border-[#0b2646] text-[#0b2646] hover:bg-[#f0f4ff] px-2 py-1 md:px-5 md:py-2 rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors">
+          <button className="bg-transparent border border-[#0b2646] text-[#0b2646] hover:bg-[#f0f4ff] px-1 md:px-2 py-1 md:py-2 min-w-[75px] sm:min-w-[90px] md:min-w-[120px] flex justify-center items-center rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors">
             {dict.navbar.login}
           </button>
-          <button className="bg-[#0b2646] hover:bg-[#061528] text-white px-2 py-1 md:px-5 md:py-2 rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors shadow-sm whitespace-nowrap">
+          <button className="bg-[#0b2646] border border-transparent hover:bg-[#061528] text-white px-1 md:px-2 py-1 md:py-2 min-w-[75px] sm:min-w-[90px] md:min-w-[120px] flex justify-center items-center rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors shadow-sm whitespace-nowrap">
             {dict.navbar.register}
           </button>
         </div>

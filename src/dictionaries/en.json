@@ -11,5 +11,61 @@
     "subtitle": "Develop your practical and personal skills with a variety of training courses across different fields.",
     "primaryButton": "Subscribe Now",
     "secondaryButton": "View Courses"
+  },
+  "coursesSection": {
+    "title": "Discover our various training courses",
+    "subtitle": "Now you can choose the educational experience that best suits you",
+    "categories": {
+      "bestSeller": "Best Seller",
+      "accounting": "Accounting",
+      "banking": "Banking",
+      "hr": "HR",
+      "sales": "Sales & Business Dev",
+      "marketing": "Marketing",
+      "audit": "Audit"
+    },
+    "course": {
+      "interactive": "Interactive Recorded",
+      "bestSeller": "Best Seller",
+      "learners": "learners",
+      "currency": "EGP",
+      "subscribe": "Subscribe Now"
+    },
+    "viewAllBtn": "View all courses ( Best Seller )"
+  },
+  "pathsSection": {
+    "registerNow": "Register Now",
+    "paths": [
+      {
+        "id": "accounting",
+        "title": "Accounting",
+        "desc": "Basics of accounting, financial reporting, financial analysis and statements"
+      },
+      {
+        "id": "banking",
+        "title": "Banking",
+        "desc": "Fundamentals of banking, financial services, risk management and compliance"
+      },
+      {
+        "id": "hr",
+        "title": "HR",
+        "desc": "Human resources management, talent acquisition, skills development and performance"
+      },
+      {
+        "id": "sales",
+        "title": "Sales & Business Dev",
+        "desc": "Sales fundamentals, business development, client relationship building and project management"
+      },
+      {
+        "id": "marketing",
+        "title": "Marketing",
+        "desc": "Marketing basics, brand management and developing effective marketing strategies"
+      },
+      {
+        "id": "audit",
+        "title": "Audit",
+        "desc": "Basics of internal and external audit, internal control evaluation and reporting"
+      }
+    ]
   }
 }
