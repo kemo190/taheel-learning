@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getDictionary } from '@/dictionaries/getDictionary';
+import MobileMenu from './MobileMenu';
 
 const ChevronDownIcon = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -25,7 +26,7 @@ const CartIcon = (props) => (
 // --- Logo Component ---
 const Logo = () => (
   <div className="flex items-center text-[#0b2646] font-extrabold text-[32px] tracking-tight" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-    Ta'hel
+    Ta&apos;hel
   </div>
 );
 
@@ -45,8 +46,14 @@ export default async function Navbar({ locale = 'ar' }) {
     <header className="bg-[#F2F7FF] sticky top-0 z-50 md:px-4">
       <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] flex items-center justify-between gap-2 py-4 border-b border-[#e1e9ff]">
       
-      {/* Right Section: Logo & Nav */}
-      <div className="flex items-center gap-6 lg:gap-12">
+      {/* Right Section: Mobile Menu, Logo & Nav */}
+      <div className="flex items-center gap-3 lg:gap-12">
+        
+        {/* Mobile Menu (Hamburger) */}
+        <div className="md:hidden flex items-center">
+          <MobileMenu dict={dict} locale={locale} navLinks={navLinks} />
+        </div>
+
         <Link href={`/${locale}`} aria-label="Home" className="flex items-center">
           <Logo />
         </Link>
@@ -67,7 +74,7 @@ export default async function Navbar({ locale = 'ar' }) {
       </div>
 
       {/* Center Section: Search Bar */}
-      <div className="hidden lg:flex flex-1 justify-center max-w-[550px] mx-8">
+      <div className="hidden md:flex flex-1 justify-center max-w-[550px] mx-4 lg:mx-8">
         <div className="relative w-full">
           <input 
             type="text" 
@@ -81,30 +88,30 @@ export default async function Navbar({ locale = 'ar' }) {
       </div>
 
       {/* Left Section: Actions */}
-      <div className="flex items-center gap-3 sm:gap-5">
+      <div className="flex items-center gap-1.5 sm:gap-4">
         <Link href={`/${locale}/business`} className="hidden xl:block text-[#5c6b81] hover:text-[#0b2646] text-[15px] font-medium transition-colors">
           Taheel Business
         </Link>
 
         {/* Cart */}
         <button className="relative p-1.5 text-[#c4d4fb] hover:text-[#0b2646] transition-colors" aria-label="Cart">
-          <CartIcon className="w-5 h-5" />
+          <CartIcon className="w-5 sm:w-5 h-5 sm:h-5" />
         </button>
         
-        {/* Auth Buttons */}
-        <div className="hidden sm:flex items-center gap-3">
-          <button className="bg-transparent border border-[#0b2646] text-[#0b2646] hover:bg-[#f0f4ff] px-5 py-2 rounded-md text-[15px] font-medium transition-colors">
+        {/* Auth Buttons - Small on mobile, normal on desktop */}
+        <div className="flex items-center gap-1.5 sm:gap-3">
+          <button className="bg-transparent border border-[#0b2646] text-[#0b2646] hover:bg-[#f0f4ff] px-2 py-1 md:px-5 md:py-2 rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors">
             {dict.navbar.login}
           </button>
-          <button className="bg-[#0b2646] hover:bg-[#061528] text-white px-5 py-2 rounded-md text-[15px] font-medium transition-colors shadow-sm">
+          <button className="bg-[#0b2646] hover:bg-[#061528] text-white px-2 py-1 md:px-5 md:py-2 rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors shadow-sm whitespace-nowrap">
             {dict.navbar.register}
           </button>
         </div>
 
-        {/* Language Switcher */}
+        {/* Language Switcher - Hidden on mobile (moved to drawer) */}
         <Link 
           href={`/${targetLocale}`} 
-          className="bg-[#0b2646] hover:bg-[#061528] text-white w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold transition-colors shadow-sm ms-1 sm:ms-0 tracking-wider"
+          className="hidden md:flex bg-[#0b2646] hover:bg-[#061528] text-white w-8 h-8 rounded-full items-center justify-center text-[11px] font-bold transition-colors shadow-sm ms-1 tracking-wider"
         >
           {toggleLabel}
         </Link>

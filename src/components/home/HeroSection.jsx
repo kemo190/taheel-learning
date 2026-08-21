@@ -8,21 +8,21 @@ export default function HeroSection({
   imageUrl = "/hero-student.jpg"
 }) {
   return (
-    <section className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] md:rounded-[30px] relative mt-8 flex h-[356px] items-center gap-6 overflow-hidden rounded-2xl px-8 max-md:justify-center max-md:py-8 md:px-28 lg:px-18 bg-[#f8fbff]">
-
-      {/* Background Image Container - Restricted width to prevent extreme vertical cropping */}
-      <div className="absolute top-0 bottom-0 w-[60%] lg:w-[55%] z-0 rtl:left-0 ltr:right-0">
-        <div
+    <section className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] md:rounded-[30px] relative mt-4 md:mt-8 flex min-h-[400px] md:min-h-[356px] md:h-[356px] items-center gap-6 overflow-hidden rounded-2xl px-6 max-md:justify-center max-md:py-12 md:px-28 lg:px-18 bg-[#f8fbff]">
+      
+      {/* Background Image Container */}
+      <div className="absolute top-0 bottom-0 w-full md:w-[60%] lg:w-[55%] z-0 rtl:left-0 ltr:right-0">
+        <div 
           className="w-full h-full bg-cover bg-[center_15%] bg-no-repeat"
           style={{ backgroundImage: `url(${imageUrl})` }}
         ></div>
-        {/* Soft gradient mask to blend the image seamlessly into the background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#f8fbff] ltr:bg-gradient-to-l"></div>
+        {/* Gradient mask: Solid white/85 overlay on mobile for readability, soft blend on desktop */}
+        <div className="absolute inset-0 max-md:bg-white/85 md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-[#f8fbff] ltr:md:bg-gradient-to-l"></div>
       </div>
 
-      {/* Text Content Area matching original DOM */}
-      <div className="z-10 basis-125 text-center md:text-start">
-        <h1 className="text-4xl lg:text-[42px] xl:text-[48px] font-bold text-[#0b2646] mb-4 leading-[1.4] tracking-tight">
+      {/* Text Content Area */}
+      <div className="relative z-10 w-full md:basis-125 text-center md:text-start">
+        <h1 className="text-3xl sm:text-4xl lg:text-[42px] xl:text-[48px] font-bold text-[#0b2646] mb-4 leading-[1.4] tracking-tight">
           {title}
         </h1>
 
