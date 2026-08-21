@@ -1,0 +1,15 @@
+{
+  "navbar": {
+    "courses": "Courses",
+    "paths": "Learning Paths",
+    "searchPlaceholder": "Search for courses...",
+    "login": "Login",
+    "register": "Sign Up"
+  },
+  "hero": {
+    "title": "Learn Your Way",
+    "subtitle": "Develop your practical and personal skills with a variety of training courses across different fields.",
+    "primaryButton": "Subscribe Now",
+    "secondaryButton": "View Courses"
+  }
+}
