@@ -67,5 +67,41 @@
         "desc": "أساسيات المراجعة الداخلية والخارجية وتقييم الرقابة الداخلية وإعداد التقارير"
       }
     ]
+  },
+  "auth": {
+    "loginTitle": "تسجيل الدخول إلى حسابك",
+    "loginSubtitle": "مرحبًا بعودتك! يرجى إدخال بياناتك.",
+    "registerTitle": "إنشاء حساب جديد",
+    "registerSubtitle": "انضم إلى آلاف المتعلمين وابدأ رحلتك.",
+    "googleBtn": "الدخول بحساب جوجل",
+    "or": "أو",
+    "name": "الاسم",
+    "namePlaceholder": "الاسم",
+    "email": "البريد الالكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "country": "الدولة",
+    "governorate": "المحافظة",
+    "gender": "النوع",
+    "phone": "رقم الهاتف",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "********",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "********",
+    "forgotPassword": "هل نسيت كلمة المرور ؟",
+    "loginBtn": "تسجيل الدخول",
+    "noAccount": "ليس لديك حساب ؟",
+    "haveAccount": "هل لديك حساب ؟",
+    "createAccount": "إنشاء حساب جديد",
+    "terms": {
+      "agree": "أوافق على ",
+      "privacy": "سياسة الخصوصية",
+      "and1": " و ",
+      "conditions": "الشروط والأحكام",
+      "and2": " و ",
+      "refund": "سياسة الاسترداد",
+      "of": " الخاصة بـ Ta'hel"
+    },
+    "welcome": "مرحبا بك في تأهيل",
+    "welcomeSub": "استمر في تعلمك وتحقيق أهدافك مع مجموعة من الخبراء"
   }
 }

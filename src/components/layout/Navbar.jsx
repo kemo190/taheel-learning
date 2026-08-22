@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { getDictionary } from '@/dictionaries/getDictionary';
 import MobileMenu from './MobileMenu';
+import AuthNav from './AuthNav';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const ChevronDownIcon = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -59,12 +61,12 @@ export default async function Navbar({ locale = 'ar' }) {
         </Link>
 
         {/* Navigation */}
-        <nav className="hidden md:flex items-center gap-6 text-[#5c6b81] font-light text-[18px]">
+        <nav className="hidden md:flex items-center gap-6 text-[#5c6b81] font-light text-[18px] pt-1.5">
           {navLinks.map((link, idx) => (
             <Link 
               key={idx} 
               href={link.href}
-              className="group flex items-center gap-1.5 pb-1 border-b-2 border-transparent hover:border-[#0b2646] hover:text-[#0b2646] transition-all"
+              className="group flex items-center gap-1.5 border-b-2 border-transparent hover:border-[#0b2646] hover:text-[#0b2646] transition-all"
             >
               <span>{link.name}</span>
               {link.hasDropdown && <ChevronDownIcon className="w-4 h-4 text-gray-400 mt-0.5 group-hover:text-[#0b2646] transition-colors" />}
@@ -93,28 +95,19 @@ export default async function Navbar({ locale = 'ar' }) {
           Taheel Business
         </Link>
 
+        {/* Auth Buttons - Conditional rendering via AuthNav */}
+        <AuthNav dict={dict} locale={locale} />
+
         {/* Cart */}
-        <button className="relative p-1.5 text-[#c4d4fb] hover:text-[#0b2646] transition-colors" aria-label="Cart">
-          <CartIcon className="w-5 sm:w-5 h-5 sm:h-5" />
+        <button className="relative p-1.5 text-[#8fa7e6] hover:text-[#0b2646] transition-colors" aria-label="Cart">
+          <CartIcon className="w-5 sm:w-[22px] h-5 sm:h-[22px]" />
+          <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-red-600 text-white text-[9px] font-bold flex items-center justify-center rounded-full border border-white">
+            1
+          </span>
         </button>
-        
-        {/* Auth Buttons - Equal size on mobile and desktop */}
-        <div className="flex items-center gap-1.5 sm:gap-3">
-          <button className="bg-transparent border border-[#0b2646] text-[#0b2646] hover:bg-[#f0f4ff] px-1 md:px-2 py-1 md:py-2 min-w-[75px] sm:min-w-[90px] md:min-w-[120px] flex justify-center items-center rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors">
-            {dict.navbar.login}
-          </button>
-          <button className="bg-[#0b2646] border border-transparent hover:bg-[#061528] text-white px-1 md:px-2 py-1 md:py-2 min-w-[75px] sm:min-w-[90px] md:min-w-[120px] flex justify-center items-center rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors shadow-sm whitespace-nowrap">
-            {dict.navbar.register}
-          </button>
-        </div>
 
         {/* Language Switcher - Hidden on mobile (moved to drawer) */}
-        <Link 
-          href={`/${targetLocale}`} 
-          className="hidden md:flex bg-[#0b2646] hover:bg-[#061528] text-white w-8 h-8 rounded-full items-center justify-center text-[11px] font-bold transition-colors shadow-sm ms-1 tracking-wider"
-        >
-          {toggleLabel}
-        </Link>
+        <LanguageSwitcher locale={locale} />
       </div>
       
       </div>

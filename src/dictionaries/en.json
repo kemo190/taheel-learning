@@ -67,5 +67,41 @@
         "desc": "Basics of internal and external audit, internal control evaluation and reporting"
       }
     ]
+  },
+  "auth": {
+    "loginTitle": "Login to your account",
+    "loginSubtitle": "Welcome back! Please enter your details.",
+    "registerTitle": "Create a new account",
+    "registerSubtitle": "Join thousands of learners and start your journey.",
+    "googleBtn": "Login with Google",
+    "or": "or",
+    "name": "Name",
+    "namePlaceholder": "Name",
+    "email": "Email Address",
+    "emailPlaceholder": "Enter your email",
+    "country": "Country",
+    "governorate": "Governorate",
+    "gender": "Gender",
+    "phone": "Phone Number",
+    "password": "Password",
+    "passwordPlaceholder": "********",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "********",
+    "forgotPassword": "Forgot password?",
+    "loginBtn": "Login",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "createAccount": "Create a new account",
+    "terms": {
+      "agree": "I agree to the ",
+      "privacy": "Privacy Policy",
+      "and1": ", ",
+      "conditions": "Terms & Conditions",
+      "and2": ", and ",
+      "refund": "Refund Policy",
+      "of": " of Ta'hel"
+    },
+    "welcome": "Welcome to Ta'hel",
+    "welcomeSub": "Continue your learning and achieve\nyour goals with our experts"
   }
 }
