@@ -22,16 +22,16 @@ export default async function LoginPage({ params }) {
   const { locale } = await params;
   const dict = await getDictionary(locale);
   const targetLocale = locale === 'ar' ? 'en' : 'ar';
-  const toggleLabel = locale === 'ar' ? 'English' : 'عربي';
+  const toggleLabel = locale === 'ar' ? 'EN' : 'AR';
   const isRtl = locale === 'ar';
 
   return (
-    <div className="h-screen flex w-full overflow-hidden">
+    <div className="min-h-screen lg:h-screen flex flex-col lg:flex-row w-full overflow-y-auto lg:overflow-hidden">
       
       {/* Image Overlay Section (Placed first in DOM so in RTL it goes to Right, in LTR it goes to Left) */}
-      <div className="hidden lg:block w-1/2 max-md:m-[38px]">
+      <div className="block w-full h-[260px] sm:h-[350px] lg:h-full lg:w-1/2 shrink-0">
         <section 
-          className="relative h-full w-full overflow-hidden p-10 after:absolute after:inset-0 after:size-full after:bg-black/50 after:content-[''] max-md:pt-32 max-md:pb-20 md:p-[88px]"
+          className="relative h-full w-full overflow-hidden p-6 sm:p-10 lg:p-10 after:absolute after:inset-0 after:size-full after:bg-black/50 after:content-[''] md:p-[88px] flex flex-col justify-end lg:justify-start"
           style={{
             backgroundImage: 'url("/auth-image.webp")',
             backgroundSize: 'cover',
@@ -40,11 +40,11 @@ export default async function LoginPage({ params }) {
           }}
         >
           {/* Text Content overlay */}
-          <div className="text-[#F5F5F5] relative z-10 max-w-[538px] space-y-1 max-md:mx-auto max-md:text-center" dir={isRtl ? 'rtl' : 'ltr'}>
-            <h1 className="flex flex-wrap items-center text-[2.5rem] font-bold max-md:justify-center">
+          <div className="text-[#F5F5F5] relative z-10 max-w-[538px] space-y-1 mx-auto text-center lg:mx-0 lg:ltr:text-left lg:rtl:text-right" dir={isRtl ? 'rtl' : 'ltr'}>
+            <h1 className="flex flex-wrap items-center text-3xl lg:text-[2.5rem] font-bold justify-center lg:justify-start">
               {isRtl ? "مرحبا بك في Ta'hel" : "Welcome to Ta'hel"}
             </h1>
-            <p className={`text-2xl font-medium ${isRtl ? 'whitespace-nowrap' : 'whitespace-pre-line'}`}>
+            <p className={`text-lg sm:text-xl lg:text-2xl font-medium lg:${isRtl ? 'whitespace-nowrap' : 'whitespace-pre-line'}`}>
               {dict.auth.welcomeSub}
             </p>
           </div>
@@ -52,18 +52,18 @@ export default async function LoginPage({ params }) {
       </div>
 
       {/* Left Side: Form Container */}
-      <section className="w-full lg:w-1/2 flex items-center justify-center overflow-hidden px-[38px] md:py-[38px] bg-[#f8f9fb]">
+      <section className="flex-1 w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 lg:overflow-hidden lg:px-[38px] lg:py-[38px] bg-[#f8f9fb]">
         {/* Form Outer Wrapper */}
         <div className="mx-auto flex h-full w-full max-w-[640px] items-center justify-center overflow-hidden rounded-[2rem]">
           
           {/* Form Inner Card */}
-          <div className="relative max-h-full min-h-[40dvh] w-full overflow-y-auto custom-scrollbar rounded-[2rem] bg-white px-6 py-16 shadow-[0_0_80px_0] shadow-[#1A44F214] md:p-6">
+          <div className="relative lg:max-h-full min-h-[40dvh] w-full lg:overflow-y-auto custom-scrollbar rounded-[2rem] bg-white px-6 py-10 lg:py-16 shadow-[0_0_80px_0] shadow-[#1A44F214] md:p-6">
             
             {/* Language Toggle Inside Card */}
             <div className="absolute rtl:left-6 ltr:right-6 top-6 z-30">
               <Link 
                 href={`/${targetLocale}/login`} 
-                className="flex items-center justify-center px-4 py-1.5 text-sm font-semibold text-[#0b2646] bg-gray-50 border border-gray-200 rounded-full hover:bg-gray-100 transition-colors shadow-sm"
+                className="flex bg-[#0b2646] text-white w-8 h-8 rounded-full items-center justify-center text-xs font-bold transition-transform hover:scale-105"
               >
                 {toggleLabel}
               </Link>

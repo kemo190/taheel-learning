@@ -47,13 +47,20 @@ const ChevronDownIcon = () => (
 export default function MobileMenu({ dict, locale }) {
   const [isOpen, setIsOpen] = useState(false);
   const targetLocale = locale === 'ar' ? 'en' : 'ar';
+  
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const q = e.target.search.value;
+    if (q) window.location.href = `/${locale}/search?q=${encodeURIComponent(q)}`;
+  };
 
   return (
     <>
       <button 
         className="p-1 text-[#0b2646] hover:bg-[#f0f4ff] rounded-md transition-colors"
         onClick={() => setIsOpen(true)}
-        aria-label="Open Menu"
+        aria-label={dict.navbar.openMenu}
+        aria-expanded={isOpen}
       >
         <MenuIcon />
       </button>
@@ -61,32 +68,44 @@ export default function MobileMenu({ dict, locale }) {
       {/* Mobile Drawer Overlay */}
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-[90] bg-black/40 md:hidden animate-in fade-in" onClick={() => setIsOpen(false)}></div>
+          <div className="fixed inset-0 z-[90] bg-black/40 md:hidden animate-in fade-in" onClick={() => setIsOpen(false)} aria-hidden="true"></div>
           
-          <div className="fixed top-0 bottom-0 start-0 w-[85%] max-w-[320px] z-[100] bg-white flex flex-col p-4 md:hidden animate-in slide-in-from-start-8 duration-300 shadow-2xl">
+          <div 
+            role="dialog"
+            aria-modal="true"
+            aria-label={dict.navbar.mainMenu}
+            className="fixed top-0 bottom-0 start-0 w-[85%] max-w-[320px] z-[100] bg-white flex flex-col p-4 md:hidden animate-in slide-in-from-start-8 duration-300 shadow-2xl overflow-y-auto"
+          >
             
             <div className="flex justify-start mb-6">
-              <button className="p-1 text-gray-500 hover:text-[#0b2646]" onClick={() => setIsOpen(false)}>
+              <button 
+                className="p-1 text-gray-500 hover:text-[#0b2646]" 
+                onClick={() => setIsOpen(false)}
+                aria-label={dict.navbar.closeMenu}
+                autoFocus
+              >
                 <CloseIcon />
               </button>
             </div>
 
             {/* Search */}
-            <div className="mb-8 relative px-2">
+            <form onSubmit={handleSearch} className="mb-8 relative px-2">
               <input 
+                name="search"
                 type="text" 
                 placeholder={dict.navbar.searchPlaceholder} 
                 className="w-full bg-[#f8fbff] border border-[#c4d4fb] rounded-xl py-3 px-12 text-sm text-[#0b2646] placeholder-[#5c6b81] focus:outline-none focus:border-[#0b2646] transition-colors"
+                aria-label={dict.navbar.searchPlaceholder}
               />
-              <div className="absolute top-3.5 right-6 rtl:right-6 rtl:left-auto ltr:left-6 ltr:right-auto text-[#8fa7e6]">
+              <button type="submit" className="absolute top-3.5 right-6 rtl:right-6 rtl:left-auto ltr:left-6 ltr:right-auto text-[#8fa7e6]" aria-label={dict.navbar.searchBtn}>
                 <SearchIcon />
-              </div>
-            </div>
+              </button>
+            </form>
 
             {/* Navigation Links */}
             <nav className="flex flex-col gap-6 px-4">
               <Link href={`/${locale}`} className="flex items-center justify-end gap-3 text-lg font-medium text-[#0b2646] pb-6 border-b border-gray-100" onClick={() => setIsOpen(false)}>
-                <span>الرئيسية</span>
+                <span>{dict.navbar.home}</span>
                 <HomeIcon />
               </Link>
 
@@ -105,18 +124,18 @@ export default function MobileMenu({ dict, locale }) {
 
               <div className="flex items-center justify-between pb-6 border-b border-gray-100 text-[#0b2646]">
                 {/* Custom AR/EN Toggle */}
-                <Link href={`/${targetLocale}`} className="flex items-center bg-[#f0f4ff] border border-[#c4d4fb] rounded-full overflow-hidden text-[13px] font-bold" onClick={() => setIsOpen(false)}>
+                <Link href={`/${targetLocale}`} className="flex items-center bg-[#f0f4ff] border border-[#c4d4fb] rounded-full overflow-hidden text-[13px] font-bold" onClick={() => setIsOpen(false)} aria-label={dict.navbar.switchLang}>
                   <span className={`px-3 py-1 ${locale === 'ar' ? 'bg-[#0b2646] text-white shadow-sm rounded-full' : 'text-[#0b2646]'}`}>AR</span>
                   <span className={`px-3 py-1 ${locale === 'en' ? 'bg-[#0b2646] text-white shadow-sm rounded-full' : 'text-[#0b2646]'}`}>EN</span>
                 </Link>
                 <div className="flex items-center gap-3 text-lg font-medium">
-                  <span>{locale === 'ar' ? 'العربية' : 'English'}</span>
+                  <span>{dict.navbar.language}</span>
                   <GlobeIcon />
                 </div>
               </div>
 
               <Link href={`/${locale}/business`} className="flex items-center justify-end gap-3 text-lg font-medium text-[#0b2646] pb-6 border-b border-gray-100" onClick={() => setIsOpen(false)}>
-                <span>Eyouth Business</span>
+                <span>{dict.navbar.business}</span>
                 <BriefcaseIcon />
               </Link>
             </nav>

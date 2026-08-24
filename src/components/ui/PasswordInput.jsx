@@ -47,6 +47,8 @@ const PasswordInput = forwardRef(({ placeholder, isRtl, ...props }, ref) => {
         type="button" 
         onClick={() => setShowPassword(!showPassword)}
         className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 text-gray-400 hover:text-[#0b2646] transition-colors cursor-pointer"
+        aria-label={isRtl ? (showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور") : (showPassword ? "Hide password" : "Show password")}
+        aria-pressed={showPassword}
       >
         {showPassword ? <EyeOffIcon /> : <EyeIcon />}
       </button>

@@ -13,6 +13,7 @@ export default async function Home({ params }) {
         subtitle={dict.hero.subtitle}
         primaryButtonText={dict.hero.primaryButton}
         secondaryButtonText={dict.hero.secondaryButton}
+        locale={locale}
       />
       <CoursesSection dict={dict} locale={locale} />
     </main>

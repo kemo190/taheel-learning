@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import ProfileHeader from '@/components/profile/ProfileHeader';
-import ProfileTabs from '@/components/profile/ProfileTabs';
+import { getDictionary } from '@/dictionaries/getDictionary';
 
 export const metadata = {
   title: 'Profile - Taheel',
@@ -9,7 +9,8 @@ export const metadata = {
 };
 
 export default async function ProfileLayout({ children, params }) {
-  const { locale } = params;
+  const { locale } = await params;
+  const dict = await getDictionary(locale);
   const supabase = await createClient();
   
   const { data: { user }, error } = await supabase.auth.getUser();
@@ -23,15 +24,9 @@ export default async function ProfileLayout({ children, params }) {
     <div className="bg-[#f8fafc] min-h-screen py-10 px-4">
       <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px]">
         {/* Header */}
-        <ProfileHeader user={user} locale={locale} />
+        <ProfileHeader user={user} locale={locale} dict={dict} />
         
-        {/* Navigation Tabs */}
-        <ProfileTabs locale={locale} />
-
-        {/* Form / Content Area */}
-        <div className="mt-6">
-          {children}
-        </div>
+        {children}
       </div>
     </div>
   );

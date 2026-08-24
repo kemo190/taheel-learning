@@ -46,10 +46,10 @@ export default async function Navbar({ locale = 'ar' }) {
 
   return (
     <header className="bg-[#F2F7FF] sticky top-0 z-50 md:px-4">
-      <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] flex items-center justify-between gap-2 py-4 border-b border-gray-300">
+      <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] flex flex-wrap items-center justify-between gap-y-3 gap-x-1 sm:gap-x-2 py-3 md:py-4 border-b border-gray-300">
       
       {/* Right Section: Mobile Menu, Logo & Nav */}
-      <div className="flex items-center gap-3 lg:gap-12">
+      <div className="flex items-center gap-2 sm:gap-3 lg:gap-12 shrink-0">
         
         {/* Mobile Menu (Hamburger) */}
         <div className="md:hidden flex items-center">
@@ -76,8 +76,8 @@ export default async function Navbar({ locale = 'ar' }) {
       </div>
 
       {/* Center Section: Search Bar */}
-      <div className="hidden md:flex flex-1 justify-center max-w-[550px] mx-4 lg:mx-8">
-        <div className="relative w-full">
+      <div className="flex w-full order-last md:order-none md:w-auto md:flex-1 justify-center max-w-full md:max-w-[550px] md:mx-4 lg:mx-8 mt-1 md:mt-0">
+        <form action={`/${locale}/search`} method="GET" className="relative w-full">
           <input 
             type="text" 
             placeholder={dict.navbar.searchPlaceholder} 
@@ -90,7 +90,7 @@ export default async function Navbar({ locale = 'ar' }) {
       </div>
 
       {/* Left Section: Actions */}
-      <div className="flex items-center gap-1.5 sm:gap-4">
+      <div className="flex items-center justify-end flex-1 md:flex-none gap-1 sm:gap-4 shrink-0">
         <Link href={`/${locale}/business`} className="hidden xl:block text-[#5c6b81] hover:text-[#0b2646] text-[15px] font-medium transition-colors">
           Taheel Business
         </Link>

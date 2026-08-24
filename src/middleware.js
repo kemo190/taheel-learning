@@ -29,7 +29,7 @@ export async function middleware(request) {
   // Transfer cookies from authResponse to the new redirect response
   const redirectResponse = NextResponse.redirect(request.nextUrl)
   authResponse.cookies.getAll().forEach((cookie) => {
-    redirectResponse.cookies.set(cookie.name, cookie.value)
+    redirectResponse.cookies.set(cookie)
   })
   
   return redirectResponse

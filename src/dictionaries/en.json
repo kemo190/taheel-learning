@@ -4,7 +4,24 @@
     "paths": "Learning Paths",
     "searchPlaceholder": "Search for courses...",
     "login": "Login",
-    "register": "Sign Up"
+    "register": "Sign Up",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainMenu": "Main menu",
+    "searchBtn": "Search",
+    "home": "Home",
+    "switchLang": "Switch to Arabic",
+    "language": "English",
+    "business": "Ta'hel for Business",
+    "cart": "Cart",
+    "userMenu": {
+      "journey": "My Learning Journey",
+      "wishlist": "Wishlist",
+      "notes": "Notes",
+      "certificates": "Certificates",
+      "expert": "Become an Expert",
+      "logout": "Logout"
+    }
   },
   "hero": {
     "title": "Learn Your Way",
@@ -31,7 +48,35 @@
       "currency": "EGP",
       "subscribe": "Subscribe Now"
     },
-    "viewAllBtn": "View all courses ( Best Seller )"
+    "viewAllBtn": "View all courses ( Best Seller )",
+    "noCoursesTitle": "No courses currently available",
+    "noCoursesDesc": "There are no courses available in this category right now. Please check back later or explore other categories.",
+    "mockCourses": {
+      "accounting": {
+        "title": "Fundamentals of Accounting & Financial Reporting",
+        "instructor": "With top experts"
+      },
+      "banking": {
+        "title": "Fundamentals of Banking & Risk Management",
+        "instructor": "With top experts"
+      },
+      "hr": {
+        "title": "Human Resources Management & Talent Acquisition",
+        "instructor": "With top experts"
+      },
+      "sales": {
+        "title": "Fundamentals of Sales & Business Development",
+        "instructor": "With top experts"
+      },
+      "marketing": {
+        "title": "Modern Digital Marketing Strategies",
+        "instructor": "With top experts"
+      },
+      "audit": {
+        "title": "Fundamentals of Internal Audit & Control",
+        "instructor": "With top experts"
+      }
+    }
   },
   "pathsSection": {
     "registerNow": "Register Now",
@@ -102,6 +147,109 @@
       "of": " of Ta'hel"
     },
     "welcome": "Welcome to Ta'hel",
-    "welcomeSub": "Continue your learning and achieve\nyour goals with our experts"
+    "welcomeSub": "Continue your learning and achieve\nyour goals with our experts",
+    "errors": {
+      "invalidEmail": "Invalid email address",
+      "invalidPassword": "Invalid password",
+      "nameRequired": "Name is required (at least 2 characters)",
+      "required": "Required",
+      "invalidPhone": "Invalid phone number",
+      "passwordLength": "Password must be at least 6 characters",
+      "passwordsNotMatch": "Passwords do not match",
+      "termsRequired": "You must agree to the terms"
+    },
+    "messages": {
+      "accountNotVerified": "Your account is not verified. We have sent a new verification link to your email.",
+      "invalidLogin": "Invalid login credentials",
+      "emailAlreadyRegistered": "This email is already registered. Please login.",
+      "checkEmailToContinue": "Please check your email to continue."
+    },
+    "countries": {
+      "egypt": "Egypt",
+      "saudiArabia": "Saudi Arabia",
+      "uae": "UAE"
+    },
+    "governorates": {
+      "cairo": "Cairo",
+      "alexandria": "Alexandria",
+      "riyadh": "Riyadh",
+      "dubai": "Dubai"
+    },
+    "genders": {
+      "male": "Male",
+      "female": "Female"
+    }
+  },
+  "profile": {
+    "accountDetails": "Account Details",
+    "underConstruction": "This page is under construction...",
+    "interests": "Interests",
+    "orderHistory": "Order History",
+    "tabs": {
+      "personal": "Personal Data",
+      "account": "Account Data",
+      "interests": "Interests",
+      "history": "Purchase History"
+    },
+    "featureComingSoon": "Feature coming soon",
+    "deleteAccount": "Delete Account",
+    "hello": "Hello",
+    "readyToContinue": "Ready to continue your journey today",
+    "linkedAccounts": "Linked Accounts",
+    "linkAccountsDesc": "You can link your identity accounts to simplify login.",
+    "linked": "Linked",
+    "notLinkedEmail": "Not Linked (Email Account)",
+    "changeAccount": "Change Account",
+    "form": {
+      "errors": {
+        "englishNameReq": "English name is required",
+        "arabicNameReq": "Arabic name is required",
+        "certificateNameReq": "Certificate name is required",
+        "genderReq": "Gender is required",
+        "dobReq": "Date of birth is required",
+        "countryReq": "Country is required",
+        "governorateReq": "Governorate is required",
+        "phoneInvalid": "Invalid phone number",
+        "educationReq": "Education status is required",
+        "workFieldReq": "Work field is required"
+      },
+      "nameEn": "Name in English",
+      "nameAr": "Name in Arabic",
+      "nameOnCertificate": "Name on Certificate",
+      "writeNameHere": "Write your name here",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "dob": "Date of Birth",
+      "country": "Country",
+      "selectCountry": "Select Country",
+      "governorate": "Governorate",
+      "selectGovernorate": "Select Governorate",
+      "phone": "Phone Number",
+      "educationStatus": "Education Status",
+      "graduated": "Graduated",
+      "student": "Student",
+      "workField": "Work Field",
+      "save": "Save",
+      "messages": {
+        "saveSuccess": "Data saved successfully",
+        "profileNotFound": "Profile not found to update"
+      },
+      "workFields": {
+        "marketing": "Marketing",
+        "operations": "Operations and Supply Chain",
+        "selfDev": "Self Development",
+        "productivity": "Productivity",
+        "teaching": "Teaching and Training",
+        "finance": "Finance and Accounting",
+        "hr": "HR and People Management",
+        "sales": "Sales and Business Development",
+        "software": "Software Development",
+        "business": "Business and Entrepreneurship",
+        "design": "Design and Digital Arts",
+        "ai": "AI and Data Science",
+        "other": "Other"
+      }
+    }
   }
 }

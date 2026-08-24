@@ -1,12 +1,20 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
 import PasswordInput from '@/components/ui/PasswordInput';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
+import { Country, State } from 'country-state-city';
+import PhoneInput, { isSupportedCountry } from 'react-phone-number-input';
+import countriesTranslations from 'i18n-iso-countries';
+import arabicCountries from 'i18n-iso-countries/langs/ar.json';
+import englishCountries from 'i18n-iso-countries/langs/en.json';
+
+countriesTranslations.registerLocale(arabicCountries);
+countriesTranslations.registerLocale(englishCountries);
 
 // --- Icons ---
 const MailIcon = (props) => (
@@ -72,35 +80,36 @@ const ChevronDownIcon = (props) => (
 
 const GoogleIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48">
-    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
-    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
-    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
   </svg>
 );
 
 
 export default function RegisterForm({ dict, isRtl, locale }) {
   const schema = z.object({
-    name: z.string().min(2, { message: locale === 'ar' ? 'الاسم مطلوب (حرفين على الأقل)' : 'Name must be at least 2 characters' }),
-    email: z.string().email({ message: locale === 'ar' ? 'بريد إلكتروني غير صالح' : 'Invalid email address' }),
-    country: z.string().min(1, { message: locale === 'ar' ? 'مطلوب' : 'Required' }),
-    governorate: z.string().min(1, { message: locale === 'ar' ? 'مطلوب' : 'Required' }),
-    gender: z.string().min(1, { message: locale === 'ar' ? 'مطلوب' : 'Required' }),
-    phone: z.string().min(10, { message: locale === 'ar' ? 'رقم هاتف غير صالح' : 'Invalid phone number' }),
-    password: z.string().min(6, { message: locale === 'ar' ? 'كلمة المرور 6 أحرف على الأقل' : 'Password must be at least 6 characters' }),
+    name: z.string().min(2, { message: dict.auth.errors.nameRequired }),
+    email: z.string().email({ message: dict.auth.errors.invalidEmail }),
+    country: z.string().min(1, { message: dict.auth.errors.required }),
+    governorate: z.string().min(1, { message: dict.auth.errors.required }),
+    gender: z.string().min(1, { message: dict.auth.errors.required }),
+    phone: z.string().min(10, { message: dict.auth.errors.invalidPhone }),
+    password: z.string().min(6, { message: dict.auth.errors.passwordLength }),
     confirmPassword: z.string(),
     terms: z.boolean().refine(val => val === true, {
-      message: locale === 'ar' ? 'يجب الموافقة على الشروط' : 'You must agree to the terms',
+      message: dict.auth.errors.termsRequired,
     })
   }).refine((data) => data.password === data.confirmPassword, {
-    message: locale === 'ar' ? 'كلمتا المرور غير متطابقتين' : 'Passwords do not match',
+    message: dict.auth.errors.passwordsNotMatch,
     path: ['confirmPassword'],
   });
 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
     watch
   } = useForm({
@@ -121,6 +130,23 @@ export default function RegisterForm({ dict, isRtl, locale }) {
   const [serverError, setServerError] = useState(null);
   const [success, setSuccess] = useState(null);
 
+  const selectedCountry = watch('country');
+
+  const countriesList = useMemo(() => {
+    return Country.getAllCountries().map((country) => ({
+      isoCode: country.isoCode,
+      name: countriesTranslations.getName(country.isoCode, locale) || country.name,
+    })).sort((a, b) => a.name.localeCompare(b.name, locale));
+  }, [locale]);
+
+  const statesList = useMemo(() => {
+    if (!selectedCountry) return [];
+    return State.getStatesOfCountry(selectedCountry).map((state) => ({
+      isoCode: state.isoCode,
+      name: state.name,
+    }));
+  }, [selectedCountry]);
+
   const onSubmit = async (formData) => {
     setServerError(null);
     setSuccess(null);
@@ -128,21 +154,34 @@ export default function RegisterForm({ dict, isRtl, locale }) {
     const { data, error } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
-      options: {
-        data: {
-          full_name: formData.name,
-          country: formData.country,
-          governorate: formData.governorate,
-          gender: formData.gender,
-          phone: `+20${formData.phone}`,
-        }
-      }
     });
 
     if (error) {
-      setServerError(error.message);
-    } else {
-      setSuccess(locale === 'ar' ? 'تم إنشاء الحساب بنجاح. يرجى مراجعة بريدك الإلكتروني.' : 'Account created successfully. Please check your email.');
+      if (error.message.includes('already registered') || error.status === 422) {
+        setServerError(dict.auth.messages.emailAlreadyRegistered);
+      } else {
+        setServerError(error.message);
+      }
+    } else if (data?.user?.identities?.length === 0) {
+      // Supabase returns an empty identities array if the email already exists and enumeration protection is on
+      // The user explicitly requested to show an error message in this case instead of a neutral message.
+      setServerError(dict.auth.messages.emailAlreadyRegistered);
+    } else if (data?.user) {
+      // User created successfully, provision profile
+      const { error: profileError } = await supabase.from('profiles').upsert({
+        id: data.user.id,
+        full_name: formData.name,
+        country: formData.country,
+        governorate: formData.governorate,
+        gender: formData.gender,
+        phone: formData.phone,
+      });
+
+      if (profileError) {
+        setServerError(profileError.message);
+      } else {
+        setSuccess(dict.auth.messages.checkEmailToContinue);
+      }
     }
   };
 
@@ -157,8 +196,8 @@ export default function RegisterForm({ dict, isRtl, locale }) {
   };
 
   return (
-    <div className="relative z-30 mt-6 flex w-full flex-col gap-4 px-6">
-      
+    <div className="relative z-30 mt-4 sm:mt-6 flex w-full flex-col gap-4 px-0 sm:px-6">
+
       {serverError && (
         <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm text-center">
           {serverError}
@@ -171,9 +210,9 @@ export default function RegisterForm({ dict, isRtl, locale }) {
         </div>
       )}
 
-      <button 
+      <button
         onClick={handleGoogleLogin}
-        type="button" 
+        type="button"
         className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
       >
         <GoogleIcon />
@@ -190,13 +229,15 @@ export default function RegisterForm({ dict, isRtl, locale }) {
         {/* Name */}
         <div>
           <div className="relative">
-            <input 
+            <input
+              id="name"
               {...register('name')}
-              type="text" 
+              type="text"
               placeholder={dict.auth.namePlaceholder}
               className={`w-full bg-[#f8f9fb] border ${errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl py-3 px-12 text-sm focus:outline-none focus:ring-1 transition-all placeholder:text-gray-400 rtl:text-right ltr:text-left`}
               dir={isRtl ? 'rtl' : 'ltr'}
             />
+            <label htmlFor="name" className="sr-only">{dict.auth.namePlaceholder}</label>
             <div className="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 text-gray-400 pointer-events-none">
               <UserIcon />
             </div>
@@ -207,13 +248,15 @@ export default function RegisterForm({ dict, isRtl, locale }) {
         {/* Email */}
         <div>
           <div className="relative">
-            <input 
+            <input
+              id="email"
               {...register('email')}
-              type="email" 
+              type="email"
               placeholder={dict.auth.emailPlaceholder}
               className={`w-full bg-[#f8f9fb] border ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl py-3 px-12 text-sm focus:outline-none focus:ring-1 transition-all placeholder:text-gray-400 rtl:text-right ltr:text-left`}
               dir={isRtl ? 'rtl' : 'ltr'}
             />
+            <label htmlFor="email" className="sr-only">{dict.auth.emailPlaceholder}</label>
             <div className="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 text-gray-400 pointer-events-none">
               <MailIcon />
             </div>
@@ -221,21 +264,80 @@ export default function RegisterForm({ dict, isRtl, locale }) {
           {errors.email && <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">{errors.email.message}</p>}
         </div>
 
-        {/* Country & Governorate */}
-        <div className="flex gap-4">
-          {/* Country */}
-          <div className="w-1/2 flex flex-col">
+        {/* Gender & Phone */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          {/* Gender */}
+          <div className="w-full sm:w-1/2 flex flex-col">
             <div className="relative">
-              <select 
+              <select
+                id="gender"
+                {...register('gender')}
+                className={`w-full bg-[#f8f9fb] border ${errors.gender ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl py-3 px-12 appearance-none text-sm focus:outline-none focus:ring-1 transition-all rtl:text-right ltr:text-left cursor-pointer ${watch('gender') ? 'text-gray-900' : 'text-gray-400'}`}
+                dir={isRtl ? 'rtl' : 'ltr'}
+              >
+                <option value="" disabled>{dict.auth.gender}</option>
+                <option value="male">{dict.auth.genders.male}</option>
+                <option value="female">{dict.auth.genders.female}</option>
+              </select>
+              <label htmlFor="gender" className="sr-only">{dict.auth.gender}</label>
+              <div className="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 text-gray-400 pointer-events-none">
+                <GenderIcon />
+              </div>
+              <div className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 text-[#0b2646] pointer-events-none">
+                <ChevronDownIcon />
+              </div>
+            </div>
+            {errors.gender && <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">{errors.gender.message}</p>}
+          </div>
+
+          {/* Phone */}
+          <div className="w-full sm:w-1/2 flex flex-col">
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field }) => (
+                <div dir="ltr" className="relative w-full">
+                  <PhoneInput
+                    {...field}
+                    international
+                    defaultCountry={selectedCountry && isSupportedCountry(selectedCountry) ? selectedCountry : "EG"}
+                    className={`flex items-center w-full bg-[#f8f9fb] border ${errors.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl px-4 py-1 focus-within:border-[#0b2646] transition-all h-[46px]
+                      [&_.PhoneInputCountry]:flex [&_.PhoneInputCountry]:items-center [&_.PhoneInputCountry]:mr-3 [&_.PhoneInputCountry]:relative
+                      [&_.PhoneInputCountrySelect]:absolute [&_.PhoneInputCountrySelect]:inset-0 [&_.PhoneInputCountrySelect]:opacity-0 [&_.PhoneInputCountrySelect]:cursor-pointer [&_.PhoneInputCountrySelect]:z-10
+                      [&_.PhoneInputCountryIcon]:w-6 [&_.PhoneInputCountryIcon]:h-4 [&_.PhoneInputCountryIcon]:shadow-sm [&_.PhoneInputCountryIcon]:mr-2
+                      [&_.PhoneInputCountrySelectArrow]:w-2 [&_.PhoneInputCountrySelectArrow]:h-2 [&_.PhoneInputCountrySelectArrow]:border-b-2 [&_.PhoneInputCountrySelectArrow]:border-r-2 [&_.PhoneInputCountrySelectArrow]:border-gray-500 [&_.PhoneInputCountrySelectArrow]:rotate-45 [&_.PhoneInputCountrySelectArrow]:ml-1`}
+                    numberInputProps={{
+                      className: "flex-1 w-full h-full bg-transparent border-none outline-none text-[#0b2646] text-sm focus:ring-0",
+                      dir: "ltr",
+                      placeholder: dict.auth.phone
+                    }}
+                  />
+                </div>
+              )}
+            />
+            {errors.phone && <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">{errors.phone.message}</p>}
+          </div>
+        </div>
+
+        {/* Country & Governorate */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          {/* Country */}
+          <div className="w-full sm:w-1/2 flex flex-col">
+            <div className="relative">
+              <select
+                id="country"
                 {...register('country')}
                 className={`w-full bg-[#f8f9fb] border ${errors.country ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl py-3 px-12 appearance-none text-sm focus:outline-none focus:ring-1 transition-all rtl:text-right ltr:text-left cursor-pointer ${watch('country') ? 'text-gray-900' : 'text-gray-400'}`}
                 dir={isRtl ? 'rtl' : 'ltr'}
               >
                 <option value="" disabled>{dict.auth.country}</option>
-                <option value="Egypt">Egypt</option>
-                <option value="Saudi Arabia">Saudi Arabia</option>
-                <option value="UAE">UAE</option>
+                {countriesList.map((country) => (
+                  <option key={country.isoCode} value={country.isoCode}>
+                    {country.name}
+                  </option>
+                ))}
               </select>
+              <label htmlFor="country" className="sr-only">{dict.auth.country}</label>
               <div className="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 text-gray-400 pointer-events-none">
                 <GlobeIcon />
               </div>
@@ -247,19 +349,23 @@ export default function RegisterForm({ dict, isRtl, locale }) {
           </div>
 
           {/* Governorate */}
-          <div className="w-1/2 flex flex-col">
+          <div className="w-full sm:w-1/2 flex flex-col">
             <div className="relative">
-              <select 
+              <select
+                id="governorate"
                 {...register('governorate')}
                 className={`w-full bg-[#f8f9fb] border ${errors.governorate ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl py-3 px-12 appearance-none text-sm focus:outline-none focus:ring-1 transition-all rtl:text-right ltr:text-left cursor-pointer ${watch('governorate') ? 'text-gray-900' : 'text-gray-400'}`}
                 dir={isRtl ? 'rtl' : 'ltr'}
+                disabled={!selectedCountry || statesList.length === 0}
               >
                 <option value="" disabled>{dict.auth.governorate}</option>
-                <option value="Cairo">Cairo</option>
-                <option value="Alexandria">Alexandria</option>
-                <option value="Riyadh">Riyadh</option>
-                <option value="Dubai">Dubai</option>
+                {statesList.map((state) => (
+                  <option key={state.isoCode} value={state.name}>
+                    {state.name}
+                  </option>
+                ))}
               </select>
+              <label htmlFor="governorate" className="sr-only">{dict.auth.governorate}</label>
               <div className="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 text-gray-400 pointer-events-none">
                 <BuildingIcon />
               </div>
@@ -271,86 +377,43 @@ export default function RegisterForm({ dict, isRtl, locale }) {
           </div>
         </div>
 
-        {/* Gender */}
-        <div>
-          <div className="relative">
-            <select 
-              {...register('gender')}
-              className={`w-full bg-[#f8f9fb] border ${errors.gender ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl py-3 px-12 appearance-none text-sm focus:outline-none focus:ring-1 transition-all rtl:text-right ltr:text-left cursor-pointer ${watch('gender') ? 'text-gray-900' : 'text-gray-400'}`}
-              dir={isRtl ? 'rtl' : 'ltr'}
-            >
-              <option value="" disabled>{dict.auth.gender}</option>
-              <option value="Male">{locale === 'ar' ? 'ذكر' : 'Male'}</option>
-              <option value="Female">{locale === 'ar' ? 'أنثى' : 'Female'}</option>
-            </select>
-            <div className="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 text-gray-400 pointer-events-none">
-              <GenderIcon />
-            </div>
-            <div className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 text-[#0b2646] pointer-events-none">
-              <ChevronDownIcon />
-            </div>
-          </div>
-          {errors.gender && <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">{errors.gender.message}</p>}
-        </div>
-
-        {/* Phone */}
-        <div>
-          <div className="relative">
-            <input 
-              {...register('phone')}
-              type="text" 
-              placeholder={dict.auth.phone}
-              className={`w-full bg-[#f8f9fb] border ${errors.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl py-3 text-sm focus:outline-none focus:ring-1 transition-all placeholder:text-gray-400 rtl:text-right ltr:text-left`}
-              dir={isRtl ? 'rtl' : 'ltr'}
-              style={{
-                paddingInlineEnd: '3rem',
-                paddingInlineStart: '5rem'
-              }}
-            />
-            {/* Icon */}
-            <div className="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 text-gray-400 pointer-events-none">
-              <PhoneIcon />
-            </div>
-            {/* Prefix */}
-            <div className="absolute top-px bottom-px ltr:right-px rtl:left-px flex items-center justify-center px-3 border-l rtl:border-l-0 rtl:border-r border-gray-200 text-sm font-semibold text-gray-600 bg-transparent rounded-r-xl rtl:rounded-r-none rtl:rounded-l-xl cursor-pointer hover:bg-gray-100 transition-colors">
-              <span className="rtl:mr-1 ltr:mr-1">EG</span> <ChevronDownIcon className="w-3 h-3 text-gray-400" />
-            </div>
-          </div>
-          {errors.phone && <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">{errors.phone.message}</p>}
-        </div>
 
         {/* Password */}
         <div>
-          <PasswordInput 
+          <PasswordInput
+            id="password"
             {...register('password')}
-            placeholder={dict.auth.password} 
-            isRtl={isRtl} 
+            placeholder={dict.auth.password}
+            isRtl={isRtl}
             className={`w-full bg-[#f8f9fb] border ${errors.password ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl py-3 px-12 text-sm focus:outline-none focus:ring-1 transition-all placeholder:text-gray-400 rtl:text-right ltr:text-left`}
           />
+          <label htmlFor="password" className="sr-only">{dict.auth.password}</label>
           {errors.password && <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">{errors.password.message}</p>}
         </div>
 
         {/* Confirm Password */}
         <div>
-          <PasswordInput 
+          <PasswordInput
+            id="confirmPassword"
             {...register('confirmPassword')}
-            placeholder={dict.auth.confirmPassword} 
-            isRtl={isRtl} 
+            placeholder={dict.auth.confirmPassword}
+            isRtl={isRtl}
             className={`w-full bg-[#f8f9fb] border ${errors.confirmPassword ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]'} rounded-xl py-3 px-12 text-sm focus:outline-none focus:ring-1 transition-all placeholder:text-gray-400 rtl:text-right ltr:text-left`}
           />
+          <label htmlFor="confirmPassword" className="sr-only">{dict.auth.confirmPassword}</label>
           {errors.confirmPassword && <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">{errors.confirmPassword.message}</p>}
         </div>
 
         {/* Terms Checkbox */}
         <div>
-          <div className="flex items-center gap-2 mt-2">
-            <input 
-              type="checkbox" 
+          <div className="flex items-start sm:items-center gap-2.5 sm:gap-2 mt-2">
+            <input
+              type="checkbox"
               id="terms"
               {...register('terms')}
-              className="shrink-0 rounded-[4px] border border-gray-300 w-4 h-4 cursor-pointer text-[#0b2646] focus:ring-[#0b2646] bg-transparent"
+              className="shrink-0 rounded-[4px] border border-gray-300 w-4 h-4 mt-0.5 sm:mt-0 cursor-pointer text-[#0b2646] focus:ring-[#0b2646] bg-transparent"
             />
-            <label htmlFor="terms" className="text-[13.5px] font-medium text-[#4b5563] cursor-pointer select-none">
+            <label htmlFor="terms" className="text-[13px] sm:text-[13.5px] leading-relaxed sm:leading-normal font-medium text-[#4b5563] cursor-pointer select-none">
               {dict.auth.terms.agree}
               <Link href={`/${locale}/privacy-policy`} className="text-[#0b2646] hover:underline mx-1">{dict.auth.terms.privacy}</Link>
               {dict.auth.terms.and1}
@@ -363,8 +426,8 @@ export default function RegisterForm({ dict, isRtl, locale }) {
           {errors.terms && <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">{errors.terms.message}</p>}
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           disabled={isSubmitting}
           className="w-full bg-[#0b2646] text-white font-bold py-3.5 rounded-xl hover:bg-[#061528] transition-colors mt-2 text-sm shadow-md disabled:opacity-70 flex items-center justify-center"
         >

@@ -22,23 +22,27 @@ const LogoutIcon = (props) => (
 export default function AuthNav({ dict, locale }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     // Check active sessions and sets the user
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+    const getUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user || null);
       setLoading(false);
-    });
+    };
+    getUser();
 
     // Listen for changes on auth state (login, logout, etc.)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      setUser(session?.user || null);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
   const handleLogout = async () => {
+    setIsDropdownOpen(false);
     await supabase.auth.signOut();
   };
 
@@ -57,27 +61,49 @@ export default function AuthNav({ dict, locale }) {
       <div className="flex items-center gap-3 sm:gap-5">
         {/* My Learning Journey */}
         <Link href={`/${locale}/journey`} className="hidden lg:block text-[#5c6b81] hover:text-[#0b2646] text-[15px] font-medium transition-colors">
-          {locale === 'ar' ? 'رحلتي التعليمية' : 'My Learning Journey'}
+          {dict.navbar.userMenu.journey}
         </Link>
 
         {/* User Profile Avatar */}
-        <div className="relative group pt-1"> {/* added pt-1 to fix hover gap padding vertically if any, actually just group */}
-          <Link href={`/${locale}/profile`} className="flex items-center justify-center w-8 h-8 sm:w-[38px] sm:h-[38px] bg-[#0b2646] text-white rounded-full transition-colors shadow-sm cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </Link>
-          
-          {/* Advanced Dropdown Menu (Hover) */}
-          <div className="absolute top-full rtl:left-0 ltr:right-0 mt-3 w-[260px] bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden border border-gray-100">
+        <div className="relative group pt-1">
+          {/* Mobile Backdrop to close dropdown */}
+          {isDropdownOpen && (
+            <div 
+              className="fixed inset-0 z-40 lg:hidden" 
+              onClick={() => setIsDropdownOpen(false)}
+            />
+          )}
+
+          <button 
+            type="button"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="flex items-center justify-center w-8 h-8 sm:w-[38px] sm:h-[38px] bg-[#0b2646] text-white rounded-full transition-colors shadow-sm cursor-pointer overflow-hidden border border-[#0b2646]/20 relative z-50"
+          >
+            {user?.user_metadata?.avatar_url ? (
+              <img src={user.user_metadata.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            )}
+              </svg>
+            )}
+          </button>
+
+          {/* Advanced Dropdown Menu (Hover on Desktop, Click on Mobile) */}
+          <div className={`absolute top-full rtl:left-0 ltr:right-0 mt-3 w-[260px] bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-200 z-50 overflow-hidden border border-gray-100 ${isDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible lg:group-hover:opacity-100 lg:group-hover:visible lg:group-focus-within:opacity-100 lg:group-focus-within:visible'}`}>
             {/* Header linked to Profile */}
-            <Link href={`/${locale}/profile`} className="p-4 border-b border-gray-100 flex items-center gap-3 hover:bg-gray-50 transition-colors cursor-pointer">
-              <div className="w-10 h-10 shrink-0 bg-[#8da5ff] text-white rounded-full flex items-center justify-center">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <Link href={`/${locale}/profile`} onClick={() => setIsDropdownOpen(false)} className="p-4 border-b border-gray-100 flex items-center gap-3 hover:bg-gray-50 transition-colors cursor-pointer">
+              <div className="w-10 h-10 shrink-0 bg-[#0b2646] text-white rounded-full flex items-center justify-center overflow-hidden border border-[#0b2646]/20">
+                {user?.user_metadata?.avatar_url ? (
+                  <img src={user.user_metadata.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
-                 </svg>
+                  </svg>
+                )}
               </div>
               <div className="flex-1 min-w-0 rtl:text-right ltr:text-left">
                 <p className="text-[15px] font-bold text-gray-900 truncate">
@@ -91,23 +117,23 @@ export default function AuthNav({ dict, locale }) {
 
             {/* Menu Links */}
             <div className="py-2">
-              <Link href={`/${locale}/journey`} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#0b2646] hover:bg-blue-50 transition-colors">
+              <Link href={`/${locale}/journey`} onClick={() => setIsDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#0b2646] hover:bg-blue-50 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <circle cx="12" cy="12" r="6"></circle>
                   <circle cx="12" cy="12" r="2"></circle>
                 </svg>
-                {locale === 'ar' ? 'رحلتي التعليمية' : 'My Learning Journey'}
+                {dict.navbar.userMenu.journey}
               </Link>
 
-              <Link href={`/${locale}/wishlist`} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#0b2646] hover:bg-blue-50 transition-colors">
+              <Link href={`/${locale}/wishlist`} onClick={() => setIsDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#0b2646] hover:bg-blue-50 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
                 </svg>
-                {locale === 'ar' ? 'المفضلة' : 'Wishlist'}
+                {dict.navbar.userMenu.wishlist}
               </Link>
 
-              <Link href={`/${locale}/notes`} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#0b2646] hover:bg-blue-50 transition-colors">
+              <Link href={`/${locale}/notes`} onClick={() => setIsDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#0b2646] hover:bg-blue-50 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                   <polyline points="14 2 14 8 20 8"></polyline>
@@ -115,10 +141,10 @@ export default function AuthNav({ dict, locale }) {
                   <line x1="16" y1="17" x2="8" y2="17"></line>
                   <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
-                {locale === 'ar' ? 'الملاحظات' : 'Notes'}
+                {dict.navbar.userMenu.notes}
               </Link>
 
-              <Link href={`/${locale}/certificates`} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#0b2646] hover:bg-blue-50 transition-colors">
+              <Link href={`/${locale}/certificates`} onClick={() => setIsDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#0b2646] hover:bg-blue-50 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
                   <rect x="9" y="9" width="6" height="6"></rect>
@@ -127,19 +153,19 @@ export default function AuthNav({ dict, locale }) {
                   <line x1="9" y1="20" x2="9" y2="23"></line>
                   <line x1="15" y1="20" x2="15" y2="23"></line>
                 </svg>
-                {locale === 'ar' ? 'الشهادات' : 'Certificates'}
+                {dict.navbar.userMenu.certificates}
               </Link>
 
-              <Link href={`/${locale}/expert`} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-blue-600 hover:bg-blue-50 transition-colors">
-                 {locale === 'ar' ? 'كن خبيراً' : 'Become an Expert'}
+              <Link href={`/${locale}/expert`} onClick={() => setIsDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-blue-600 hover:bg-blue-50 transition-colors">
+                {dict.navbar.userMenu.expert}
               </Link>
-              
-              <button 
+
+              <button
                 onClick={handleLogout}
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-[#0b2646] hover:bg-blue-50 transition-colors rtl:text-right ltr:text-left mt-1 border-t border-gray-50"
               >
                 <LogoutIcon className="w-5 h-5 text-[#0b2646]" />
-                {locale === 'ar' ? 'تسجيل الخروج' : 'Logout'}
+                {dict.navbar.userMenu.logout}
               </button>
             </div>
           </div>
