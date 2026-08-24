@@ -87,8 +87,6 @@ export default function AuthNav({ dict, locale }) {
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
             )}
-              </svg>
-            )}
           </button>
 
           {/* Advanced Dropdown Menu (Hover on Desktop, Click on Mobile) */}
