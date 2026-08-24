@@ -86,7 +86,7 @@ export default async function Navbar({ locale = 'ar' }) {
           <button className="absolute end-1 top-1 bottom-1 w-9 flex items-center justify-center bg-transparent border-0 text-[#8fa7e6] hover:text-[#0b2646] transition-colors">
             <SearchIcon className="w-5 h-5" />
           </button>
-        </div>
+        </form>
       </div>
 
       {/* Left Section: Actions */}
