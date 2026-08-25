@@ -12,7 +12,7 @@ export default function Footer({ locale = 'ar' }) {
         style={{ position: 'absolute', height: '100%', width: '100%', left: 0, top: 0, right: 0, bottom: 0, color: 'transparent' }}
         src="/footer.webp"
       />
-      <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] relative z-10">
+      <div className="mx-auto max-w-[1232px] w-full px-4 xl:px-0 relative z-10 flex flex-col justify-between h-full">
         <div className="relative grid w-full grid-cols-2 gap-6 pt-8 pb-6 md:grid-cols-2 md:pt-12 xl:grid-cols-4">
           <div className="relative order-0">
             <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">المنصة التعليمية</h2>
@@ -20,7 +20,7 @@ export default function Footer({ locale = 'ar' }) {
               <li><Link className="text-primary-darkBlue" href={`/${locale}/courses?delivery_type=recorded`}>الدورات المُسجلة</Link></li>
               <li><Link className="text-primary-darkBlue" href={`/${locale}/courses?delivery_type=live`}>الدورات التدريبية المباشرة</Link></li>
               <li><Link className="text-primary-darkBlue" href={`/${locale}/instructors`}>المدربين</Link></li>
-              <li><a href="https://careers.eyouthlearning.com/?_gl=1*f7jt3f*_gcl_au*MTIxNDU4NjUzNC4xNzg3MzEyMjU0LjEyNzUzNjQwMS4xNzg3NjYyNDM2LjE3ODc2NjI5OTMuMTc3MzgwMTg3NS4xNzg3NjYyNDM2LjE3ODc2NjI5OTM." target="_blank" rel="noreferrer" className="text-primary-darkBlue">الوظائف</a></li>
+              <li><a href="https://careers.eyouthlearning.com" target="_blank" rel="noreferrer" className="text-primary-darkBlue">الوظائف</a></li>
               <li><Link className="text-primary-darkBlue" href={`/${locale}/about-us`}>عن eyouth</Link></li>
             </ul>
           </div>
@@ -101,6 +101,11 @@ export default function Footer({ locale = 'ar' }) {
               </div>
             </div>
           </div>
+        </div>
+        
+        {/* Copyright Text */}
+        <div className="text-primary-darkBlue opacity-70 text-sm font-medium pb-6 text-right w-full">
+          جميع الحقوق محفوظة .eyouth ©
         </div>
       </div>
     </footer>
