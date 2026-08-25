@@ -20,7 +20,7 @@ export default function Footer({ locale = 'ar' }) {
               <li><Link className="text-primary-darkBlue" href={`/${locale}/courses?delivery_type=recorded`}>الدورات المُسجلة</Link></li>
               <li><Link className="text-primary-darkBlue" href={`/${locale}/courses?delivery_type=live`}>الدورات التدريبية المباشرة</Link></li>
               <li><Link className="text-primary-darkBlue" href={`/${locale}/instructors`}>المدربين</Link></li>
-              <li><a href="https://careers.eyouthlearning.com" target="_blank" rel="noreferrer" className="text-primary-darkBlue">الوظائف</a></li>
+              <li><a href="https://careers.eyouthlearning.com/?_gl=1*f7jt3f*_gcl_au*MTIxNDU4NjUzNC4xNzg3MzEyMjU0LjEyNzUzNjQwMS4xNzg3NjYyNDM2LjE3ODc2NjI5OTMuMTc3MzgwMTg3NS4xNzg3NjYyNDM2LjE3ODc2NjI5OTM." target="_blank" rel="noreferrer" className="text-primary-darkBlue">الوظائف</a></li>
               <li><Link className="text-primary-darkBlue" href={`/${locale}/about-us`}>عن eyouth</Link></li>
             </ul>
           </div>
