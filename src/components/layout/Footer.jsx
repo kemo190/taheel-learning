@@ -1,12 +1,17 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer({ locale = 'ar' }) {
   return (
-    <footer 
-      className="bg-white border-t border-gray-200 mt-auto bg-cover bg-center bg-no-repeat relative"
-      style={{ backgroundImage: 'url(/footer.webp)' }}
-    >
-      <div className="absolute inset-0 bg-white/90"></div> {/* Overlay to ensure text readability */}
+    <footer className="relative mt-auto overflow-hidden bg-white border-t border-gray-200">
+      <img
+        alt="Background"
+        loading="lazy"
+        decoding="async"
+        className="!w-full object-cover opacity-20 rtl:scale-x-[-1]"
+        style={{ position: 'absolute', height: '100%', width: '100%', left: 0, top: 0, right: 0, bottom: 0, color: 'transparent' }}
+        src="/footer.webp"
+      />
       <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] relative z-10">
         <div className="relative grid w-full grid-cols-2 gap-6 pt-8 pb-6 md:grid-cols-2 md:pt-12 xl:grid-cols-4">
           <div className="relative order-0">
@@ -19,7 +24,7 @@ export default function Footer({ locale = 'ar' }) {
               <li><Link className="text-[#0b2646] hover:text-[#0b2646]/80 transition-colors" href={`/${locale}/about-us`}>عن تأهيل</Link></li>
             </ul>
           </div>
-          
+
           <div className="relative order-2 col-span-2 md:order-1 md:col-span-1">
             <h2 className="text-[#0b2646] mb-3 text-[1.375rem] font-bold">تأهيل للأعمال</h2>
             <ul className="flex flex-col gap-6">
@@ -27,7 +32,7 @@ export default function Footer({ locale = 'ar' }) {
               <li><Link className="border-[#0b2646] text-[#0b2646] rounded-full border px-4 py-1 hover:bg-[#0b2646]/5 transition-colors md:rounded-lg md:px-4 md:py-1 inline-block" href={`/${locale}/join-as-instructor`}>كــــن خبيراً</Link></li>
             </ul>
           </div>
-          
+
           <div className="relative order-1 md:order-2">
             <h2 className="text-[#0b2646] mb-3 text-[1.375rem] font-bold">سياسات المنصة</h2>
             <ul className="flex flex-col gap-1">
@@ -41,7 +46,7 @@ export default function Footer({ locale = 'ar' }) {
               <li><Link className="text-[#0b2646] hover:text-[#0b2646]/80 transition-colors" href={`/${locale}/trainer-guide`}>دليل المدرب</Link></li>
             </ul>
           </div>
-          
+
           <div className="order-3 flex flex-col justify-start">
             <h2 className="text-[#0b2646] mb-3 text-[1.375rem] font-bold">ابق على تواصل</h2>
             <div className="flex flex-col gap-3">
@@ -59,7 +64,7 @@ export default function Footer({ locale = 'ar' }) {
                 </svg>
                 تواصل معنا
               </Link>
-              
+
               {/* Social Media Links */}
               <div className="z-10 flex items-center gap-4 mt-2">
                 <a href="https://www.facebook.com/Taheel/" target="_blank" rel="noreferrer" className="text-[#0b2646] hover:text-[#0b2646]/70 transition-colors">
