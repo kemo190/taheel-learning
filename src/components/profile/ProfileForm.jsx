@@ -116,8 +116,8 @@ export default function ProfileForm({ initialData, locale, userId, dict }) {
     </div>
   );
 
-  const inputClasses = "file:text-foreground focus-visible:ring-gray-200 flex min-h-[43px] w-full rounded-[10px] px-4 py-[0.5rem] text-sm transition file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:opacity-70 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-base bg-white text-[#0b2646] border border-gray-200 focus:border-[#0b2646] focus-visible:ring-0 h-[52px]";
-  const selectClasses = `${inputClasses} appearance-none cursor-pointer`;
+  const inputClasses = "file:text-foreground focus-visible:ring-gray-200 flex min-h-[43px] w-full rounded-[10px] px-4 py-[0.5rem] text-sm transition file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:opacity-70 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-base bg-white text-[#0b2646] border-gray-200 focus:border-[#0b2646] focus-visible:ring-0 border-0 h-[52px]";
+  const selectClasses = `${inputClasses} appearance-none cursor-pointer focus:ring-1 focus:ring-gray-200 shadow-none py-0`;
 
   return (
     <div className="rounded-xl px-0 sm:px-8 py-4" dir={isRtl ? 'rtl' : 'ltr'}>
@@ -169,12 +169,12 @@ export default function ProfileForm({ initialData, locale, userId, dict }) {
           <div className="flex flex-col gap-1.5">
             <label className="mb-2 text-gray-500 font-bold text-lg">{dict.profile.form.gender}</label>
             <div className="gap-3 grid grid-cols-2">
-              <label htmlFor="gender_male" className="flex h-[52px] items-center gap-3 rounded-lg bg-white px-4 text-gray-600 border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors">
-                <input id="gender_male" type="radio" value="Male" {...register('gender')} className="aspect-square size-5 shrink-0 rounded-full border border-gray-200 shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] text-blue-600 focus-visible:ring-blue-500/50" />
+              <label htmlFor="gender_male" className="flex h-[52px] items-center gap-3 rounded-lg bg-white px-4 text-gray-600 cursor-pointer">
+                <input id="gender_male" type="radio" value="Male" {...register('gender')} className="border-gray-200 text-[#0b2646] focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square size-5 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50" />
                 <span>{dict.profile.form.male}</span>
               </label>
-              <label htmlFor="gender_female" className="flex h-[52px] items-center gap-3 rounded-lg bg-white px-4 text-gray-600 border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors">
-                <input id="gender_female" type="radio" value="Female" {...register('gender')} className="aspect-square size-5 shrink-0 rounded-full border border-gray-200 shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] text-blue-600 focus-visible:ring-blue-500/50" />
+              <label htmlFor="gender_female" className="flex h-[52px] items-center gap-3 rounded-lg bg-white px-4 text-gray-600 cursor-pointer">
+                <input id="gender_female" type="radio" value="Female" {...register('gender')} className="border-gray-200 text-[#0b2646] focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square size-5 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50" />
                 <span>{dict.profile.form.female}</span>
               </label>
             </div>
@@ -238,7 +238,7 @@ export default function ProfileForm({ initialData, locale, userId, dict }) {
                     {...field}
                     international
                     defaultCountry={selectedCountry && isSupportedCountry(selectedCountry) ? selectedCountry : "EG"}
-                    className="flex items-center w-full h-[52px] bg-white border border-gray-200 rounded-[10px] px-4 focus-within:border-[#0b2646] transition-all
+                    className="focus:border-gray-200 text-[#0b2646] flex min-h-[43px] w-full max-w-full flex-row-reverse pe-5 text-sm transition focus:border disabled:cursor-not-allowed disabled:opacity-50 md:text-base dark:text-white ps-4 h-[52px] items-center rounded-xl border-none bg-white py-0
                       [&_.PhoneInputCountry]:flex [&_.PhoneInputCountry]:items-center [&_.PhoneInputCountry]:mr-3 [&_.PhoneInputCountry]:relative
                       [&_.PhoneInputCountrySelect]:absolute [&_.PhoneInputCountrySelect]:inset-0 [&_.PhoneInputCountrySelect]:opacity-0 [&_.PhoneInputCountrySelect]:cursor-pointer [&_.PhoneInputCountrySelect]:z-10
                       [&_.PhoneInputCountryIcon]:w-6 [&_.PhoneInputCountryIcon]:h-4 [&_.PhoneInputCountryIcon]:shadow-sm [&_.PhoneInputCountryIcon]:mr-2
@@ -299,7 +299,7 @@ export default function ProfileForm({ initialData, locale, userId, dict }) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="relative inline-flex items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer rounded-2xl text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&>svg]:pointer-events-none [&>svg]:size-5 [&>svg]:shrink-0 bg-[#0b2646] text-white hover:bg-[#0b2646]/80 h-[3.125rem] px-[1.5rem] py-3 mx-auto mt-4 w-full md:max-w-xs ltr:[&>svg]:rotate-180"
+          className="relative inline-flex items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer rounded-2xl text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-5 [&_svg]:shrink-0 bg-[#0b2646] text-white hover:bg-[#0b2646]/80 h-[3.125rem] px-[1.5rem] py-3 mx-auto mt-8 w-full md:max-w-[346px] ltr:[&>svg]:rotate-180"
         >
           {isSubmitting ? (
             <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
