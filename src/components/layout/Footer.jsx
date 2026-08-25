@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getDictionary } from '@/dictionaries/getDictionary';
 
-export default function Footer({ locale = 'ar' }) {
+export default async function Footer({ locale = 'ar' }) {
+  const dict = await getDictionary(locale);
+  const isRtl = locale === 'ar';
+
   return (
-    <footer className="relative mt-auto overflow-hidden bg-[#eff2f6] border-t border-gray-200 xl:h-[388px]">
+    <footer dir={isRtl ? 'rtl' : 'ltr'} className="relative mt-auto overflow-hidden bg-[#eff2f6] border-t border-gray-200 xl:h-[388px]">
       <img
         alt="Background"
         loading="lazy"
@@ -13,62 +17,61 @@ export default function Footer({ locale = 'ar' }) {
         src="/footer.webp"
       />
       <div className="mx-auto max-w-[1232px] w-full px-4 xl:px-0 relative z-10 flex flex-col justify-between h-full">
-        <div className="relative grid w-full grid-cols-2 gap-6 pt-8 pb-6 md:grid-cols-2 md:pt-12 xl:grid-cols-4">
+        <div className="relative grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-8 pb-6 md:pt-12">
           <div className="relative order-0">
-            <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">المنصة التعليمية</h2>
+            <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">{dict.footer.platform}</h2>
             <ul className="flex flex-col gap-2">
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/courses?delivery_type=recorded`}>الدورات المُسجلة</Link></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/courses?delivery_type=live`}>الدورات التدريبية المباشرة</Link></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/instructors`}>المدربين</Link></li>
-              <li><a href="#" target="_blank" rel="noreferrer" className="text-primary-darkBlue">الوظائف</a></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/about-us`}>عن Ta&apos;hel</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/courses?delivery_type=recorded`}>{dict.footer.recordedCourses}</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/courses?delivery_type=live`}>{dict.footer.liveCourses}</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/instructors`}>{dict.footer.instructors}</Link></li>
+              <li><a href="#" target="_blank" rel="noreferrer" className="text-primary-darkBlue">{dict.footer.jobs}</a></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/about-us`}>{dict.footer.aboutUs}</Link></li>
             </ul>
           </div>
-          <div className="relative order-2 col-span-2 md:order-1 md:col-span-1">
-            <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">Ta&apos;hel للاعمال</h2>
+          <div className="relative order-1 sm:order-2 lg:order-1 lg:col-span-1">
+            <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">{dict.footer.businessTitle}</h2>
             <ul className="flex flex-col gap-6">
-              <li><a href="#" target="_blank" rel="noreferrer" className="rounded-full border border-[#FBBC04] px-4 py-1 text-[#FBBC04] md:rounded-lg md:px-4 md:py-1">Ta&apos;hel للاعمال</a></li>
-              <li><Link className="border-primary-mainBlue text-primary-mainBlue rounded-full border px-4 py-1 md:rounded-lg md:px-4 md:py-1" href={`/${locale}/join-as-instructor`}>كــــن خبيراً</Link></li>
+              <li><a href="#" target="_blank" rel="noreferrer" className="rounded-full border border-[#FBBC04] px-4 py-1 text-[#FBBC04] md:rounded-lg md:px-4 md:py-1 whitespace-nowrap w-fit">{dict.footer.businessLink}</a></li>
+              <li><Link className="border-primary-mainBlue text-primary-mainBlue rounded-full border px-4 py-1 md:rounded-lg md:px-4 md:py-1 whitespace-nowrap w-fit" href={`/${locale}/join-as-instructor`}>{dict.footer.becomeExpert}</Link></li>
             </ul>
           </div>
-          <div className="relative order-1 md:order-2">
-            <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">سياسات المنصة</h2>
+          <div className="relative order-2 sm:order-1 lg:order-2">
+            <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">{dict.footer.policiesTitle}</h2>
             <ul className="flex flex-col gap-1">
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/privacy-policy`}>سياسة الخصوصية</Link></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/platform-policy`}>سياسات المنصة</Link></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/refund-policy`}>سياسة الاسترداد</Link></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/terms-and-conditions`}>الشروط والأحكام</Link></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/trainers-terms-and-conditions`}>شروط وسياسات المدرّبين</Link></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/faqs`}>الأسئلة الشائعة</Link></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/user-guide`}>دليل المستخدم</Link></li>
-              <li><Link className="text-primary-darkBlue" href={`/${locale}/trainer-guide`}>دليل المدرب</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/privacy-policy`}>{dict.footer.privacyPolicy}</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/platform-policy`}>{dict.footer.platformPolicy}</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/refund-policy`}>{dict.footer.refundPolicy}</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/terms-and-conditions`}>{dict.footer.termsConditions}</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/trainers-terms-and-conditions`}>{dict.footer.trainerTerms}</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/faqs`}>{dict.footer.faqs}</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/user-guide`}>{dict.footer.userGuide}</Link></li>
+              <li><Link className="text-primary-darkBlue" href={`/${locale}/trainer-guide`}>{dict.footer.trainerGuide}</Link></li>
             </ul>
           </div>
           <div className="order-3 flex flex-col justify-start">
-            <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">ابق على تواصل</h2>
+            <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">{dict.footer.stayInTouch}</h2>
             <div className="flex flex-col gap-3">
               <a href="mailto:support@tahel.com" className="text-primary-darkBlue inline-flex items-center gap-2 whitespace-nowrap">
-                <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="text-primary-darkBlue">
+                <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="text-primary-darkBlue shrink-0">
                   <path d="M2.19866 0H17.6945C19.1564 0 19.8932 0.690005 19.8932 2.0934V11.9406C19.8932 13.3323 19.1564 14.034 17.6945 14.034H2.19866C0.736785 14.034 0 13.3323 0 11.9406V2.0934C0 0.690005 0.736785 0 2.19866 0ZM9.94075 10.0577L17.8232 3.59036C18.1039 3.35646 18.3261 2.81849 17.9752 2.339C17.6361 1.8595 17.0162 1.84781 16.6069 2.14018L9.94075 6.65445L3.2863 2.14018C2.87697 1.84781 2.25714 1.8595 1.91798 2.339C1.56713 2.81849 1.78934 3.35646 2.07001 3.59036L9.94075 10.0577Z" fill="currentColor"></path>
                 </svg>
                 support@tahel.com
               </a>
               <Link className="text-primary-darkBlue flex items-center gap-2 font-medium" href={`/${locale}/contact-us`}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone-call text-primary-darkBlue size-4" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone-call text-primary-darkBlue size-4 shrink-0" aria-hidden="true">
                   <path d="M13 2a9 9 0 0 1 9 9"></path>
                   <path d="M13 6a5 5 0 0 1 5 5"></path>
                   <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path>
                 </svg>
-                تواصل معنا
+                {dict.footer.contactUs}
               </Link>
             </div>
           </div>
         </div>
         
-        {/* Bottom Bar: Copyright and Social Icons */}
-        <div className="flex flex-col md:flex-row justify-between items-center w-full pb-6 mt-auto">
-          <p className="text-secondary w-full text-left font-medium md:w-fit"> جميع الحقوق محفوظة © Ta&apos;hel.</p>
-          <div className="z-10 flex items-center gap-2 mt-4 md:mt-0">
+        <div className="flex flex-col sm:flex-row justify-between items-center w-full pb-6 mt-auto gap-4">
+          <p className="text-secondary w-full text-center sm:text-start font-medium sm:w-fit">{dict.footer.copyright}</p>
+          <div className="z-10 flex items-center justify-center gap-2">
             <a href="#" target="_blank" rel="noreferrer">
               <svg width="30" height="29" viewBox="0 0 30 29" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary-mainBlue fill-primary-mainBlue hover:opacity-80 transition-opacity">
                 <g clipPath="url(#clip0_1484_106507)">

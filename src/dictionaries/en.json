@@ -251,5 +251,28 @@
         "other": "Other"
       }
     }
+  },
+  "footer": {
+    "platform": "Educational Platform",
+    "recordedCourses": "Recorded Courses",
+    "liveCourses": "Live Training Courses",
+    "instructors": "Instructors",
+    "jobs": "Careers",
+    "aboutUs": "About Ta'hel",
+    "businessTitle": "Ta'hel for Business",
+    "businessLink": "Ta'hel for Business",
+    "becomeExpert": "Become an Expert",
+    "policiesTitle": "Platform Policies",
+    "privacyPolicy": "Privacy Policy",
+    "platformPolicy": "Platform Policies",
+    "refundPolicy": "Refund Policy",
+    "termsConditions": "Terms & Conditions",
+    "trainerTerms": "Trainers Terms & Policies",
+    "faqs": "FAQs",
+    "userGuide": "User Guide",
+    "trainerGuide": "Trainer Guide",
+    "stayInTouch": "Stay in Touch",
+    "contactUs": "Contact Us",
+    "copyright": "All rights reserved © Ta'hel."
   }
 }

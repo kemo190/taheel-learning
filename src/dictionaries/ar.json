@@ -251,5 +251,28 @@
         "other": "أخرى"
       }
     }
+  },
+  "footer": {
+    "platform": "المنصة التعليمية",
+    "recordedCourses": "الدورات المُسجلة",
+    "liveCourses": "الدورات التدريبية المباشرة",
+    "instructors": "المدربين",
+    "jobs": "الوظائف",
+    "aboutUs": "عن Ta'hel",
+    "businessTitle": "Ta'hel للاعمال",
+    "businessLink": "Ta'hel للاعمال",
+    "becomeExpert": "كــــن خبيراً",
+    "policiesTitle": "سياسات المنصة",
+    "privacyPolicy": "سياسة الخصوصية",
+    "platformPolicy": "سياسات المنصة",
+    "refundPolicy": "سياسة الاسترداد",
+    "termsConditions": "الشروط والأحكام",
+    "trainerTerms": "شروط وسياسات المدرّبين",
+    "faqs": "الأسئلة الشائعة",
+    "userGuide": "دليل المستخدم",
+    "trainerGuide": "دليل المدرب",
+    "stayInTouch": "ابق على تواصل",
+    "contactUs": "تواصل معنا",
+    "copyright": "جميع الحقوق محفوظة © Ta'hel."
   }
 }
