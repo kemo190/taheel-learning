@@ -67,9 +67,7 @@ export default function Footer({ locale = 'ar' }) {
         
         {/* Bottom Bar: Copyright and Social Icons */}
         <div className="flex flex-col md:flex-row justify-between items-center w-full pb-6 mt-auto">
-          <div className="text-primary-darkBlue opacity-70 text-sm font-medium">
-            جميع الحقوق محفوظة .eyouth ©
-          </div>
+          <p className="text-secondary w-full text-left font-medium md:w-fit"> جميع الحقوق محفوظة © eyouth.</p>
           <div className="z-10 flex items-center gap-2 mt-4 md:mt-0">
             <a href="https://www.facebook.com/EYouthLearning/" target="_blank" rel="noreferrer">
               <svg width="30" height="29" viewBox="0 0 30 29" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary-mainBlue fill-primary-mainBlue hover:opacity-80 transition-opacity">
