@@ -19,32 +19,37 @@ export default function AuthNav({ dict, locale }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
+    const fetchProfile = async (currentUser) => {
+      if (!currentUser) {
+        setProfile(null);
+        return;
+      }
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('avatar_url, full_name, certificate_name')
+        .eq('id', currentUser.id)
+        .single();
+        
+      if (profileData) {
+        setProfile(profileData);
+      }
+    };
+
     // Check active sessions and sets the user
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       const currentUser = session?.user || null;
       setUser(currentUser);
-      
-      if (currentUser) {
-        // Fetch profile to get latest avatar and name
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('avatar_url, full_name, certificate_name')
-          .eq('id', currentUser.id)
-          .single();
-        
-        if (profileData) {
-          setProfile(profileData);
-        }
-      }
+      await fetchProfile(currentUser);
       setLoading(false);
     };
     getUser();
 
     // Listen for changes on auth state (login, logout, etc.)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-      if (!session) setProfile(null);
+      const nextUser = session?.user || null;
+      setUser(nextUser);
+      fetchProfile(nextUser);
     });
 
     return () => subscription.unsubscribe();

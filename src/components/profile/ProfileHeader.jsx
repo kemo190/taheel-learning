@@ -32,6 +32,16 @@ export default function ProfileHeader({ user, profile, locale, dict }) {
       }
 
       const file = event.target.files[0];
+      const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+      const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        throw new Error(isRtl ? 'يجب أن تكون الصورة بصيغة JPEG أو PNG أو WEBP' : 'Image must be JPEG, PNG, or WEBP');
+      }
+
+      if (file.size > MAX_SIZE) {
+        throw new Error(isRtl ? 'حجم الصورة يجب أن لا يتجاوز 5 ميجابايت' : 'Image size must be less than 5MB');
+      }
       const fileExt = file.name.split('.').pop();
       const fileName = `${user.id}-${Math.random()}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
@@ -139,8 +149,10 @@ export default function ProfileHeader({ user, profile, locale, dict }) {
         <div className="flex flex-col items-center md:items-end gap-1">
           <div className="flex items-center justify-center md:justify-end gap-3 w-full md:w-auto shrink-0 md:pb-2">
             <button 
-              onClick={() => document.getElementById('photo-upload').click()}
-              className="px-5 py-2.5 md:py-2 rounded-lg bg-white hover:bg-gray-50 text-gray-700 font-bold md:font-medium text-sm border border-gray-300 shadow-sm transition-colors whitespace-nowrap flex items-center justify-center gap-2 w-full md:w-auto"
+              type="button"
+              disabled={isUploading}
+              onClick={() => document.getElementById('photo-upload')?.click()}
+              className="px-5 py-2.5 md:py-2 rounded-lg bg-white hover:bg-gray-50 text-gray-700 font-bold md:font-medium text-sm border border-gray-300 shadow-sm transition-colors whitespace-nowrap flex items-center justify-center gap-2 w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path></svg>
               {dict?.profile?.header?.editPhoto || 'Edit Photo'}

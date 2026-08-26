@@ -21,6 +21,7 @@ export default function OrderHistory({ locale, user, dict }) {
   const [expandedId, setExpandedId] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -34,7 +35,9 @@ export default function OrderHistory({ locale, user, dict }) {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      if (data) {
+      if (error) {
+        setLoadError(error.message);
+      } else if (data) {
         setOrders(data);
         if (data.length > 0) {
           setExpandedId(data[0].id);
@@ -83,6 +86,15 @@ export default function OrderHistory({ locale, user, dict }) {
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </div>
+        ) : loadError ? (
+          <div className="py-12 flex flex-col items-center justify-center text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-red-300 mb-3">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <p className="text-red-500 font-bold">{dict?.profile?.history?.loadError || 'Failed to load orders'}</p>
+          </div>
         ) : orders.length === 0 ? (
           <div className="py-12 flex flex-col items-center justify-center text-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300 mb-3">
@@ -102,9 +114,11 @@ export default function OrderHistory({ locale, user, dict }) {
               <div key={order.id} className="bg-white rounded-xl shadow-[0_2px_15px_rgba(0,0,0,0.04)] border border-gray-100 overflow-hidden">
               
               {/* Accordion Header */}
-              <div 
+              <button 
+                type="button"
+                aria-expanded={isExpanded}
                 onClick={() => toggleExpand(order.id)}
-                className="flex flex-col lg:flex-row items-center w-full cursor-pointer hover:bg-gray-50 transition-colors p-5 gap-4 lg:gap-0"
+                className="flex flex-col lg:flex-row items-center w-full cursor-pointer hover:bg-gray-50 transition-colors p-5 gap-4 lg:gap-0 text-start appearance-none"
               >
                 {/* Grid Columns */}
                 <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 w-full gap-4 lg:gap-0 text-center text-sm">
@@ -125,13 +139,15 @@ export default function OrderHistory({ locale, user, dict }) {
                     </div>
                   </div>
 
-                  {/* Col 3 */}
-                  <div className="flex flex-col gap-2 items-center justify-center rtl:lg:border-l ltr:lg:border-r border-gray-200">
-                    <span className="text-[#0b2646] font-bold text-xs sm:text-sm lg:text-base whitespace-nowrap">{dict?.profile?.history?.paymentMethod || 'Payment Method'}</span>
-                    <div className="flex items-center justify-center text-gray-500 h-[20px]">
-                      <CardIcon />
+                  {/* Col 3: Conditionally omit if no payment_method */}
+                  {order.payment_method && (
+                    <div className="flex flex-col gap-2 items-center justify-center rtl:lg:border-l ltr:lg:border-r border-gray-200">
+                      <span className="text-[#0b2646] font-bold text-xs sm:text-sm lg:text-base whitespace-nowrap">{dict?.profile?.history?.paymentMethod || 'Payment Method'}</span>
+                      <div className="flex items-center gap-1.5 text-gray-700 font-medium text-xs sm:text-sm h-[20px]">
+                        <CardIcon /> <span>{order.payment_method}</span>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Col 4 */}
                   <div className="flex flex-col gap-2 items-center justify-center rtl:lg:border-l ltr:lg:border-r border-gray-200">
@@ -165,7 +181,7 @@ export default function OrderHistory({ locale, user, dict }) {
                 <div className="lg:w-16 flex items-center justify-center text-gray-400 mt-2 lg:mt-0">
                   <ChevronIcon expanded={isExpanded} />
                 </div>
-              </div>
+              </button>
 
               {/* Expanded Body */}
               {isExpanded && (

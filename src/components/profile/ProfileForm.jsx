@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'react-toastify';
 import { Country, State } from 'country-state-city';
-import PhoneInput, { isSupportedCountry } from 'react-phone-number-input';
+import PhoneInput, { isSupportedCountry, isValidPhoneNumber } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 
 export default function ProfileForm({ initialData, locale, userId, dict, onProfileUpdate }) {
@@ -48,7 +48,11 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ 
+      ...prev, 
+      [name]: value,
+      ...(name === 'country' ? { governorate: '' } : {})
+    }));
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -67,8 +71,8 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
     if (!formData.gender) newErrors.gender = dict?.profile?.form?.errors?.genderReq || 'Gender is required';
     if (!formData.dob) newErrors.dob = dict?.profile?.form?.errors?.dobReq || 'Date of birth is required';
     if (!formData.country) newErrors.country = dict?.profile?.form?.errors?.countryReq || 'Country is required';
-    if (!formData.governorate) newErrors.governorate = dict?.profile?.form?.errors?.governorateReq || 'Governorate is required';
-    if (!formData.phone) newErrors.phone = dict?.profile?.form?.errors?.phoneInvalid || 'Invalid phone number';
+    if (!formData.governorate && states.length > 0) newErrors.governorate = dict?.profile?.form?.errors?.governorateReq || 'Governorate is required';
+    if (!formData.phone || !isValidPhoneNumber(formData.phone)) newErrors.phone = dict?.profile?.form?.errors?.phoneInvalid || 'Invalid phone number';
     if (!formData.educationStatus) newErrors.educationStatus = dict?.profile?.form?.errors?.educationReq || 'Education status is required';
     if (!formData.workField) newErrors.workField = dict?.profile?.form?.errors?.workFieldReq || 'Work field is required';
     

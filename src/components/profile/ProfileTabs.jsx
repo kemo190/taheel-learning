@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'react-toastify';
 import ProfileForm from './ProfileForm';
@@ -13,6 +13,22 @@ export default function ProfileTabs({ locale, profile, user, dict }) {
   const [localProfile, setLocalProfile] = useState(profile);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    if (!showDeleteModal) return;
+    
+    // Move initial focus into the dialog when it opens
+    if (modalRef.current) {
+      modalRef.current.focus();
+    }
+    
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape' && !isDeleting) setShowDeleteModal(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [showDeleteModal, isDeleting]);
 
   const tabs = [
     { id: 'personal', name: dict.profile.tabs.personal },
@@ -117,8 +133,13 @@ export default function ProfileTabs({ locale, profile, user, dict }) {
       
       {/* Custom Delete Confirmation Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden relative">
+        <div 
+          role="dialog" 
+          aria-modal="true" 
+          aria-labelledby="delete-account-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm"
+        >
+          <div ref={modalRef} tabIndex="-1" className="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden relative outline-none">
             
             {/* Close Button */}
             <button 
@@ -141,7 +162,7 @@ export default function ProfileTabs({ locale, profile, user, dict }) {
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-bold text-[#0b2646] mb-3">
+              <h3 id="delete-account-title" className="text-xl font-bold text-[#0b2646] mb-3">
                 {dict?.profile?.deleteModal?.deleteConfirmTitle || 'Are you sure you want to delete the account?'}
               </h3>
               
