@@ -36,3 +36,5 @@ export default async function RootLayout({ children, params }) {
     </html>
   );
 }
+
+// Trigger CodeRabbit review for app directory

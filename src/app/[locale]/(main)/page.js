@@ -19,3 +19,5 @@ export default async function Home({ params }) {
     </main>
   );
 }
+
+// Trigger CodeRabbit review for app directory

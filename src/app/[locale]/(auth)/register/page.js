@@ -95,3 +95,5 @@ export default async function RegisterPage({ params }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review for app directory

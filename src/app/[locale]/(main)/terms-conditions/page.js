@@ -17,3 +17,5 @@ export default async function TermsConditionsPage({ params }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review for app directory

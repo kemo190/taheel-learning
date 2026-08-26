@@ -5,3 +5,5 @@ export default function AuthLayout({ children }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review for app directory
