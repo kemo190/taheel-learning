@@ -2,14 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-
-const UserIcon = (props) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-    <circle cx="12" cy="7" r="4"></circle>
-  </svg>
-);
 
 const LogoutIcon = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -21,30 +15,83 @@ const LogoutIcon = (props) => (
 
 export default function AuthNav({ dict, locale }) {
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
+    const fetchProfile = async (currentUser) => {
+      if (!currentUser) {
+        setProfile(null);
+        return;
+      }
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('avatar_url, full_name, certificate_name')
+        .eq('id', currentUser.id)
+        .single();
+        
+      if (profileData) {
+        setProfile(profileData);
+      }
+    };
+
     // Check active sessions and sets the user
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user || null);
+      const currentUser = session?.user || null;
+      setUser(currentUser);
+      await fetchProfile(currentUser);
       setLoading(false);
     };
     getUser();
 
     // Listen for changes on auth state (login, logout, etc.)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
+      const nextUser = session?.user || null;
+      setUser(nextUser);
+      fetchProfile(nextUser);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
+  // Listen for custom profile update events (e.g. from ProfileHeader)
+  useEffect(() => {
+    const handleProfileUpdate = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('avatar_url, full_name, certificate_name')
+          .eq('id', session.user.id)
+          .single();
+        if (profileData) {
+          setProfile(profileData);
+        }
+      }
+    };
+
+    window.addEventListener('profileUpdated', handleProfileUpdate);
+    return () => window.removeEventListener('profileUpdated', handleProfileUpdate);
+  }, []);
+
+  const router = useRouter();
+
   const handleLogout = async () => {
     setIsDropdownOpen(false);
     await supabase.auth.signOut();
+    router.push(`/${locale}`);
   };
+
+  // Determine display avatar & name with fallbacks
+  const displayName = profile?.certificate_name 
+    || profile?.full_name 
+    || user?.user_metadata?.full_name 
+    || user?.email?.split('@')[0];
+
+  const defaultAvatar = displayName ? `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=0b2646&color=fff&size=150` : null;
+  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url || defaultAvatar;
 
   // While checking session initially, render a small placeholder to avoid UI jump
   if (loading) {
@@ -77,10 +124,10 @@ export default function AuthNav({ dict, locale }) {
           <button 
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center justify-center w-8 h-8 sm:w-[38px] sm:h-[38px] bg-[#0b2646] text-white rounded-full transition-colors shadow-sm cursor-pointer overflow-hidden border border-[#0b2646]/20 relative z-50"
+            className={`flex items-center justify-center w-8 h-8 sm:w-[38px] sm:h-[38px] ${avatarUrl ? 'bg-gray-100' : 'bg-[#0b2646] text-white'} rounded-full transition-colors shadow-sm cursor-pointer overflow-hidden border border-gray-200 relative z-50`}
           >
-            {user?.user_metadata?.avatar_url ? (
-              <img src={user.user_metadata.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+            {avatarUrl ? (
+              <img src={avatarUrl} alt="Profile" className="w-full h-full object-cover" />
             ) : (
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
@@ -93,9 +140,9 @@ export default function AuthNav({ dict, locale }) {
           <div className={`absolute top-full rtl:left-0 ltr:right-0 mt-3 w-[260px] bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-200 z-50 overflow-hidden border border-gray-100 ${isDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible lg:group-hover:opacity-100 lg:group-hover:visible lg:group-focus-within:opacity-100 lg:group-focus-within:visible'}`}>
             {/* Header linked to Profile */}
             <Link href={`/${locale}/profile`} onClick={() => setIsDropdownOpen(false)} className="p-4 border-b border-gray-100 flex items-center gap-3 hover:bg-gray-50 transition-colors cursor-pointer">
-              <div className="w-10 h-10 shrink-0 bg-[#0b2646] text-white rounded-full flex items-center justify-center overflow-hidden border border-[#0b2646]/20">
-                {user?.user_metadata?.avatar_url ? (
-                  <img src={user.user_metadata.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+              <div className={`w-10 h-10 shrink-0 ${avatarUrl ? 'bg-gray-100' : 'bg-[#0b2646] text-white'} rounded-full flex items-center justify-center overflow-hidden border border-gray-200`}>
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
                   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
@@ -105,7 +152,7 @@ export default function AuthNav({ dict, locale }) {
               </div>
               <div className="flex-1 min-w-0 rtl:text-right ltr:text-left">
                 <p className="text-[15px] font-bold text-gray-900 truncate">
-                  {user.user_metadata?.full_name || user.email?.split('@')[0]}
+                  {displayName}
                 </p>
                 <p className="text-[13px] text-gray-500 truncate mt-0.5">
                   {user.email}

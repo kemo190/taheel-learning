@@ -20,11 +20,18 @@ export default async function ProfileLayout({ children, params }) {
     redirect(`/${locale}/login`);
   }
 
+  // Fetch the profile data
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('full_name, certificate_name, avatar_url')
+    .eq('id', user.id)
+    .single();
+
   return (
     <div className="bg-[#f8fafc] min-h-screen py-10 px-4">
       <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px]">
         {/* Header */}
-        <ProfileHeader user={user} locale={locale} dict={dict} />
+        <ProfileHeader user={user} profile={profile} locale={locale} dict={dict} />
         
         {children}
       </div>

@@ -250,6 +250,53 @@
         "ai": "الذكاء الاصطناعي وعلوم البيانات",
         "other": "أخرى"
       }
+    },
+    "account": {
+      "emailLabel": "البريد الإلكتروني",
+      "passwordLabel": "كلمة المرور",
+      "googleLinked": "حسابك مرتبط بجوجل. لا توجد كلمة مرور.",
+      "newPassword": "كلمة المرور الجديدة",
+      "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+      "cancel": "إلغاء",
+      "save": "حفظ",
+      "passwordMinLength": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+      "passwordsNotMatch": "كلمتا المرور غير متطابقتين",
+      "passwordUpdated": "تم تحديث كلمة المرور بنجاح"
+    },
+    "header": {
+      "mustSelectImage": "يجب اختيار صورة للرفع.",
+      "imageUpdated": "تم تحديث صورة البروفايل بنجاح!",
+      "editPhoto": "تغيير الصورة",
+      "uploadNewPhoto": "رفع صورة جديدة",
+      "userFallback": "مستخدم"
+    },
+    "deleteModal": {
+      "deleting": "جاري الحذف...",
+      "deleteSuccess": "تم حذف الحساب بنجاح.",
+      "deleteConfirmTitle": "هل أنت متأكد من حذف الحساب؟",
+      "deleteConfirmDesc": "هذا الإجراء سيؤدي إلى حذف حسابك وجميع بياناتك بشكل دائم.\nلا يمكن التراجع عن هذا الإجراء.",
+      "cancelDelete": "إلغاء",
+      "confirmDelete": "تأكيد الحذف"
+    },
+    "history": {
+      "desc": "تابع جميع معاملاتك المالية والدورات التي قمت بشرائها.",
+      "noOrders": "ليس لديك أي طلبات سابقة.",
+      "browseCourses": "تصفح الدورات المتاحة",
+      "orderId": "رقم الطلب",
+      "date": "التاريخ",
+      "paymentMethod": "طريقة الدفع",
+      "totalPaid": "الإجمالي المدفوع",
+      "totalCourses": "إجمالي الدورات",
+      "course": "دورة",
+      "status": "الحالة",
+      "statusSuccess": "ناجح",
+      "by": "بواسطة:",
+      "type": "النوع:",
+      "price": "السعر:"
+    },
+    "error": {
+      "auth": "حدث خطأ في المصادقة",
+      "loadProfile": "حدث خطأ أثناء تحميل البيانات"
     }
   },
   "footer": {

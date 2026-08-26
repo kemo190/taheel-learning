@@ -12,6 +12,9 @@ export const metadata = {
   description: "منصة تأهيل التعليمية والتوظيفية",
 };
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default async function RootLayout({ children, params }) {
   // Await params per Next.js App Router latest conventions
   const { locale } = await params;
@@ -23,6 +26,12 @@ export default async function RootLayout({ children, params }) {
         <main>
           {children}
         </main>
+        <ToastContainer 
+          position="top-center"
+          autoClose={3000}
+          rtl={dir === 'rtl'}
+          theme="light"
+        />
       </body>
     </html>
   );
