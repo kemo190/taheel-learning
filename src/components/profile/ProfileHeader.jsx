@@ -191,3 +191,5 @@ export default function ProfileHeader({ user, profile, locale, dict }) {
   );
 }
 
+
+// Trigger CodeRabbit review

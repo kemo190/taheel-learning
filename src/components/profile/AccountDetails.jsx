@@ -170,3 +170,5 @@ export default function AccountDetails({ locale, user, dict }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review

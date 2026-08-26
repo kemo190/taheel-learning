@@ -203,3 +203,5 @@ export default function ProfileTabs({ locale, profile, user, dict }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review
