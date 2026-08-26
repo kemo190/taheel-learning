@@ -12,7 +12,7 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
   
   const [formData, setFormData] = useState({
     nameEn: initialData?.full_name || '',
-    nameAr: initialData?.full_name_ar || '',
+    nameAr: initialData?.arabic_name || '',
     certificateName: initialData?.certificate_name || '',
     gender: initialData?.gender || '',
     dob: initialData?.dob || '',
@@ -82,7 +82,10 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate()) {
+      toast.error(isRtl ? 'يرجى إكمال جميع الحقول المطلوبة بشكل صحيح' : 'Please fill all required fields correctly');
+      return;
+    }
     if (!userId) {
       toast.error(dict?.profile?.form?.messages?.profileNotFound || 'Profile not found to update');
       return;
@@ -92,7 +95,7 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
     
     const updatePayload = {
       full_name: formData.nameEn,
-      full_name_ar: formData.nameAr,
+      arabic_name: formData.nameAr,
       certificate_name: formData.certificateName,
       gender: formData.gender,
       dob: formData.dob,
@@ -127,27 +130,13 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6 md:gap-8 pb-4" dir={isRtl ? 'rtl' : 'ltr'}>
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4 md:gap-5 pb-4" dir={isRtl ? 'rtl' : 'ltr'}>
       
-      {/* Names Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-        <div className="flex flex-col gap-2">
-          <label className="text-[#0b2646] font-bold text-sm" htmlFor="nameEn">
-            {dict?.profile?.form?.nameEn || "Name in English"}
-          </label>
-          <input
-            id="nameEn"
-            name="nameEn"
-            type="text"
-            value={formData.nameEn}
-            onChange={handleChange}
-            placeholder={dict?.profile?.form?.writeNameHere || "Write your name here"}
-            className={`w-full bg-[#f4f7fb] text-gray-700 placeholder:text-gray-400 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.nameEn ? 'border-red-500' : 'border-transparent'}`}
-          />
-          {errors.nameEn && <span className="text-red-500 text-xs font-medium">{errors.nameEn}</span>}
-        </div>
-
-        <div className="flex flex-col gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 pt-1">
+        
+        {/* Row 1 */}
+        {/* Right: Name in Arabic */}
+        <div className="flex flex-col gap-1.5">
           <label className="text-[#0b2646] font-bold text-sm" htmlFor="nameAr">
             {dict?.profile?.form?.nameAr || "Name in Arabic"}
           </label>
@@ -158,73 +147,81 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
             value={formData.nameAr}
             onChange={handleChange}
             placeholder={dict?.profile?.form?.writeNameHere || "Write your name here"}
-            className={`w-full bg-[#f4f7fb] text-gray-700 placeholder:text-gray-400 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.nameAr ? 'border-red-500' : 'border-transparent'}`}
+            className={`w-full bg-gray-50 text-gray-700 placeholder:text-gray-400 rounded-xl px-4 py-2 h-[40px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.nameAr ? 'border-red-500' : 'border-gray-200'}`}
           />
           {errors.nameAr && <span className="text-red-500 text-xs font-medium">{errors.nameAr}</span>}
         </div>
-      </div>
+        
+        {/* Left: Name in English */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="nameEn">
+            {dict?.profile?.form?.nameEn || "Name in English"}
+          </label>
+          <input
+            id="nameEn"
+            name="nameEn"
+            type="text"
+            value={formData.nameEn}
+            onChange={handleChange}
+            placeholder={dict?.profile?.form?.writeNameHere || "Write your name here"}
+            className={`w-full bg-gray-50 text-gray-700 placeholder:text-gray-400 rounded-xl px-4 py-2 h-[40px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.nameEn ? 'border-red-500' : 'border-gray-200'}`}
+          />
+          {errors.nameEn && <span className="text-red-500 text-xs font-medium">{errors.nameEn}</span>}
+        </div>
 
-      {/* Certificate Name Row */}
-      <div className="w-full flex flex-col gap-2">
-        <label className="text-[#0b2646] font-bold text-sm" htmlFor="certificateName">
-          {dict?.profile?.form?.nameOnCertificate || "Name on Certificate"}
-        </label>
-        <input
-          id="certificateName"
-          name="certificateName"
-          type="text"
-          value={formData.certificateName}
-          onChange={handleChange}
-          placeholder={dict?.profile?.form?.writeNameHere || "Write your name here"}
-          className={`w-full bg-[#f4f7fb] text-gray-700 placeholder:text-gray-400 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.certificateName ? 'border-red-500' : 'border-transparent'}`}
-        />
-        {errors.certificateName && <span className="text-red-500 text-xs font-medium">{errors.certificateName}</span>}
-      </div>
+        {/* Row 2 */}
+        {/* Right: Certificate Name */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="certificateName">
+            {dict?.profile?.form?.nameOnCertificate || "Name on Certificate"}
+          </label>
+          <input
+            id="certificateName"
+            name="certificateName"
+            type="text"
+            value={formData.certificateName}
+            onChange={handleChange}
+            placeholder={dict?.profile?.form?.writeNameHere || "Write your name here"}
+            className={`w-full bg-gray-50 text-gray-700 placeholder:text-gray-400 rounded-xl px-4 py-2 h-[40px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.certificateName ? 'border-red-500' : 'border-gray-200'}`}
+          />
+          {errors.certificateName && <span className="text-red-500 text-xs font-medium">{errors.certificateName}</span>}
+        </div>
 
-      {/* Gender & DOB Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="flex flex-col gap-2">
+        {/* Left: Gender */}
+        <div className="flex flex-col gap-1.5">
           <label className="text-[#0b2646] font-bold text-sm" htmlFor="gender">
             {dict?.profile?.form?.gender || "Gender"}
           </label>
-          <div className="relative">
-            <select
-              id="gender"
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.gender ? 'border-red-500' : 'border-transparent'}`}
-            >
-              <option value="" disabled>{dict?.profile?.form?.gender || "Gender"}</option>
-              <option value="male">{dict?.profile?.form?.male || "Male"}</option>
-              <option value="female">{dict?.profile?.form?.female || "Female"}</option>
-            </select>
-            <div className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 text-gray-400 pointer-events-none">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </div>
+          <div className="flex gap-4 h-[40px]">
+            <label className={`flex-1 flex items-center justify-center gap-3 px-4 bg-gray-50 border rounded-xl cursor-pointer transition-all ${formData.gender === 'male' ? 'border-[#0b2646] ring-1 ring-[#0b2646]' : errors.gender ? 'border-red-500' : 'border-gray-200'}`}>
+              <span className="text-gray-700 text-sm font-medium">{dict?.profile?.form?.male || "Male"}</span>
+              <input
+                type="radio"
+                name="gender"
+                value="male"
+                checked={formData.gender === 'male'}
+                onChange={handleChange}
+                className="w-4 h-4 text-[#0b2646] focus:ring-[#0b2646] border-gray-300"
+              />
+            </label>
+            <label className={`flex-1 flex items-center justify-center gap-3 px-4 bg-gray-50 border rounded-xl cursor-pointer transition-all ${formData.gender === 'female' ? 'border-[#0b2646] ring-1 ring-[#0b2646]' : errors.gender ? 'border-red-500' : 'border-gray-200'}`}>
+              <span className="text-gray-700 text-sm font-medium">{dict?.profile?.form?.female || "Female"}</span>
+              <input
+                type="radio"
+                name="gender"
+                value="female"
+                checked={formData.gender === 'female'}
+                onChange={handleChange}
+                className="w-4 h-4 text-[#0b2646] focus:ring-[#0b2646] border-gray-300"
+              />
+            </label>
           </div>
           {errors.gender && <span className="text-red-500 text-xs font-medium">{errors.gender}</span>}
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-[#0b2646] font-bold text-sm" htmlFor="dob">
-            {dict?.profile?.form?.dob || "Date of Birth"}
-          </label>
-          <input
-            id="dob"
-            name="dob"
-            type="date"
-            value={formData.dob}
-            onChange={handleChange}
-            className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.dob ? 'border-red-500' : 'border-transparent'}`}
-          />
-          {errors.dob && <span className="text-red-500 text-xs font-medium">{errors.dob}</span>}
-        </div>
-      </div>
-
-      {/* Country & Governorate Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="flex flex-col gap-2">
+        {/* Row 3 */}
+        {/* Right: Country */}
+        <div className="flex flex-col gap-1.5">
           <label className="text-[#0b2646] font-bold text-sm" htmlFor="country">
             {dict?.profile?.form?.country || "Country"}
           </label>
@@ -234,7 +231,7 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
               name="country"
               value={formData.country}
               onChange={handleChange}
-              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.country ? 'border-red-500' : 'border-transparent'}`}
+              className={`w-full bg-gray-50 text-gray-700 rounded-xl px-4 py-2 h-[40px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.country ? 'border-red-500' : 'border-gray-200'}`}
             >
               <option value="" disabled>{dict?.profile?.form?.selectCountry || "Select Country"}</option>
               {countries.map(c => (
@@ -248,7 +245,25 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
           {errors.country && <span className="text-red-500 text-xs font-medium">{errors.country}</span>}
         </div>
 
-        <div className="flex flex-col gap-2">
+        {/* Left: DOB */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="dob">
+            {dict?.profile?.form?.dob || "Date of Birth"}
+          </label>
+          <input
+            id="dob"
+            name="dob"
+            type="date"
+            value={formData.dob}
+            onChange={handleChange}
+            className={`w-full bg-gray-50 text-gray-700 rounded-xl px-4 py-2 h-[40px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.dob ? 'border-red-500' : 'border-gray-200'}`}
+          />
+          {errors.dob && <span className="text-red-500 text-xs font-medium">{errors.dob}</span>}
+        </div>
+
+        {/* Row 4 */}
+        {/* Right: Governorate */}
+        <div className="flex flex-col gap-1.5">
           <label className="text-[#0b2646] font-bold text-sm" htmlFor="governorate">
             {dict?.profile?.form?.governorate || "Governorate"}
           </label>
@@ -259,7 +274,7 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
               value={formData.governorate}
               onChange={handleChange}
               disabled={!formData.country || states.length === 0}
-              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none disabled:opacity-50 ${errors.governorate ? 'border-red-500' : 'border-transparent'}`}
+              className={`w-full bg-gray-50 text-gray-700 rounded-xl px-4 py-2 h-[40px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none disabled:opacity-50 ${errors.governorate ? 'border-red-500' : 'border-gray-200'}`}
             >
               <option value="" disabled>{dict?.profile?.form?.selectGovernorate || "Select Governorate"}</option>
               {states.map(s => (
@@ -272,31 +287,30 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
           </div>
           {errors.governorate && <span className="text-red-500 text-xs font-medium">{errors.governorate}</span>}
         </div>
-      </div>
 
-      {/* Phone Number */}
-      <div className="flex flex-col gap-2">
-        <label className="text-[#0b2646] font-bold text-sm">
-          {dict?.profile?.form?.phone || "Phone Number"}
-        </label>
-        <div dir="ltr" className={`w-full bg-[#f4f7fb] rounded-lg px-4 focus-within:ring-1 focus-within:ring-[#0b2646] transition-all border ${errors.phone ? 'border-red-500' : 'border-transparent'}`}>
-          <PhoneInput
-            international
-            defaultCountry={formData.country && isSupportedCountry(formData.country) ? formData.country : "EG"}
-            value={formData.phone}
-            onChange={handlePhoneChange}
-            className="flex items-center w-full h-[48px] [&_.PhoneInputCountry]:mr-3 [&_.PhoneInputCountrySelect]:opacity-0 [&_.PhoneInputCountrySelect]:cursor-pointer [&_.PhoneInputCountryIcon]:w-6 [&_.PhoneInputCountryIcon]:h-4 [&_.PhoneInputCountryIcon]:shadow-sm"
-            numberInputProps={{
-              className: "flex-1 w-full h-full bg-transparent border-none outline-none text-gray-700 text-sm focus:ring-0",
-            }}
-          />
+        {/* Left: Phone */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[#0b2646] font-bold text-sm">
+            {dict?.profile?.form?.phone || "Phone Number"}
+          </label>
+          <div dir="ltr" className={`w-full bg-gray-50 rounded-xl px-4 border focus-within:ring-1 focus-within:ring-[#0b2646] focus-within:border-[#0b2646] transition-all ${errors.phone ? 'border-red-500' : 'border-gray-200'}`}>
+            <PhoneInput
+              international
+              defaultCountry={formData.country && isSupportedCountry(formData.country) ? formData.country : "EG"}
+              value={formData.phone}
+              onChange={handlePhoneChange}
+              className="flex items-center w-full h-[40px] [&_.PhoneInputCountry]:mr-3 [&_.PhoneInputCountrySelect]:opacity-0 [&_.PhoneInputCountrySelect]:cursor-pointer [&_.PhoneInputCountryIcon]:w-6 [&_.PhoneInputCountryIcon]:h-4 [&_.PhoneInputCountryIcon]:shadow-sm"
+              numberInputProps={{
+                className: "flex-1 w-full h-full bg-transparent border-none outline-none text-gray-700 text-sm focus:ring-0",
+              }}
+            />
+          </div>
+          {errors.phone && <span className="text-red-500 text-xs font-medium">{errors.phone}</span>}
         </div>
-        {errors.phone && <span className="text-red-500 text-xs font-medium">{errors.phone}</span>}
-      </div>
 
-      {/* Education & Work Field Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="flex flex-col gap-2">
+        {/* Row 5 */}
+        {/* Right: Education Status */}
+        <div className="flex flex-col gap-1.5">
           <label className="text-[#0b2646] font-bold text-sm" htmlFor="educationStatus">
             {dict?.profile?.form?.educationStatus || "Education Status"}
           </label>
@@ -306,7 +320,7 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
               name="educationStatus"
               value={formData.educationStatus}
               onChange={handleChange}
-              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.educationStatus ? 'border-red-500' : 'border-transparent'}`}
+              className={`w-full bg-gray-50 text-gray-700 rounded-xl px-4 py-2 h-[40px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.educationStatus ? 'border-red-500' : 'border-gray-200'}`}
             >
               <option value="" disabled>{dict?.profile?.form?.educationStatus || "Education Status"}</option>
               <option value="graduated">{dict?.profile?.form?.graduated || "Graduated"}</option>
@@ -319,7 +333,8 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
           {errors.educationStatus && <span className="text-red-500 text-xs font-medium">{errors.educationStatus}</span>}
         </div>
 
-        <div className="flex flex-col gap-2">
+        {/* Left: Work Field */}
+        <div className="flex flex-col gap-1.5">
           <label className="text-[#0b2646] font-bold text-sm" htmlFor="workField">
             {dict?.profile?.form?.workField || "Work Field"}
           </label>
@@ -329,7 +344,7 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
               name="workField"
               value={formData.workField}
               onChange={handleChange}
-              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.workField ? 'border-red-500' : 'border-transparent'}`}
+              className={`w-full bg-gray-50 text-gray-700 rounded-xl px-4 py-2 h-[40px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.workField ? 'border-red-500' : 'border-gray-200'}`}
             >
               <option value="" disabled>{dict?.profile?.form?.workField || "Work Field"}</option>
               {workFields.map(field => (
@@ -342,6 +357,7 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
           </div>
           {errors.workField && <span className="text-red-500 text-xs font-medium">{errors.workField}</span>}
         </div>
+
       </div>
 
       {/* Save Button */}

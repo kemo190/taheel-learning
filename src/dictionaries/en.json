@@ -261,9 +261,7 @@
       "save": "Save",
       "passwordMinLength": "Password must be at least 6 characters",
       "passwordsNotMatch": "Passwords do not match",
-      "passwordUpdated": "Password updated successfully",
-      "passwordUpdateFailed": "Unable to update password",
-      "editPassword": "Edit password"
+      "passwordUpdated": "Password updated successfully"
     },
     "header": {
       "mustSelectImage": "You must select an image to upload.",
@@ -294,8 +292,7 @@
       "statusSuccess": "Successful",
       "by": "By:",
       "type": "Type:",
-      "price": "Price:",
-      "loadError": "Failed to load orders"
+      "price": "Price:"
     },
     "error": {
       "auth": "Authentication error",

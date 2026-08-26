@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
 const LogoutIcon = (props) => (
@@ -55,9 +56,32 @@ export default function AuthNav({ dict, locale }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Listen for custom profile update events (e.g. from ProfileHeader)
+  useEffect(() => {
+    const handleProfileUpdate = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('avatar_url, full_name, certificate_name')
+          .eq('id', session.user.id)
+          .single();
+        if (profileData) {
+          setProfile(profileData);
+        }
+      }
+    };
+
+    window.addEventListener('profileUpdated', handleProfileUpdate);
+    return () => window.removeEventListener('profileUpdated', handleProfileUpdate);
+  }, []);
+
+  const router = useRouter();
+
   const handleLogout = async () => {
     setIsDropdownOpen(false);
     await supabase.auth.signOut();
+    router.push(`/${locale}`);
   };
 
   // Determine display avatar & name with fallbacks
@@ -100,7 +124,7 @@ export default function AuthNav({ dict, locale }) {
           <button 
             type="button"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center justify-center w-8 h-8 sm:w-[38px] sm:h-[38px] bg-[#0b2646] text-white rounded-full transition-colors shadow-sm cursor-pointer overflow-hidden border border-[#0b2646]/20 relative z-50"
+            className={`flex items-center justify-center w-8 h-8 sm:w-[38px] sm:h-[38px] ${avatarUrl ? 'bg-gray-100' : 'bg-[#0b2646] text-white'} rounded-full transition-colors shadow-sm cursor-pointer overflow-hidden border border-gray-200 relative z-50`}
           >
             {avatarUrl ? (
               <img src={avatarUrl} alt="Profile" className="w-full h-full object-cover" />
@@ -116,7 +140,7 @@ export default function AuthNav({ dict, locale }) {
           <div className={`absolute top-full rtl:left-0 ltr:right-0 mt-3 w-[260px] bg-white rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] transition-all duration-200 z-50 overflow-hidden border border-gray-100 ${isDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible lg:group-hover:opacity-100 lg:group-hover:visible lg:group-focus-within:opacity-100 lg:group-focus-within:visible'}`}>
             {/* Header linked to Profile */}
             <Link href={`/${locale}/profile`} onClick={() => setIsDropdownOpen(false)} className="p-4 border-b border-gray-100 flex items-center gap-3 hover:bg-gray-50 transition-colors cursor-pointer">
-              <div className="w-10 h-10 shrink-0 bg-[#0b2646] text-white rounded-full flex items-center justify-center overflow-hidden border border-[#0b2646]/20">
+              <div className={`w-10 h-10 shrink-0 ${avatarUrl ? 'bg-gray-100' : 'bg-[#0b2646] text-white'} rounded-full flex items-center justify-center overflow-hidden border border-gray-200`}>
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="Profile" className="w-full h-full object-cover" />
                 ) : (

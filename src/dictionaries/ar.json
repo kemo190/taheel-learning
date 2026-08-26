@@ -261,9 +261,7 @@
       "save": "حفظ",
       "passwordMinLength": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
       "passwordsNotMatch": "كلمتا المرور غير متطابقتين",
-      "passwordUpdated": "تم تحديث كلمة المرور بنجاح",
-      "passwordUpdateFailed": "تعذر تحديث كلمة المرور",
-      "editPassword": "تعديل كلمة المرور"
+      "passwordUpdated": "تم تحديث كلمة المرور بنجاح"
     },
     "header": {
       "mustSelectImage": "يجب اختيار صورة للرفع.",
@@ -294,8 +292,7 @@
       "statusSuccess": "ناجح",
       "by": "بواسطة:",
       "type": "النوع:",
-      "price": "السعر:",
-      "loadError": "تعذر تحميل الطلبات"
+      "price": "السعر:"
     },
     "error": {
       "auth": "حدث خطأ في المصادقة",
