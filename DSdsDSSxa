@@ -1,0 +1,39 @@
+[33m200ca23[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to origin/main
+[33me6c1ff5[m HEAD@{1}: checkout: moving from main to main
+[33me6c1ff5[m HEAD@{2}: commit: Empty state
+[33m200ca23[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{3}: checkout: moving from main to main
+[33m200ca23[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{4}: commit: Refactor Footer for i18n and responsive layout
+[33m9f9e29e[m HEAD@{5}: commit: Replace eyouth brand text and links with Ta'hel
+[33mb6e5ccd[m HEAD@{6}: commit: Fix SVG visibility by adding fill currentColor to paths
+[33m51b338c[m HEAD@{7}: commit: Use exact user HTML for copyright text
+[33mad8fb94[m HEAD@{8}: commit: Move social icons to bottom bar and use exact user SVGs
+[33m6b14a34[m HEAD@{9}: commit: Fix footer container size to exactly match screenshot
+[33m190eabd[m HEAD@{10}: commit: Restore exact tracking URL in first column
+[33m0ce770a[m HEAD@{11}: commit: Match exact footer dimensions, eyouth text, and original layout
+[33m66ffd25[m HEAD@{12}: commit: Fix Footer background image styling
+[33mee38782[m HEAD@{13}: commit: Add social media icons to Footer
+[33mb9aafc3[m HEAD@{14}: commit: Update Footer with taheel branding and background image
+[33m1ff2bbf[m HEAD@{15}: commit: Update profile form styles and add global footer
+[33m56a257f[m HEAD@{16}: commit: Hide search bar on mobile screens
+[33m67bceb6[m HEAD@{17}: commit: Update HeroSection mobile layout to match UI mockup
+[33me1fe812[m HEAD@{18}: commit: Fix syntax error in Navbar
+[33m603ae7d[m HEAD@{19}: commit: Fix syntax error in AuthNav
+[33m0e48cd6[m HEAD@{20}: commit: Update profile, responsive auth layouts, and navbar dropdown on mobile
+[33md1cea74[m HEAD@{21}: checkout: moving from state-full to main
+[33m859fc86[m[33m ([m[1;31morigin/state-full[m[33m, [m[1;32mstate-full[m[33m)[m HEAD@{22}: commit: Add full codebase for CodeRabbit review
+[33m8e31251[m[33m ([m[1;31morigin/state-empty[m[33m, [m[1;32mstate-empty[m[33m)[m HEAD@{23}: checkout: moving from state-empty to state-full
+[33m8e31251[m[33m ([m[1;31morigin/state-empty[m[33m, [m[1;32mstate-empty[m[33m)[m HEAD@{24}: commit: Empty state
+[33md1cea74[m HEAD@{25}: checkout: moving from main to state-empty
+[33md1cea74[m HEAD@{26}: checkout: moving from main to main
+[33md1cea74[m HEAD@{27}: checkout: moving from base-empty to main
+[33m2371b06[m[33m ([m[1;31morigin/base-empty[m[33m, [m[1;32mbase-empty[m[33m)[m HEAD@{28}: commit: Empty state for review
+[33md1cea74[m HEAD@{29}: checkout: moving from main to base-empty
+[33md1cea74[m HEAD@{30}: checkout: moving from main to main
+[33md1cea74[m HEAD@{31}: checkout: moving from empty-base to main
+[33m2a4f77c[m[33m ([m[1;31morigin/empty-base[m[33m, [m[1;32mempty-base[m[33m)[m HEAD@{32}: commit (initial): Create an empty branch for full CodeRabbit review
+[33md1cea74[m HEAD@{33}: commit: feat: complete authentication flow and user profile dashboard
+[33me21fce8[m HEAD@{34}: commit: feat: Add Paths and Courses sections with brand styles
+[33m8df9606[m HEAD@{35}: commit: feat: enhance responsive design and mobile menu
+[33m28d4271[m HEAD@{36}: Branch: renamed refs/heads/master to refs/heads/main
+[33m28d4271[m HEAD@{38}: commit: feat: implement i18n routing, Navbar, and HeroSection
+[33maf3954a[m HEAD@{39}: commit (initial): Initial commit from Create Next App

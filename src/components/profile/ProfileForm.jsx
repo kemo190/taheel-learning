@@ -1,322 +1,363 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import React, { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { toast } from 'react-toastify';
 import { Country, State } from 'country-state-city';
 import PhoneInput, { isSupportedCountry } from 'react-phone-number-input';
-import countriesTranslations from 'i18n-iso-countries';
-import arabicCountries from 'i18n-iso-countries/langs/ar.json';
-import englishCountries from 'i18n-iso-countries/langs/en.json';
+import 'react-phone-number-input/style.css';
 
-countriesTranslations.registerLocale(arabicCountries);
-countriesTranslations.registerLocale(englishCountries);
-
-const getProfileSchema = (dict) => z.object({
-  full_name: z.string().min(2, dict.profile.form.errors.englishNameReq),
-  arabic_name: z.string().min(2, dict.profile.form.errors.arabicNameReq),
-  certificate_name: z.string().min(2, dict.profile.form.errors.certificateNameReq),
-  gender: z.enum(['male', 'female'], { required_error: dict.profile.form.errors.genderReq }),
-  dob: z.string().min(1, dict.profile.form.errors.dobReq),
-  country: z.string().min(1, dict.profile.form.errors.countryReq),
-  governorate: z.string().min(1, dict.profile.form.errors.governorateReq),
-  phone: z.string().min(8, dict.profile.form.errors.phoneInvalid),
-  education_status: z.string().min(1, dict.profile.form.errors.educationReq),
-  work_field: z.string().min(1, dict.profile.form.errors.workFieldReq),
-});
-
-export default function ProfileForm({ initialData, locale, userId, dict }) {
+export default function ProfileForm({ initialData, locale, userId, dict, onProfileUpdate }) {
   const isRtl = locale === 'ar';
-  const schema = getProfileSchema(dict);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMsg, setSuccessMsg] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      full_name: initialData?.full_name || '',
-      arabic_name: initialData?.arabic_name || '',
-      certificate_name: initialData?.certificate_name || '',
-      gender: initialData?.gender || 'male',
-      dob: initialData?.dob ? new Date(initialData.dob).toISOString().split('T')[0] : '',
-      country: initialData?.country || '',
-      governorate: initialData?.governorate || '',
-      phone: initialData?.phone || '',
-      education_status: initialData?.education_status || '',
-      work_field: initialData?.work_field || '',
-    },
+  
+  const [formData, setFormData] = useState({
+    nameEn: initialData?.full_name || '',
+    nameAr: initialData?.full_name_ar || '',
+    certificateName: initialData?.certificate_name || '',
+    gender: initialData?.gender || '',
+    dob: initialData?.dob || '',
+    country: initialData?.country || '',
+    governorate: initialData?.governorate || '',
+    phone: initialData?.phone || '',
+    educationStatus: initialData?.education_status || '',
+    workField: initialData?.work_field || ''
   });
 
-  const selectedCountry = watch('country');
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const countriesList = useMemo(() => {
-    return Country.getAllCountries().map((country) => ({
-      isoCode: country.isoCode,
-      name: countriesTranslations.getName(country.isoCode, locale) || country.name,
-    })).sort((a, b) => a.name.localeCompare(b.name, locale));
-  }, [locale]);
+  // Helper arrays/objects
+  const countries = Country.getAllCountries();
+  const states = formData.country ? State.getStatesOfCountry(formData.country) : [];
 
-  const statesList = useMemo(() => {
-    if (!selectedCountry) return [];
-    return State.getStatesOfCountry(selectedCountry).map((state) => ({
-      isoCode: state.isoCode,
-      name: state.name,
-    }));
-  }, [selectedCountry]);
+  const workFields = [
+    { id: 'marketing', label: dict?.profile?.form?.workFields?.marketing || 'Marketing' },
+    { id: 'operations', label: dict?.profile?.form?.workFields?.operations || 'Operations and Supply Chain' },
+    { id: 'selfDev', label: dict?.profile?.form?.workFields?.selfDev || 'Self Development' },
+    { id: 'productivity', label: dict?.profile?.form?.workFields?.productivity || 'Productivity' },
+    { id: 'teaching', label: dict?.profile?.form?.workFields?.teaching || 'Teaching and Training' },
+    { id: 'finance', label: dict?.profile?.form?.workFields?.finance || 'Finance and Accounting' },
+    { id: 'hr', label: dict?.profile?.form?.workFields?.hr || 'HR and People Management' },
+    { id: 'sales', label: dict?.profile?.form?.workFields?.sales || 'Sales and Business Development' },
+    { id: 'software', label: dict?.profile?.form?.workFields?.software || 'Software Development' },
+    { id: 'business', label: dict?.profile?.form?.workFields?.business || 'Business and Entrepreneurship' },
+    { id: 'design', label: dict?.profile?.form?.workFields?.design || 'Design and Digital Arts' },
+    { id: 'ai', label: dict?.profile?.form?.workFields?.ai || 'AI and Data Science' },
+    { id: 'other', label: dict?.profile?.form?.workFields?.other || 'Other' },
+  ];
 
-  const onSubmit = async (data) => {
-    setIsSubmitting(true);
-    setSuccessMsg(null);
-    setErrorMsg(null);
-
-    const { data: updatedData, error } = await supabase
-      .from('profiles')
-      .update({
-        full_name: data.full_name,
-        arabic_name: data.arabic_name,
-        certificate_name: data.certificate_name,
-        gender: data.gender,
-        dob: data.dob,
-        country: data.country,
-        governorate: data.governorate,
-        phone: data.phone,
-        education_status: data.education_status,
-        work_field: data.work_field,
-      })
-      .eq('id', userId)
-      .select('id');
-
-    setIsSubmitting(false);
-
-    if (error) {
-      setErrorMsg(error.message);
-    } else if (updatedData?.length === 1) {
-      setSuccessMsg(dict.profile.form.messages.saveSuccess);
-    } else {
-      setErrorMsg(dict.profile.form.messages.profileNotFound);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
-  const InputWrapper = ({ label, htmlFor, error, children }) => (
-    <div className="flex w-full flex-col gap-1.5 text-start">
-      <label htmlFor={htmlFor} className="peer-disabled:cursor-not-allowed peer-disabled:opacity-70 block mb-2 text-gray-500 font-bold text-lg">{label}</label>
-      <div className="relative">
-        {children}
-      </div>
-      {error && <span className="text-red-500 text-xs font-medium mt-1">{error.message}</span>}
-    </div>
-  );
+  const handlePhoneChange = (value) => {
+    setFormData(prev => ({ ...prev, phone: value }));
+    if (errors.phone) setErrors(prev => ({ ...prev, phone: '' }));
+  };
 
-  const inputClasses = "file:text-foreground focus-visible:ring-gray-200 flex min-h-[43px] w-full rounded-[10px] px-4 py-[0.5rem] text-sm transition file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:opacity-70 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-base bg-white text-[#0b2646] border-gray-200 focus:border-[#0b2646] focus-visible:ring-0 border-0 h-[52px]";
-  const selectClasses = `${inputClasses} appearance-none cursor-pointer focus:ring-1 focus:ring-gray-200 shadow-none py-0`;
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.nameEn) newErrors.nameEn = dict?.profile?.form?.errors?.englishNameReq || 'English name is required';
+    if (!formData.nameAr) newErrors.nameAr = dict?.profile?.form?.errors?.arabicNameReq || 'Arabic name is required';
+    if (!formData.certificateName) newErrors.certificateName = dict?.profile?.form?.errors?.certificateNameReq || 'Certificate name is required';
+    if (!formData.gender) newErrors.gender = dict?.profile?.form?.errors?.genderReq || 'Gender is required';
+    if (!formData.dob) newErrors.dob = dict?.profile?.form?.errors?.dobReq || 'Date of birth is required';
+    if (!formData.country) newErrors.country = dict?.profile?.form?.errors?.countryReq || 'Country is required';
+    if (!formData.governorate) newErrors.governorate = dict?.profile?.form?.errors?.governorateReq || 'Governorate is required';
+    if (!formData.phone) newErrors.phone = dict?.profile?.form?.errors?.phoneInvalid || 'Invalid phone number';
+    if (!formData.educationStatus) newErrors.educationStatus = dict?.profile?.form?.errors?.educationReq || 'Education status is required';
+    if (!formData.workField) newErrors.workField = dict?.profile?.form?.errors?.workFieldReq || 'Work field is required';
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    if (!userId) {
+      toast.error(dict?.profile?.form?.messages?.profileNotFound || 'Profile not found to update');
+      return;
+    }
+
+    setLoading(true);
+    
+    const updatePayload = {
+      full_name: formData.nameEn,
+      full_name_ar: formData.nameAr,
+      certificate_name: formData.certificateName,
+      gender: formData.gender,
+      dob: formData.dob,
+      country: formData.country,
+      governorate: formData.governorate,
+      phone: formData.phone,
+      education_status: formData.educationStatus,
+      work_field: formData.workField,
+      updated_at: new Date().toISOString()
+    };
+
+    const { error } = await supabase
+      .from('profiles')
+      .update(updatePayload)
+      .eq('id', userId);
+
+    setLoading(false);
+
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success(dict?.profile?.form?.messages?.saveSuccess || 'Data saved successfully');
+      
+      // Update local state in parent
+      if (onProfileUpdate) {
+        onProfileUpdate({
+          ...initialData,
+          ...updatePayload
+        });
+      }
+    }
+  };
 
   return (
-    <div className="rounded-xl px-0 sm:px-8 py-4" dir={isRtl ? 'rtl' : 'ltr'}>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-5">
-
-        {errorMsg && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium border border-red-100">
-            {errorMsg}
-          </div>
-        )}
-        {successMsg && (
-          <div className="bg-green-50 text-green-600 p-3 rounded-lg text-sm font-medium border border-green-100">
-            {successMsg}
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
-
-          <InputWrapper label={dict.profile.form.nameEn} htmlFor="full_name" error={errors.full_name}>
-            <input
-              id="full_name"
-              type="text"
-              {...register('full_name')}
-              placeholder={dict.profile.form.nameEn}
-              className={inputClasses}
-            />
-          </InputWrapper>
-
-          <InputWrapper label={dict.profile.form.nameAr} htmlFor="arabic_name" error={errors.arabic_name}>
-            <input
-              id="arabic_name"
-              type="text"
-              {...register('arabic_name')}
-              placeholder={dict.profile.form.nameAr}
-              className={inputClasses}
-            />
-          </InputWrapper>
-
-          <InputWrapper label={dict.profile.form.nameOnCertificate} htmlFor="certificate_name" error={errors.certificate_name}>
-            <input
-              id="certificate_name"
-              type="text"
-              {...register('certificate_name')}
-              placeholder={dict.profile.form.writeNameHere}
-              className={inputClasses}
-            />
-          </InputWrapper>
-
-          <div className="flex flex-col gap-1.5">
-            <label className="mb-2 text-gray-500 font-bold text-lg">{dict.profile.form.gender}</label>
-            <div className="gap-3 grid grid-cols-2">
-              <label htmlFor="gender_male" className="flex h-[52px] items-center gap-3 rounded-lg bg-white px-4 text-gray-600 cursor-pointer">
-                <input id="gender_male" type="radio" value="Male" {...register('gender')} className="border-gray-200 text-[#0b2646] focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square size-5 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50" />
-                <span>{dict.profile.form.male}</span>
-              </label>
-              <label htmlFor="gender_female" className="flex h-[52px] items-center gap-3 rounded-lg bg-white px-4 text-gray-600 cursor-pointer">
-                <input id="gender_female" type="radio" value="Female" {...register('gender')} className="border-gray-200 text-[#0b2646] focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square size-5 shrink-0 rounded-full border shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50" />
-                <span>{dict.profile.form.female}</span>
-              </label>
-            </div>
-            {errors.gender && <span className="text-red-500 text-xs font-medium mt-1">{errors.gender.message}</span>}
-          </div>
-
-          <InputWrapper label={dict.profile.form.dob} htmlFor="dob" error={errors.dob}>
-            <input
-              id="dob"
-              type="date"
-              {...register('dob')}
-              className={inputClasses}
-            />
-          </InputWrapper>
-
-          <InputWrapper label={dict.profile.form.country} htmlFor="country" error={errors.country}>
-            <select
-              id="country"
-              {...register('country')}
-              className={selectClasses}
-            >
-              <option value="">{dict.profile.form.selectCountry}</option>
-              {countriesList.map((country) => (
-                <option key={country.isoCode} value={country.isoCode}>
-                  {country.name}
-                </option>
-              ))}
-
-            </select>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down text-gray-500 size-6 absolute rtl:left-4 ltr:right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-              <path d="m6 9 6 6 6-6"></path>
-            </svg>
-          </InputWrapper>
-
-          <InputWrapper label={dict.profile.form.governorate} htmlFor="governorate" error={errors.governorate}>
-            <select
-              id="governorate"
-              {...register('governorate')}
-              className={selectClasses}
-              disabled={!selectedCountry || statesList.length === 0}
-            >
-              <option value="">{dict.profile.form.selectGovernorate}</option>
-              {statesList.map((state) => (
-                <option key={state.isoCode} value={state.name}>
-                  {state.name}
-                </option>
-              ))}
-            </select>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down text-gray-500 size-6 absolute rtl:left-4 ltr:right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-              <path d="m6 9 6 6 6-6"></path>
-            </svg>
-          </InputWrapper>
-
-          <InputWrapper label={dict.profile.form.phone} htmlFor="phone" error={errors.phone}>
-            <Controller
-              name="phone"
-              control={control}
-              render={({ field }) => (
-                <div dir="ltr" className="relative w-full">
-                  <PhoneInput
-                    {...field}
-                    international
-                    defaultCountry={selectedCountry && isSupportedCountry(selectedCountry) ? selectedCountry : "EG"}
-                    className="focus:border-gray-200 text-[#0b2646] flex min-h-[43px] w-full max-w-full flex-row-reverse pe-5 text-sm transition focus:border disabled:cursor-not-allowed disabled:opacity-50 md:text-base dark:text-white ps-4 h-[52px] items-center rounded-xl border-none bg-white py-0
-                      [&_.PhoneInputCountry]:flex [&_.PhoneInputCountry]:items-center [&_.PhoneInputCountry]:mr-3 [&_.PhoneInputCountry]:relative
-                      [&_.PhoneInputCountrySelect]:absolute [&_.PhoneInputCountrySelect]:inset-0 [&_.PhoneInputCountrySelect]:opacity-0 [&_.PhoneInputCountrySelect]:cursor-pointer [&_.PhoneInputCountrySelect]:z-10
-                      [&_.PhoneInputCountryIcon]:w-6 [&_.PhoneInputCountryIcon]:h-4 [&_.PhoneInputCountryIcon]:shadow-sm [&_.PhoneInputCountryIcon]:mr-2
-                      [&_.PhoneInputCountrySelectArrow]:w-2 [&_.PhoneInputCountrySelectArrow]:h-2 [&_.PhoneInputCountrySelectArrow]:border-b-2 [&_.PhoneInputCountrySelectArrow]:border-r-2 [&_.PhoneInputCountrySelectArrow]:border-gray-500 [&_.PhoneInputCountrySelectArrow]:rotate-45 [&_.PhoneInputCountrySelectArrow]:ml-1"
-                    numberInputProps={{
-                      className: "flex-1 w-full h-full bg-transparent border-none outline-none text-[#0b2646] text-sm md:text-base ltr focus:ring-0",
-                      dir: "ltr"
-                    }}
-                  />
-                </div>
-              )}
-            />
-          </InputWrapper>
-
-          <InputWrapper label={dict.profile.form.educationStatus} htmlFor="education_status" error={errors.education_status}>
-            <select
-              id="education_status"
-              {...register('education_status')}
-              className={selectClasses}
-            >
-              <option value="">{dict.profile.form.educationStatus}</option>
-              <option value="Graduated">{dict.profile.form.graduated}</option>
-              <option value="Student">{dict.profile.form.student}</option>
-            </select>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down text-gray-500 size-6 absolute rtl:left-4 ltr:right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-              <path d="m6 9 6 6 6-6"></path>
-            </svg>
-          </InputWrapper>
-
-          <InputWrapper label={dict.profile.form.workField} htmlFor="work_field" error={errors.work_field}>
-            <select
-              id="work_field"
-              {...register('work_field')}
-              className={selectClasses}
-            >
-              <option value="">{dict.profile.form.workField}</option>
-              <option value="7a89e26e-5d31-43e6-9be7-5d303a79b267">{dict.profile.form.workFields.marketing}</option>
-              <option value="c4b14640-98f1-445d-89fc-5ae746b9539c">{dict.profile.form.workFields.operations}</option>
-              <option value="f0279e66-c6dd-457b-b56f-6eefa021276f">{dict.profile.form.workFields.selfDev}</option>
-              <option value="79d22433-5ffc-40e8-9de2-69e03321159c">{dict.profile.form.workFields.productivity}</option>
-              <option value="55cfe43d-ca31-4b27-9dc1-c218c0947014">{dict.profile.form.workFields.teaching}</option>
-              <option value="f3f7de18-0c06-4cce-a613-f13e2b7616a7">{dict.profile.form.workFields.finance}</option>
-              <option value="d6871c60-3325-4dbc-835a-82a34f7808a5">{dict.profile.form.workFields.hr}</option>
-              <option value="17f33f8c-a2b9-4d7c-9d4e-99bb1414676e">{dict.profile.form.workFields.sales}</option>
-              <option value="9fef0132-f835-42a2-bb34-a7257ab55079">{dict.profile.form.workFields.software}</option>
-              <option value="58819717-0338-4b1f-96b3-74def18ac69d">{dict.profile.form.workFields.business}</option>
-              <option value="5e29c184-f4c3-4c20-a945-a14abddc2252">{dict.profile.form.workFields.design}</option>
-              <option value="1d40d0f3-69e6-4b41-b523-f340dd1a6513">{dict.profile.form.workFields.ai}</option>
-              <option value="80bd0a42-1765-40dc-8497-d7f431bd78e4">{dict.profile.form.workFields.other}</option>
-            </select>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-down text-gray-500 size-6 absolute rtl:left-4 ltr:right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-              <path d="m6 9 6 6 6-6"></path>
-            </svg>
-          </InputWrapper>
-
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6 md:gap-8 pb-4" dir={isRtl ? 'rtl' : 'ltr'}>
+      
+      {/* Names Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+        <div className="flex flex-col gap-2">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="nameEn">
+            {dict?.profile?.form?.nameEn || "Name in English"}
+          </label>
+          <input
+            id="nameEn"
+            name="nameEn"
+            type="text"
+            value={formData.nameEn}
+            onChange={handleChange}
+            placeholder={dict?.profile?.form?.writeNameHere || "Write your name here"}
+            className={`w-full bg-[#f4f7fb] text-gray-700 placeholder:text-gray-400 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.nameEn ? 'border-red-500' : 'border-transparent'}`}
+          />
+          {errors.nameEn && <span className="text-red-500 text-xs font-medium">{errors.nameEn}</span>}
         </div>
 
+        <div className="flex flex-col gap-2">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="nameAr">
+            {dict?.profile?.form?.nameAr || "Name in Arabic"}
+          </label>
+          <input
+            id="nameAr"
+            name="nameAr"
+            type="text"
+            value={formData.nameAr}
+            onChange={handleChange}
+            placeholder={dict?.profile?.form?.writeNameHere || "Write your name here"}
+            className={`w-full bg-[#f4f7fb] text-gray-700 placeholder:text-gray-400 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.nameAr ? 'border-red-500' : 'border-transparent'}`}
+          />
+          {errors.nameAr && <span className="text-red-500 text-xs font-medium">{errors.nameAr}</span>}
+        </div>
+      </div>
+
+      {/* Certificate Name Row */}
+      <div className="w-full flex flex-col gap-2">
+        <label className="text-[#0b2646] font-bold text-sm" htmlFor="certificateName">
+          {dict?.profile?.form?.nameOnCertificate || "Name on Certificate"}
+        </label>
+        <input
+          id="certificateName"
+          name="certificateName"
+          type="text"
+          value={formData.certificateName}
+          onChange={handleChange}
+          placeholder={dict?.profile?.form?.writeNameHere || "Write your name here"}
+          className={`w-full bg-[#f4f7fb] text-gray-700 placeholder:text-gray-400 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.certificateName ? 'border-red-500' : 'border-transparent'}`}
+        />
+        {errors.certificateName && <span className="text-red-500 text-xs font-medium">{errors.certificateName}</span>}
+      </div>
+
+      {/* Gender & DOB Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-2">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="gender">
+            {dict?.profile?.form?.gender || "Gender"}
+          </label>
+          <div className="relative">
+            <select
+              id="gender"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.gender ? 'border-red-500' : 'border-transparent'}`}
+            >
+              <option value="" disabled>{dict?.profile?.form?.gender || "Gender"}</option>
+              <option value="male">{dict?.profile?.form?.male || "Male"}</option>
+              <option value="female">{dict?.profile?.form?.female || "Female"}</option>
+            </select>
+            <div className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 text-gray-400 pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          {errors.gender && <span className="text-red-500 text-xs font-medium">{errors.gender}</span>}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="dob">
+            {dict?.profile?.form?.dob || "Date of Birth"}
+          </label>
+          <input
+            id="dob"
+            name="dob"
+            type="date"
+            value={formData.dob}
+            onChange={handleChange}
+            className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border ${errors.dob ? 'border-red-500' : 'border-transparent'}`}
+          />
+          {errors.dob && <span className="text-red-500 text-xs font-medium">{errors.dob}</span>}
+        </div>
+      </div>
+
+      {/* Country & Governorate Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-2">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="country">
+            {dict?.profile?.form?.country || "Country"}
+          </label>
+          <div className="relative">
+            <select
+              id="country"
+              name="country"
+              value={formData.country}
+              onChange={handleChange}
+              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.country ? 'border-red-500' : 'border-transparent'}`}
+            >
+              <option value="" disabled>{dict?.profile?.form?.selectCountry || "Select Country"}</option>
+              {countries.map(c => (
+                <option key={c.isoCode} value={c.isoCode}>{c.name}</option>
+              ))}
+            </select>
+            <div className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 text-gray-400 pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          {errors.country && <span className="text-red-500 text-xs font-medium">{errors.country}</span>}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="governorate">
+            {dict?.profile?.form?.governorate || "Governorate"}
+          </label>
+          <div className="relative">
+            <select
+              id="governorate"
+              name="governorate"
+              value={formData.governorate}
+              onChange={handleChange}
+              disabled={!formData.country || states.length === 0}
+              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none disabled:opacity-50 ${errors.governorate ? 'border-red-500' : 'border-transparent'}`}
+            >
+              <option value="" disabled>{dict?.profile?.form?.selectGovernorate || "Select Governorate"}</option>
+              {states.map(s => (
+                <option key={s.isoCode} value={s.name}>{s.name}</option>
+              ))}
+            </select>
+            <div className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 text-gray-400 pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          {errors.governorate && <span className="text-red-500 text-xs font-medium">{errors.governorate}</span>}
+        </div>
+      </div>
+
+      {/* Phone Number */}
+      <div className="flex flex-col gap-2">
+        <label className="text-[#0b2646] font-bold text-sm">
+          {dict?.profile?.form?.phone || "Phone Number"}
+        </label>
+        <div dir="ltr" className={`w-full bg-[#f4f7fb] rounded-lg px-4 focus-within:ring-1 focus-within:ring-[#0b2646] transition-all border ${errors.phone ? 'border-red-500' : 'border-transparent'}`}>
+          <PhoneInput
+            international
+            defaultCountry={formData.country && isSupportedCountry(formData.country) ? formData.country : "EG"}
+            value={formData.phone}
+            onChange={handlePhoneChange}
+            className="flex items-center w-full h-[48px] [&_.PhoneInputCountry]:mr-3 [&_.PhoneInputCountrySelect]:opacity-0 [&_.PhoneInputCountrySelect]:cursor-pointer [&_.PhoneInputCountryIcon]:w-6 [&_.PhoneInputCountryIcon]:h-4 [&_.PhoneInputCountryIcon]:shadow-sm"
+            numberInputProps={{
+              className: "flex-1 w-full h-full bg-transparent border-none outline-none text-gray-700 text-sm focus:ring-0",
+            }}
+          />
+        </div>
+        {errors.phone && <span className="text-red-500 text-xs font-medium">{errors.phone}</span>}
+      </div>
+
+      {/* Education & Work Field Row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex flex-col gap-2">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="educationStatus">
+            {dict?.profile?.form?.educationStatus || "Education Status"}
+          </label>
+          <div className="relative">
+            <select
+              id="educationStatus"
+              name="educationStatus"
+              value={formData.educationStatus}
+              onChange={handleChange}
+              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.educationStatus ? 'border-red-500' : 'border-transparent'}`}
+            >
+              <option value="" disabled>{dict?.profile?.form?.educationStatus || "Education Status"}</option>
+              <option value="graduated">{dict?.profile?.form?.graduated || "Graduated"}</option>
+              <option value="student">{dict?.profile?.form?.student || "Student"}</option>
+            </select>
+            <div className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 text-gray-400 pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          {errors.educationStatus && <span className="text-red-500 text-xs font-medium">{errors.educationStatus}</span>}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="text-[#0b2646] font-bold text-sm" htmlFor="workField">
+            {dict?.profile?.form?.workField || "Work Field"}
+          </label>
+          <div className="relative">
+            <select
+              id="workField"
+              name="workField"
+              value={formData.workField}
+              onChange={handleChange}
+              className={`w-full bg-[#f4f7fb] text-gray-700 rounded-lg px-4 py-3 h-[48px] text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] transition-all border appearance-none ${errors.workField ? 'border-red-500' : 'border-transparent'}`}
+            >
+              <option value="" disabled>{dict?.profile?.form?.workField || "Work Field"}</option>
+              {workFields.map(field => (
+                <option key={field.id} value={field.id}>{field.label}</option>
+              ))}
+            </select>
+            <div className="absolute top-1/2 -translate-y-1/2 ltr:right-4 rtl:left-4 text-gray-400 pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </div>
+          {errors.workField && <span className="text-red-500 text-xs font-medium">{errors.workField}</span>}
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="flex items-center justify-center md:justify-end mt-4">
         <button
           type="submit"
-          disabled={isSubmitting}
-          className="relative inline-flex items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer rounded-2xl text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-5 [&_svg]:shrink-0 bg-[#0b2646] text-white hover:bg-[#0b2646]/80 h-[3.125rem] px-[1.5rem] py-3 mx-auto mt-8 w-full md:max-w-[346px] ltr:[&>svg]:rotate-180"
+          disabled={loading}
+          className="w-full md:w-auto px-10 py-3 rounded-lg bg-[#0b2646] hover:bg-[#061528] text-white font-bold text-sm transition-colors shadow-sm disabled:opacity-70 flex items-center justify-center gap-2"
         >
-          {isSubmitting ? (
+          {loading ? (
             <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           ) : (
-            <>
-              {dict.profile.form.save}
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-left" aria-hidden="true">
-                <path d="m12 19-7-7 7-7"></path>
-                <path d="M19 12H5"></path>
-              </svg>
-            </>
+            dict?.profile?.form?.save || "Save"
           )}
         </button>
-      </form>
-    </div>
+      </div>
+
+    </form>
   );
 }
