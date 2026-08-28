@@ -83,7 +83,7 @@ export default function ProfileTabs({ locale, profile, user, dict }) {
       {/* Sidebar / Tabs Navigation */}
       <div className="w-full xl:w-72 shrink-0">
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden sticky top-24">
-          <div className="flex flex-row xl:flex-col overflow-x-auto xl:overflow-visible p-3 gap-2 hide-scroll-bar whitespace-nowrap scroll-smooth flex-nowrap">
+          <div className="flex flex-col p-3 gap-2">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
               return (
