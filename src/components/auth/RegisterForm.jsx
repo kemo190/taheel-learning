@@ -130,6 +130,7 @@ export default function RegisterForm({ dict, isRtl, locale }) {
   const [serverError, setServerError] = useState(null);
   const [success, setSuccess] = useState(null);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const selectedCountry = watch('country');
 
   const countriesList = useMemo(() => {

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const MenuIcon = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -46,12 +47,16 @@ const ChevronDownIcon = () => (
 
 export default function MobileMenu({ dict, locale }) {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const targetLocale = locale === 'ar' ? 'en' : 'ar';
   
   const handleSearch = (e) => {
     e.preventDefault();
     const q = e.target.search.value;
-    if (q) window.location.href = `/${locale}/search?q=${encodeURIComponent(q)}`;
+    if (q) {
+      router.push(`/${locale}/search?q=${encodeURIComponent(q)}`);
+      setIsOpen(false);
+    }
   };
 
   return (

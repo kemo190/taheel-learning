@@ -321,5 +321,84 @@
     "stayInTouch": "ابق على تواصل",
     "contactUs": "تواصل معنا",
     "copyright": "جميع الحقوق محفوظة © Ta'hel."
+  },
+  "journey": {
+    "header": {
+      "learningPhase": "حاليا في مرحلة التعلم",
+      "welcome": "أهلاً",
+      "readyToContinue": "جاهز تكمل رحلتك انهاردة",
+      "stats": {
+        "completedLessons": "الدروس المكتملة",
+        "liveSessions": "جلسه مباشرة",
+        "learningMinutes": "دقيقة تعلم",
+        "achievements": "انجازات",
+        "keepItUp": "استمر علي هذا"
+      }
+    },
+    "overview": {
+      "inProgress": "الدورات قيد التقدم",
+      "completed": "الدورات المكتملة",
+      "favorites": "الدورات المفضلة",
+      "certificates": "الشهادات المكتسبة"
+    },
+    "comparison": {
+      "title": "ما الفرق بين الدورة والمسار؟",
+      "paths": {
+        "title": "مسارات",
+        "desc": "رحلة تعليمية متكاملة تقودك لهدف واضح",
+        "subDesc": "يتكون من مجموعة دورات مرتبة تساعدك تبني مهاراتك خطوة بخطوة لحد ما توصل لمستوى احترافي.",
+        "importantPoints": "نقاط هامة:",
+        "point1": "يقودك لهدف وظيفي",
+        "point2": "مبني علي مسار واضح",
+        "point3": "يتكون من عدة دورات",
+        "point4": "متابعة تقدمك في كل مرحلة"
+      },
+      "courses": {
+        "title": "دورات تدريبية",
+        "desc": "تعلم مهارة محددة في وقت محدد",
+        "subDesc": "محتوى تعليمي يركز علي موضوع واحد، تقدر تبدأه وتخلصه بشكل مستقل حسب احتياجك.",
+        "importantPoints": "نقاط هامة:",
+        "point1": "مهارة أو موضوع واحد",
+        "point2": "يمكن أخذه بشكل مستقل"
+      }
+    },
+    "tabs": {
+      "paths": "مسارات",
+      "courses": "دورات تدريبية"
+    },
+    "search": {
+      "placeholder": "ابحث في دوراتي التدريبية"
+    },
+    "filter": {
+      "category": "تصنيف"
+    },
+    "empty": {
+      "certificatesSubtitle": "لا توجد شهادات بعد",
+      "certificatesDesc": "أكمل الدورات والمسارات التدريبية للحصول على الشهادات.",
+      "notesSubtitle": "لا توجد ملاحظات بعد",
+      "notesDesc": "ابدأ بكتابة ملاحظاتك أثناء التعلم للرجوع إليها لاحقاً.",
+      "favoritesTitle": "المفضلة",
+      "favoritesCoursesSubtitle": "المفضلة (الدورات التدريبية)",
+      "favoritesPathsSubtitle": "المفضلة (مسارات)",
+      "noFavoriteCourses": "لا توجد دورات مفضلة بعد",
+      "noFavoriteCoursesDesc": "أضف بعض الدورات إلى مفضلتك للرجوع إليها لاحقاً.",
+      "noFavoritePaths": "لا توجد مسارات مفضلة بعد",
+      "noFavoritePathsDesc": "أضف بعض المسارات إلى مفضلتك."
+    },
+    "courseCard": {
+      "interactive": "مسجل تفاعلي",
+      "startNow": "أبدأ الان",
+      "instructorPrefix": "مع",
+      "currency": "ج.م"
+    },
+    "certificateCard": {
+      "completionDate": "تاريخ الاكتمال:",
+      "viewCertificate": "عرض الشهادة",
+      "download": "تحميل",
+      "share": "مشاركة"
+    },
+    "favoriteCard": {
+      "subscribeNow": "اشترك الآن"
+    }
   }
 }

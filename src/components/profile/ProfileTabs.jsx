@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import ProfileForm from './ProfileForm';
 import AccountDetails from './AccountDetails';
@@ -9,6 +10,7 @@ import OrderHistory from './OrderHistory';
 
 export default function ProfileTabs({ locale, profile, user, dict }) {
   const isRtl = locale === 'ar';
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('personal');
   const [localProfile, setLocalProfile] = useState(profile);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -49,7 +51,7 @@ export default function ProfileTabs({ locale, profile, user, dict }) {
       
       // Sign out and redirect
       await supabase.auth.signOut();
-      window.location.href = `/${locale}`;
+      router.push(`/${locale}`);
 
     } catch (error) {
       toast.error(error.message || 'An error occurred while deleting the account');

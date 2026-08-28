@@ -8,12 +8,10 @@ export default async function Footer({ locale = 'ar' }) {
 
   return (
     <footer dir={isRtl ? 'rtl' : 'ltr'} className="relative mt-auto overflow-hidden bg-[#eff2f6] border-t border-gray-200 xl:h-[388px]">
-      <img
+      <Image
         alt="Background"
-        loading="lazy"
-        decoding="async"
+        fill
         className="!w-full object-cover opacity-20 rtl:scale-x-[-1]"
-        style={{ position: 'absolute', height: '100%', width: '100%', left: 0, top: 0, right: 0, bottom: 0, color: 'transparent' }}
         src="/footer.webp"
       />
       <div className="mx-auto max-w-[1232px] w-full px-4 xl:px-0 relative z-10 flex flex-col justify-between h-full">

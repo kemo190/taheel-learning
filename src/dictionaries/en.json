@@ -321,5 +321,84 @@
     "stayInTouch": "Stay in Touch",
     "contactUs": "Contact Us",
     "copyright": "All rights reserved © Ta'hel."
+  },
+  "journey": {
+    "header": {
+      "learningPhase": "Currently in learning phase",
+      "welcome": "Hello",
+      "readyToContinue": "Ready to continue your journey today",
+      "stats": {
+        "completedLessons": "Completed Lessons",
+        "liveSessions": "Live Sessions",
+        "learningMinutes": "Learning Minutes",
+        "achievements": "Achievements",
+        "keepItUp": "Keep it up"
+      }
+    },
+    "overview": {
+      "inProgress": "Courses in Progress",
+      "completed": "Completed Courses",
+      "favorites": "Favorite Courses",
+      "certificates": "Earned Certificates"
+    },
+    "comparison": {
+      "title": "What is the difference between a course and a path?",
+      "paths": {
+        "title": "Learning Paths",
+        "desc": "An integrated educational journey leading you to a clear goal",
+        "subDesc": "Consists of a set of arranged courses that help you build your skills step-by-step until you reach a professional level.",
+        "importantPoints": "Important Points:",
+        "point1": "Leads to a career goal",
+        "point2": "Based on a clear path",
+        "point3": "Consists of multiple courses",
+        "point4": "Track your progress in each stage"
+      },
+      "courses": {
+        "title": "Training Courses",
+        "desc": "Learn a specific skill in a specific time",
+        "subDesc": "Educational content focused on a single topic, you can start and finish it independently according to your needs.",
+        "importantPoints": "Important Points:",
+        "point1": "One skill or topic",
+        "point2": "Can be taken independently"
+      }
+    },
+    "tabs": {
+      "paths": "Paths",
+      "courses": "Training Courses"
+    },
+    "search": {
+      "placeholder": "Search in my courses"
+    },
+    "filter": {
+      "category": "Category"
+    },
+    "empty": {
+      "certificatesSubtitle": "No certificates yet",
+      "certificatesDesc": "Complete training courses and paths to earn certificates.",
+      "notesSubtitle": "No notes yet",
+      "notesDesc": "Start taking notes while learning to review them later.",
+      "favoritesTitle": "Favorites",
+      "favoritesCoursesSubtitle": "Favorites (Courses)",
+      "favoritesPathsSubtitle": "Favorites (Paths)",
+      "noFavoriteCourses": "No favorite courses yet",
+      "noFavoriteCoursesDesc": "Add some courses to your favorites to access them easily later.",
+      "noFavoritePaths": "No favorite paths yet",
+      "noFavoritePathsDesc": "Add some paths to your favorites to access them easily later."
+    },
+    "courseCard": {
+      "interactive": "Interactive Recorded",
+      "startNow": "Start Now",
+      "instructorPrefix": "With",
+      "currency": "EGP"
+    },
+    "certificateCard": {
+      "completionDate": "Completion Date:",
+      "viewCertificate": "View Certificate",
+      "download": "Download",
+      "share": "Share"
+    },
+    "favoriteCard": {
+      "subscribeNow": "Subscribe Now"
+    }
   }
 }
