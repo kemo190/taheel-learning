@@ -61,11 +61,11 @@ export default function JourneyTabsAndFilter({ dict, locale }) {
         {/* Dropdown Menu */}
         <div className={`absolute top-full ${isRtl ? 'right-0' : 'left-0'} mt-2 w-full min-w-[200px] bg-white rounded-xl shadow-lg border border-gray-100 z-50 overflow-hidden py-2 transition-all duration-200 origin-top ${isCategoryOpen ? 'opacity-100 scale-y-100 visible' : 'opacity-0 scale-y-95 invisible'}`}>
           {[
-            'الكل',
-            'من الاقدم للاحدث',
-            'من الاحدث الي الاقدم',
-            'الاكثر مبيعا',
-            'الاعلي تقيما'
+            dict?.journey?.filters?.categories?.all || 'الكل',
+            dict?.journey?.filters?.categories?.oldest || 'من الاقدم للاحدث',
+            dict?.journey?.filters?.categories?.newest || 'من الاحدث الي الاقدم',
+            dict?.journey?.filters?.categories?.bestseller || 'الاكثر مبيعا',
+            dict?.journey?.filters?.categories?.highestRated || 'الاعلي تقيما'
           ].map((option) => (
             <button
               key={option}

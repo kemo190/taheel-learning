@@ -399,6 +399,15 @@
     },
     "favoriteCard": {
       "subscribeNow": "اشترك الآن"
+    },
+    "filters": {
+      "categories": {
+        "all": "الكل",
+        "oldest": "من الاقدم للاحدث",
+        "newest": "من الاحدث الي الاقدم",
+        "bestseller": "الاكثر مبيعا",
+        "highestRated": "الاعلي تقيما"
+      }
     }
   }
 }
