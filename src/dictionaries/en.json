@@ -407,7 +407,11 @@
         "newest": "Newest to Oldest",
         "bestseller": "Bestseller",
         "highestRated": "Highest Rated"
-      }
+      },
+      "category": "Category",
+      "search": "Search for courses...",
+      "courses": "Training Courses",
+      "paths": "Learning Paths"
     }
   }
 }
