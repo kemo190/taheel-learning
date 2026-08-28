@@ -19,9 +19,9 @@ export default function JourneyTabsAndFilter({ dict, locale }) {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   return (
-    <div className="max-tablet:flex-wrap flex items-center gap-x-5 gap-y-7 mb-8 w-full" dir={isRtl ? 'rtl' : 'ltr'}>
+    <div className="flex flex-col xl:flex-row items-center gap-4 mb-8 w-full" dir={isRtl ? 'rtl' : 'ltr'}>
       {/* Category Dropdown */}
-      <div className="relative z-50">
+      <div className="relative z-50 w-full xl:w-auto">
         {isCategoryOpen && (
           <div
             className="fixed inset-0 z-40"
@@ -33,7 +33,7 @@ export default function JourneyTabsAndFilter({ dict, locale }) {
           onClick={() => setIsCategoryOpen(!isCategoryOpen)}
           role="combobox"
           aria-expanded={isCategoryOpen}
-          className="relative z-50 focus:ring-border-default text-[#0b2646] flex h-9 cursor-pointer items-center justify-between px-4 text-sm whitespace-nowrap focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 dark:text-white [&>span]:line-clamp-1 min-h-12 gap-3 bg-[#FAFAFA] rounded-2xl border border-[#DEDEDE] w-57 py-6 shadow-[#0b264626] shadow-sm"
+          className="relative z-50 focus:ring-border-default text-[#0b2646] flex h-9 cursor-pointer items-center justify-between px-4 text-sm whitespace-nowrap focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 dark:text-white [&>span]:line-clamp-1 min-h-12 gap-3 bg-[#FAFAFA] rounded-2xl border border-[#DEDEDE] w-full xl:w-56 py-6 shadow-[#0b264626] shadow-sm"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-11">
             <path d="M12 5L20 5" stroke="#051359" strokeWidth="2" strokeLinecap="round"></path>
@@ -85,7 +85,7 @@ export default function JourneyTabsAndFilter({ dict, locale }) {
       </div>
 
       {/* Search Input */}
-      <div className="relative w-100 max-[400px]:w-full flex-1">
+      <div className="relative w-full xl:flex-1">
         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute start-3 top-1/2 text-gray-400 size-6 -translate-y-1/2">
           <path d="M5.09604 10.1921C3.67299 10.1921 2.46785 9.69854 1.48062 8.71146C0.493541 7.72424 0 6.5191 0 5.09604C0 3.67299 0.493541 2.46785 1.48062 1.48063C2.46785 0.493542 3.67299 0 5.09604 0C6.5191 0 7.72424 0.493542 8.71146 1.48063C9.69854 2.46785 10.1921 3.67299 10.1921 5.09604C10.1921 5.69118 10.0922 6.25958 9.8925 6.80125C9.69264 7.34292 9.42604 7.81403 9.09271 8.21458L13.8877 13.0096C14.0031 13.1249 14.0622 13.2699 14.0648 13.4446C14.0674 13.6193 14.0084 13.767 13.8877 13.8877C13.767 14.0084 13.6206 14.0688 13.4485 14.0688C13.2766 14.0688 13.1303 14.0084 13.0096 13.8877L8.21458 9.09271C7.79792 9.43674 7.31875 9.70597 6.77708 9.90042C6.23542 10.0949 5.67507 10.1921 5.09604 10.1921ZM5.09604 8.94229C6.16979 8.94229 7.07924 8.56965 7.82438 7.82437C8.56965 7.07924 8.94229 6.16979 8.94229 5.09604C8.94229 4.02229 8.56965 3.11285 7.82438 2.36771C7.07924 1.62243 6.16979 1.24979 5.09604 1.24979C4.02229 1.24979 3.11285 1.62243 2.36771 2.36771C1.62243 3.11285 1.24979 4.02229 1.24979 5.09604C1.24979 6.16979 1.62243 7.07924 2.36771 7.82437C3.11285 8.56965 4.02229 8.94229 5.09604 8.94229Z" fill="currentColor"></path>
         </svg>
@@ -93,11 +93,11 @@ export default function JourneyTabsAndFilter({ dict, locale }) {
       </div>
 
       {/* Courses / Paths Toggle */}
-      <div className="max-tablet:w-full ms-auto flex justify-center">
-        <div className="flex w-fit items-center rounded-2xl border border-[#DEDEDE]">
+      <div className="w-full xl:w-auto xl:ms-auto flex justify-center">
+        <div className="flex w-full xl:w-fit items-center rounded-2xl border border-[#DEDEDE]">
           <button
             onClick={() => handleToggle('courses')}
-            className={`relative inline-flex items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer text-base transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 h-[3.125rem] px-[1.5rem] py-3 w-50 rounded-2xl font-normal [&_svg]:size-6 ${activeTab === 'courses'
+            className={`relative inline-flex items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer text-base transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 h-[3.125rem] px-[1.5rem] py-3 w-1/2 xl:w-48 rounded-2xl font-normal [&_svg]:size-6 ${activeTab === 'courses'
               ? 'bg-[#0b2646] text-white hover:bg-[#061528]'
               : 'text-[#020518] hover:text-[#0b2646] hover:bg-gray-50'
               }`}
@@ -111,7 +111,7 @@ export default function JourneyTabsAndFilter({ dict, locale }) {
 
           <button
             onClick={() => handleToggle('paths')}
-            className={`relative inline-flex items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer text-base transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 h-[3.125rem] px-[1.5rem] py-3 w-50 rounded-2xl font-normal [&_svg]:size-6 ${activeTab === 'paths'
+            className={`relative inline-flex items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer text-base transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 h-[3.125rem] px-[1.5rem] py-3 w-1/2 xl:w-48 rounded-2xl font-normal [&_svg]:size-6 ${activeTab === 'paths'
               ? 'bg-[#0b2646] text-white hover:bg-[#061528]'
               : 'text-[#020518] hover:text-[#0b2646] hover:bg-gray-50'
               }`}

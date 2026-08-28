@@ -56,9 +56,9 @@ export default function JourneyStats({
   const getTabClasses = (tabId) => {
     const isActive = currentTab === tabId;
     return {
-      link: `group/tab hover:bg-primary-blue-50 hover:border-primary-blue-200 flex h-[156px] min-w-60 grow basis-[314px] flex-col justify-center rounded-3xl border p-4 duration-300 ${isActive ? 'border-primary-blue-200 bg-primary-blue-50' : 'border-transparent bg-white'}`,
+      link: `group/tab hover:bg-primary-blue-50 hover:border-primary-blue-200 flex h-[156px] w-full flex-col justify-center rounded-3xl border p-4 duration-300 ${isActive ? 'border-primary-blue-200 bg-primary-blue-50' : 'border-transparent bg-white'}`,
       iconContainer: `text-primary-mainBlue flex size-14 items-center justify-center rounded-2xl duration-300 group-hover/tab:bg-white [&>svg]:size-6 ${isActive ? 'bg-white' : 'bg-[#EEF2FF]'}`,
-      innerDiv: `mx-auto flex gap-3 transition-all duration-300 ${!isActive ? 'md:group-hover/tab:-translate-y-1 md:ltr:group-hover/tab:-translate-x-6 md:rtl:group-hover/tab:translate-x-6' : ''}`,
+      innerDiv: `mx-auto flex gap-3 transition-all duration-300 ${!isActive ? 'xl:group-hover/tab:-translate-y-1 xl:ltr:group-hover/tab:-translate-x-6 xl:rtl:group-hover/tab:translate-x-6' : ''}`,
       detailsSpan: `text-primary-mainBlue mx-auto mt-2 flex items-center gap-2 overflow-hidden rounded-2xl bg-white duration-300 group-hover/tab:max-h-fit group-hover/tab:py-2 ${isActive ? 'hidden' : 'max-h-0 px-4.5'}`
     };
   };
@@ -69,7 +69,7 @@ export default function JourneyStats({
   const certificatesClasses = getTabClasses('certificates');
 
   return (
-    <div className="hide-scroll-bar flex items-center justify-between gap-4 overflow-x-auto mb-12" dir={isRtl ? 'rtl' : 'ltr'}>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12" dir={isRtl ? 'rtl' : 'ltr'}>
       {/* Card 1: In Progress */}
       <Link href="?tab=in-progress" className={inProgressClasses.link}>
         <div className={inProgressClasses.innerDiv}>
