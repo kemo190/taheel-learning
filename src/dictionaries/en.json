@@ -413,5 +413,14 @@
       "courses": "Training Courses",
       "paths": "Learning Paths"
     }
+  },
+  "userHome": {
+    "welcome": "Welcome back,",
+    "welcomeSubtitle": "Ready to continue your learning journey and develop your skills today?",
+    "continueLearning": "Continue Learning",
+    "recommendedCourses": "Recommended for You",
+    "viewAll": "View All",
+    "learningPaths": "Learning Paths",
+    "explorePaths": "Explore the paths that will help you reach your career goal with clear steps."
   }
 }

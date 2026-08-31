@@ -68,7 +68,7 @@ export default function LoginForm({ dict, isRtl, locale }) {
           : error.message);
       }
     } else {
-      router.push(`/${locale}`);
+      router.push(`/${locale}/home`);
     }
   };
 
@@ -76,7 +76,7 @@ export default function LoginForm({ dict, isRtl, locale }) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/${locale}`,
+        redirectTo: `${window.location.origin}/${locale}/home`,
       }
     });
     if (error) setServerError(error.message);
