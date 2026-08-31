@@ -49,9 +49,9 @@ export default function ProfileTabs({ locale, profile, user, dict }) {
 
       toast.success(dict?.profile?.deleteModal?.deleteSuccess || 'Account deleted successfully.');
       
-      // Sign out and redirect
+      // Sign out and hard redirect
       await supabase.auth.signOut();
-      router.push(`/${locale}`);
+      window.location.href = `/${locale}`;
 
     } catch (error) {
       toast.error(error.message || 'An error occurred while deleting the account');

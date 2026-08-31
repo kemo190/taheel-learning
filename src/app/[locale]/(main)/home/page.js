@@ -1,7 +1,6 @@
 import React from 'react';
-import { getDictionary } from '@/lib/dictionary';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { getDictionary } from '@/dictionaries/getDictionary';
+import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import UserHomeClient from '@/components/home/UserHomeClient';
 
@@ -10,9 +9,10 @@ export const metadata = {
   description: 'Your personal learning dashboard',
 };
 
-export default async function UserHomePage({ params: { locale } }) {
+export default async function UserHomePage({ params }) {
+  const { locale } = await params;
   const dict = await getDictionary(locale);
-  const supabase = createServerComponentClient({ cookies });
+  const supabase = await createClient();
 
   const {
     data: { session },
@@ -31,7 +31,7 @@ export default async function UserHomePage({ params: { locale } }) {
     .single();
 
   return (
-    <main className="min-h-screen bg-[#F8F9FB] pt-28 pb-10">
+    <main className="min-h-screen">
       <UserHomeClient 
         dict={dict} 
         locale={locale} 

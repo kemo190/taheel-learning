@@ -100,8 +100,10 @@ export default function CoursesSection({ dict, locale }) {
     return course.category === activeCategory;
   });
 
+  const activeCategoryLabel = categories.find(c => c.id === activeCategory)?.label;
+
   return (
-    <section className="w-full overflow-hidden py-16 md:py-24 mx-auto max-w-[96%] min-[1410px]:max-w-[1400px]">
+    <section className="w-full overflow-hidden py-16 md:py-24 mx-auto max-w-[96%] min-[1410px]:max-w-[1400px]" dir={isRtl ? 'rtl' : 'ltr'}>
 
       {/* Header Section */}
       <div className="flex flex-col items-start mb-10 text-start">
@@ -166,7 +168,7 @@ export default function CoursesSection({ dict, locale }) {
       {/* View All Button */}
       <div className="flex justify-center px-4 md:px-0">
         <a href={`/${locale}/courses`} className="w-full sm:w-auto bg-[#0b2646] hover:bg-[#061528] text-white px-8 py-3.5 rounded-xl font-bold text-[15px] flex items-center justify-center gap-2 transition-colors shadow-md">
-          <span>{dict.coursesSection.viewAllBtn}</span>
+          <span>{dict.coursesSection.viewAllBtn} {activeCategoryLabel ? `( ${activeCategoryLabel} )` : ''}</span>
           <ArrowLeftIcon className={isRtl ? '' : 'rotate-180'} />
         </a>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
@@ -28,6 +28,24 @@ const GoogleIcon = () => (
 export default function LoginForm({ dict, isRtl, locale }) {
   const router = useRouter();
   const [serverError, setServerError] = useState(null);
+
+  // Aggressively check for session on mount (to catch OAuth hash parsing) and listen for auth changes
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        window.location.href = `/${locale}/home`;
+      }
+    };
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        window.location.href = `/${locale}/home`;
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [locale]);
 
   const schema = z.object({
     email: z.string().email({ message: dict.auth.errors.invalidEmail }),
@@ -68,7 +86,7 @@ export default function LoginForm({ dict, isRtl, locale }) {
           : error.message);
       }
     } else {
-      router.push(`/${locale}/home`);
+      window.location.href = `/${locale}/home`;
     }
   };
 
@@ -76,7 +94,7 @@ export default function LoginForm({ dict, isRtl, locale }) {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/${locale}/home`,
+        redirectTo: `${window.location.origin}/api/auth/callback?next=/${locale}/login`,
       }
     });
     if (error) setServerError(error.message);

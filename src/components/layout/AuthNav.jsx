@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 
 const LogoutIcon = (props) => (
@@ -19,8 +19,19 @@ export default function AuthNav({ dict, locale }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    const handleAuthRedirect = (currentUser) => {
+      if (currentUser && typeof window !== 'undefined') {
+        const isAuthPath = pathname.includes('/login') || pathname.includes('/register');
+        const isBaseRoute = pathname === '/' || pathname === '/ar' || pathname === '/en';
+        if (isAuthPath || isBaseRoute) {
+          window.location.href = `/${locale}/home`;
+        }
+      }
+    };
+
     const fetchProfile = async (currentUser) => {
       if (!currentUser) {
         setProfile(null);
@@ -42,6 +53,7 @@ export default function AuthNav({ dict, locale }) {
       const { data: { session } } = await supabase.auth.getSession();
       const currentUser = session?.user || null;
       setUser(currentUser);
+      handleAuthRedirect(currentUser);
       await fetchProfile(currentUser);
       setLoading(false);
     };
@@ -51,11 +63,12 @@ export default function AuthNav({ dict, locale }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       const nextUser = session?.user || null;
       setUser(nextUser);
+      handleAuthRedirect(nextUser);
       fetchProfile(nextUser);
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [pathname, locale]);
 
   // Listen for custom profile update events (e.g. from ProfileHeader)
   useEffect(() => {
@@ -82,7 +95,7 @@ export default function AuthNav({ dict, locale }) {
   const handleLogout = async () => {
     setIsDropdownOpen(false);
     await supabase.auth.signOut();
-    router.push(`/${locale}`);
+    window.location.href = `/${locale}`;
   };
 
   // Determine display avatar & name with fallbacks

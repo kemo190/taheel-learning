@@ -68,9 +68,11 @@ export default function CourseCard({ course, dict, locale }) {
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
-              <span className="bg-[#fff8e1] text-[#f59e0b] border border-[#fde68a] px-2 py-0.5 rounded-full text-[11px] font-bold">
-                {dict.coursesSection.course.bestSeller}
-              </span>
+              {course.isBestSeller && (
+                <span className="bg-[#fff8e1] text-[#f59e0b] border border-[#fde68a] px-2 py-0.5 rounded-full text-[11px] font-bold">
+                  {dict.coursesSection.course.bestSeller}
+                </span>
+              )}
               <div className="flex items-center gap-1 text-[#f59e0b]">
                 <span className="text-sm font-bold text-gray-700">{course.rating}</span>
                 <StarIcon />

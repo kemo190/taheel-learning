@@ -48,7 +48,7 @@
       "currency": "EGP",
       "subscribe": "Subscribe Now"
     },
-    "viewAllBtn": "View all courses ( Best Seller )",
+    "viewAllBtn": "View all courses",
     "noCoursesTitle": "No courses currently available",
     "noCoursesDesc": "There are no courses available in this category right now. Please check back later or explore other categories.",
     "mockCourses": {
@@ -418,9 +418,23 @@
     "welcome": "Welcome back,",
     "welcomeSubtitle": "Ready to continue your learning journey and develop your skills today?",
     "continueLearning": "Continue Learning",
-    "recommendedCourses": "Recommended for You",
+    "recommendedCourses": "Recommended Courses",
     "viewAll": "View All",
     "learningPaths": "Learning Paths",
-    "explorePaths": "Explore the paths that will help you reach your career goal with clear steps."
+    "explorePaths": "Discover paths that will help you reach your career goals with clear steps.",
+    "bannerTitle": "Start Your Future",
+    "bannerSubtitle": "Discover educational and training paths specifically designed for the job market",
+    "subscribeNow": "Subscribe Now",
+    "favoritesTitle": "Featured Courses",
+    "aiSkillsTitle": "Develop your skills in AI",
+    "marketingSkillsTitle": "Develop your skills in Marketing",
+    "viewAllCourses": "View all courses",
+    "featuredCourse": {
+      "title": "Our Top Pick for You",
+      "interactive": "Interactive Recorded",
+      "instructorPrefix": "with",
+      "learners": "Learners",
+      "currency": "EGP"
+    }
   }
 }

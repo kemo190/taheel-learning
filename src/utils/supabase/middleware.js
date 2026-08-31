@@ -36,16 +36,28 @@ export async function updateSession(request) {
   } = await supabase.auth.getUser()
 
   const { pathname } = request.nextUrl
-  const isProfile = pathname.includes('/profile')
+  const isProtectedPath = pathname.includes('/profile') || pathname.includes('/home')
+  const isAuthPath = pathname.includes('/login') || pathname.includes('/register')
+  const isBaseRoute = pathname === '/' || pathname === '/ar' || pathname === '/en'
 
-  if (!user && isProfile) {
-    // If user is not logged in and trying to access profile, redirect to login
+  if (!user && isProtectedPath) {
+    // If user is not logged in and trying to access a protected route, redirect to login
     // Extract locale to maintain it in redirect, or default to ar
     const localeMatch = pathname.match(/^\/(en|ar)/)
     const locale = localeMatch ? localeMatch[1] : 'ar'
     
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}/login`
+    return NextResponse.redirect(url)
+  }
+
+  if (user && (isAuthPath || isBaseRoute)) {
+    // If user is logged in and tries to access login/register or landing page, redirect to home
+    const localeMatch = pathname.match(/^\/(en|ar)/)
+    const locale = localeMatch ? localeMatch[1] : 'ar'
+    
+    const url = request.nextUrl.clone()
+    url.pathname = `/${locale}/home`
     return NextResponse.redirect(url)
   }
 

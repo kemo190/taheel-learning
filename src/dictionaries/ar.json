@@ -48,7 +48,7 @@
       "currency": "ج.م",
       "subscribe": "اشترك الآن"
     },
-    "viewAllBtn": "عرض جميع دورات ( أكثر مبيعا )",
+    "viewAllBtn": "عرض جميع دورات",
     "noCoursesTitle": "لا توجد دورات حالياً",
     "noCoursesDesc": "لا توجد دورات متاحة في هذا القسم حالياً، يرجى التحقق مرة أخرى لاحقاً أو استكشاف الأقسام الأخرى.",
     "mockCourses": {
@@ -421,6 +421,20 @@
     "recommendedCourses": "كورسات مقترحة لك",
     "viewAll": "عرض الكل",
     "learningPaths": "المسارات التعليمية",
-    "explorePaths": "اكتشف المسارات اللي هتساعدك توصل لهدفك الوظيفي بخطوات واضحة."
+    "explorePaths": "اكتشف المسارات اللي هتساعدك توصل لهدفك الوظيفي بخطوات واضحة.",
+    "bannerTitle": "ابدأ مستقبلك",
+    "bannerSubtitle": "اكتشف مسارات تعليمية وتدريبية مصممة خصيصاً لسوق العمل",
+    "subscribeNow": "اشترك الآن",
+    "favoritesTitle": "أبرز الدورات التدريبية",
+    "aiSkillsTitle": "طور مهاراتك في الذكاء الاصطناعي",
+    "marketingSkillsTitle": "طور مهاراتك في التسويق",
+    "viewAllCourses": "عرض جميع دورات",
+    "featuredCourse": {
+      "title": "اختيارنا الأفضل لك",
+      "interactive": "مسجل تفاعلي",
+      "instructorPrefix": "مع",
+      "learners": "متعلم",
+      "currency": "ج.م"
+    }
   }
 }
