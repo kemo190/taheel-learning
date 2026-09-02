@@ -20,6 +20,7 @@ export default function AuthNav({ dict, locale }) {
   const [loading, setLoading] = useState(true);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleAuthRedirect = (currentUser) => {
@@ -27,7 +28,8 @@ export default function AuthNav({ dict, locale }) {
         const isAuthPath = pathname.includes('/login') || pathname.includes('/register');
         const isBaseRoute = pathname === '/' || pathname === '/ar' || pathname === '/en';
         if (isAuthPath || isBaseRoute) {
-          window.location.href = `/${locale}/home`;
+          router.replace(`/${locale}/home`);
+          router.refresh();
         }
       }
     };
@@ -90,12 +92,11 @@ export default function AuthNav({ dict, locale }) {
     return () => window.removeEventListener('profileUpdated', handleProfileUpdate);
   }, []);
 
-  const router = useRouter();
-
   const handleLogout = async () => {
     setIsDropdownOpen(false);
     await supabase.auth.signOut();
-    window.location.href = `/${locale}`;
+    router.replace(`/${locale}`);
+    router.refresh();
   };
 
   // Determine display avatar & name with fallbacks
