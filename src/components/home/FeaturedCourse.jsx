@@ -90,3 +90,5 @@ export default function FeaturedCourse({ dict, locale }) {
     </section>
   );
 }
+
+// Trigger CodeRabbit review

@@ -183,3 +183,5 @@ export default function LoginForm({ dict, isRtl, locale }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review

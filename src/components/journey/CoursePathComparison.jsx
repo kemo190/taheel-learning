@@ -76,3 +76,5 @@ export default function CoursePathComparison({ dict, locale }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review

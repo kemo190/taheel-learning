@@ -231,3 +231,5 @@ export default function OrderHistory({ locale, user, dict }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review

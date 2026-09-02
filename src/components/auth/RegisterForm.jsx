@@ -465,3 +465,5 @@ export default function RegisterForm({ dict, isRtl, locale }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review

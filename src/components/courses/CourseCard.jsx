@@ -108,3 +108,5 @@ export default function CourseCard({ course, dict, locale }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review

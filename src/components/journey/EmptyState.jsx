@@ -43,3 +43,5 @@ export default function EmptyState({ title, subtitle, description, imageSrc, loc
     </div>
   );
 }
+
+// Trigger CodeRabbit review

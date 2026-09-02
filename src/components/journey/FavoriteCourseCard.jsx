@@ -102,3 +102,5 @@ export default function FavoriteCourseCard({
     </div>
   );
 }
+
+// Trigger CodeRabbit review

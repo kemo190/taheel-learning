@@ -58,3 +58,5 @@ export default function JourneyCourseCard({
     </div>
   );
 }
+
+// Trigger CodeRabbit review

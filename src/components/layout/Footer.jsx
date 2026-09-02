@@ -110,3 +110,5 @@ export default async function Footer({ locale = 'ar' }) {
     </footer>
   );
 }
+
+// Trigger CodeRabbit review

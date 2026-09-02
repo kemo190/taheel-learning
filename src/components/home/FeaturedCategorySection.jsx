@@ -59,3 +59,5 @@ export default function FeaturedCategorySection({
     </section>
   );
 }
+
+// Trigger CodeRabbit review

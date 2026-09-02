@@ -381,3 +381,5 @@ export default function ProfileForm({ initialData, locale, userId, dict, onProfi
     </form>
   );
 }
+
+// Trigger CodeRabbit review

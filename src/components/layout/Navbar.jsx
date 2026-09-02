@@ -129,3 +129,5 @@ export default async function Navbar({ locale = 'ar' }) {
     </header>
   );
 }
+
+// Trigger CodeRabbit review

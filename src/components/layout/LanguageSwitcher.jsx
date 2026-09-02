@@ -21,3 +21,5 @@ export default function LanguageSwitcher({ locale }) {
     </Link>
   );
 }
+
+// Trigger CodeRabbit review

@@ -176,3 +176,5 @@ export default function CoursesSection({ dict, locale }) {
     </section>
   );
 }
+
+// Trigger CodeRabbit review

@@ -259,3 +259,5 @@ export default function AuthNav({ dict, locale, initialUser = null, initialProfi
     </div>
   );
 }
+
+// Trigger CodeRabbit review
