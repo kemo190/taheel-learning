@@ -14,10 +14,13 @@ const LogoutIcon = (props) => (
   </svg>
 );
 
-export default function AuthNav({ dict, locale }) {
-  const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function AuthNav({ dict, locale, initialUser = null, initialProfile = null }) {
+  const [user, setUser] = useState(initialUser);
+  const [profile, setProfile] = useState(initialProfile);
+  // If we have initial data from the server, or we are on the server, loading is false!
+  // Wait, if it's the client and we don't have initial data, we still shouldn't blink the skeleton if it's SSR.
+  // Actually, we ALWAYS start with loading: false because the server already figured out if they are logged in!
+  const [loading, setLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();

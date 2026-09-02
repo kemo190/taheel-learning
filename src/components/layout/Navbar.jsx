@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getDictionary } from '@/dictionaries/getDictionary';
+import { createClient } from '@/utils/supabase/server';
 import MobileMenu from './MobileMenu';
 import AuthNav from './AuthNav';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -35,6 +36,20 @@ const Logo = () => (
 // --- Main Header Component ---
 export default async function Navbar({ locale = 'ar' }) {
   const dict = await getDictionary(locale);
+  
+  // Fetch user session on the server to prevent client-side blink
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let profile = null;
+  if (user) {
+    const { data } = await supabase
+      .from('profiles')
+      .select('avatar_url, full_name, certificate_name')
+      .eq('id', user.id)
+      .single();
+    profile = data;
+  }
   
   const navLinks = [
     { name: dict.navbar.courses, hasDropdown: true, href: `/${locale}` },
@@ -96,7 +111,7 @@ export default async function Navbar({ locale = 'ar' }) {
         </Link>
 
         {/* Auth Buttons - Conditional rendering via AuthNav */}
-        <AuthNav dict={dict} locale={locale} />
+        <AuthNav dict={dict} locale={locale} initialUser={user} initialProfile={profile} />
 
         {/* Cart */}
         <button className="relative p-1.5 text-[#8fa7e6] hover:text-[#0b2646] transition-colors" aria-label="Cart">
