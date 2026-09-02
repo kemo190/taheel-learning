@@ -59,4 +59,4 @@ export default function JourneyCourseCard({
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

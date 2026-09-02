@@ -111,4 +111,4 @@ export default async function Footer({ locale = 'ar' }) {
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

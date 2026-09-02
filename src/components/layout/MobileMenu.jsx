@@ -152,4 +152,4 @@ export default function MobileMenu({ dict, locale }) {
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

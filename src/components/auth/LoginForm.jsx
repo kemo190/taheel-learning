@@ -184,4 +184,4 @@ export default function LoginForm({ dict, isRtl, locale }) {
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

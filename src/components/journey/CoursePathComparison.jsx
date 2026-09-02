@@ -77,4 +77,4 @@ export default function CoursePathComparison({ dict, locale }) {
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

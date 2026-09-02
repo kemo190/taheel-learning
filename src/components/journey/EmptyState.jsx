@@ -44,4 +44,4 @@ export default function EmptyState({ title, subtitle, description, imageSrc, loc
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

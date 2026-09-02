@@ -22,4 +22,4 @@ export default function LanguageSwitcher({ locale }) {
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

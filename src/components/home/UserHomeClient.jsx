@@ -103,4 +103,4 @@ export default function UserHomeClient({ dict, locale, user, profile }) {
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

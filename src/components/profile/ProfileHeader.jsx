@@ -192,4 +192,4 @@ export default function ProfileHeader({ user, profile, locale, dict }) {
 }
 
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

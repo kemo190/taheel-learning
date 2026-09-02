@@ -206,4 +206,4 @@ export default function ProfileTabs({ locale, profile, user, dict }) {
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2

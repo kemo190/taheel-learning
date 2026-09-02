@@ -232,4 +232,4 @@ export default function OrderHistory({ locale, user, dict }) {
   );
 }
 
-// Trigger CodeRabbit review
+// Trigger CodeRabbit review 2
