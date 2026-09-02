@@ -34,7 +34,7 @@ export default function LoginForm({ dict, isRtl, locale }) {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        router.push(`/${locale}/home`);
+        router.replace(`/${locale}/home`);
         router.refresh();
       }
     };
@@ -42,7 +42,7 @@ export default function LoginForm({ dict, isRtl, locale }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
-        router.push(`/${locale}/home`);
+        router.replace(`/${locale}/home`);
         router.refresh();
       }
     });
@@ -88,7 +88,7 @@ export default function LoginForm({ dict, isRtl, locale }) {
           : error.message);
       }
     } else {
-      router.push(`/${locale}/home`);
+      router.replace(`/${locale}/home`);
       router.refresh();
     }
   };
