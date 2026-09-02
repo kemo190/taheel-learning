@@ -6,9 +6,7 @@ export default async function MainLayout({ children, params }) {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar locale={locale} />
-      <main className="flex-grow">
-        {children}
-      </main>
+      <main className="flex-grow">{children}</main>
       <Footer locale={locale} />
     </div>
   );

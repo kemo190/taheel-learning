@@ -1,12 +1,12 @@
-import React from 'react';
-import { getDictionary } from '@/dictionaries/getDictionary';
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
-import UserHomeClient from '@/components/home/UserHomeClient';
+import React from "react";
+import { getDictionary } from "@/dictionaries/getDictionary";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+import UserHomeClient from "@/components/home/UserHomeClient";
 
 export const metadata = {
-  title: 'Home | Taheel',
-  description: 'Your personal learning dashboard',
+  title: "Home | Taheel",
+  description: "Your personal learning dashboard",
 };
 
 export default async function UserHomePage({ params }) {
@@ -25,22 +25,21 @@ export default async function UserHomePage({ params }) {
 
   // Fetch user profile if needed
   const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
     .single();
 
   return (
     <main className="min-h-screen">
-      <UserHomeClient 
-        dict={dict} 
-        locale={locale} 
-        user={user} 
-        profile={profile} 
+      <UserHomeClient
+        dict={dict}
+        locale={locale}
+        user={user}
+        profile={profile}
       />
     </main>
   );
 }
-
 
 // Trigger CodeRabbit review

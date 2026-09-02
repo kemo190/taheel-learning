@@ -8,7 +8,7 @@ export default async function Home({ params }) {
 
   return (
     <main className="min-h-screen">
-      <HeroSection 
+      <HeroSection
         title={dict.hero.title}
         subtitle={dict.hero.subtitle}
         primaryButtonText={dict.hero.primaryButton}
