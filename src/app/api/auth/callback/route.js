@@ -1,32 +1,49 @@
 import { NextResponse } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
+  const code = searchParams.get('code');
   const next = searchParams.get('next') ?? '/ar/login';
 
-  // We return a simple HTML page that executes client-side JavaScript.
-  // This is crucial because Supabase OAuth Implicit Flow returns the access token
-  // in the URL hash (#access_token=...), which the server cannot read.
-  // This script grabs the hash and redirects the browser to the target page (/ar/login)
-  // where the client-side Supabase SDK can parse it, set the cookies, and log the user in.
-  
-  const html = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Authenticating...</title>
-      </head>
-      <body>
-        <p>Completing login...</p>
-        <script>
-          // Redirect to the login page (or target) AND preserve the hash so Supabase can parse it
-          window.location.href = '${next}' + window.location.hash;
-        </script>
-      </body>
-    </html>
-  `;
+  if (code) {
+    const cookieStore = await cookies();
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      {
+        cookies: {
+          getAll() {
+            return cookieStore.getAll();
+          },
+          setAll(cookiesToSet) {
+            try {
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options)
+              );
+            } catch (error) {
+              // Ignore if called from a Server Component
+            }
+          },
+        },
+      }
+    );
 
-  return new NextResponse(html, {
-    headers: { 'Content-Type': 'text/html' },
-  });
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      // Upon successful exchange, redirect to the target page (e.g. /ar/home)
+      // If next is /ar/login, we might want to redirect to /ar/home since they are now logged in.
+      const target = next.includes('login') || next.includes('register') 
+        ? next.replace(/login|register/, 'home') 
+        : next;
+      
+      return NextResponse.redirect(`${origin}${target}`);
+    } else {
+      console.error('OAuth Callback Error:', error.message);
+    }
+  }
+
+  // Fallback: If there's no code or there was an error, redirect to login page
+  return NextResponse.redirect(`${origin}/ar/login`);
 }
