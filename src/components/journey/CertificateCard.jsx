@@ -82,4 +82,3 @@ export default function CertificateCard({
   );
 }
 
-// Trigger CodeRabbit review 2

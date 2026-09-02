@@ -177,4 +177,3 @@ export default function CoursesSection({ dict, locale }) {
   );
 }
 
-// Trigger CodeRabbit review 2

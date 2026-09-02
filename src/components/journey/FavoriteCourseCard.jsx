@@ -103,4 +103,3 @@ export default function FavoriteCourseCard({
   );
 }
 
-// Trigger CodeRabbit review 2

@@ -152,4 +152,3 @@ export default function JourneyHeader({ dict, user, profile, locale, userStats }
   );
 }
 
-// Trigger CodeRabbit review 2

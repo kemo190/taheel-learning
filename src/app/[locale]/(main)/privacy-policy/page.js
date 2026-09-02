@@ -17,3 +17,5 @@ export default async function PrivacyPolicyPage({ params }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review

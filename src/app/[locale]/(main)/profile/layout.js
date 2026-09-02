@@ -38,3 +38,5 @@ export default async function ProfileLayout({ children, params }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review

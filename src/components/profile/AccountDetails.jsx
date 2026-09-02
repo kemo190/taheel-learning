@@ -171,4 +171,3 @@ export default function AccountDetails({ locale, user, dict }) {
   );
 }
 
-// Trigger CodeRabbit review 2

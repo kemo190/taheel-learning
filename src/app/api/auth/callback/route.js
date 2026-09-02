@@ -47,3 +47,7 @@ export async function GET(request) {
   // Fallback: If there's no code or there was an error, redirect to login page
   return NextResponse.redirect(`${origin}/ar/login`);
 }
+
+// Trigger CodeRabbit review
+
+// Trigger CodeRabbit review

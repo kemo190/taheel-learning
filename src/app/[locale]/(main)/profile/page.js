@@ -29,3 +29,5 @@ export default async function ProfilePage({ params }) {
     <ProfileTabs locale={locale} profile={profile} user={user} dict={dict} />
   );
 }
+
+// Trigger CodeRabbit review

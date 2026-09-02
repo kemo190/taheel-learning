@@ -48,4 +48,3 @@ export default function HeroSection({
   );
 }
 
-// Trigger CodeRabbit review 2

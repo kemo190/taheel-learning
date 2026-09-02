@@ -60,4 +60,3 @@ export default function FeaturedCategorySection({
   );
 }
 
-// Trigger CodeRabbit review 2

@@ -91,4 +91,3 @@ export default function FeaturedCourse({ dict, locale }) {
   );
 }
 
-// Trigger CodeRabbit review 2

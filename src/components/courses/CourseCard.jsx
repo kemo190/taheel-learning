@@ -109,4 +109,3 @@ export default function CourseCard({ course, dict, locale }) {
   );
 }
 
-// Trigger CodeRabbit review 2

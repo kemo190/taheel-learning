@@ -260,4 +260,3 @@ export default function AuthNav({ dict, locale, initialUser = null, initialProfi
   );
 }
 
-// Trigger CodeRabbit review 2

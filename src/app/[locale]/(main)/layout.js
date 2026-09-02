@@ -13,3 +13,5 @@ export default async function MainLayout({ children, params }) {
     </div>
   );
 }
+
+// Trigger CodeRabbit review

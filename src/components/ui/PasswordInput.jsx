@@ -59,4 +59,3 @@ const PasswordInput = forwardRef(({ placeholder, isRtl, ...props }, ref) => {
 PasswordInput.displayName = 'PasswordInput';
 export default PasswordInput;
 
-// Trigger CodeRabbit review 2
