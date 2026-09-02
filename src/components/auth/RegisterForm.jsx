@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import PasswordInput from '@/components/ui/PasswordInput';
 import { useForm, Controller } from 'react-hook-form';
@@ -90,23 +91,27 @@ const GoogleIcon = () => (
 
 export default function RegisterForm({ dict, isRtl, locale }) {
 
+  const router = useRouter();
+
   // Aggressively check for session on mount (to catch OAuth hash parsing) and listen for auth changes
   useEffect(() => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        window.location.href = `/${locale}/home`;
+        router.push(`/${locale}/home`);
+        router.refresh();
       }
     };
     checkSession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
-        window.location.href = `/${locale}/home`;
+        router.push(`/${locale}/home`);
+        router.refresh();
       }
     });
     return () => subscription.unsubscribe();
-  }, [locale]);
+  }, [locale, router]);
 
   const schema = z.object({
     name: z.string().min(2, { message: dict.auth.errors.nameRequired }),

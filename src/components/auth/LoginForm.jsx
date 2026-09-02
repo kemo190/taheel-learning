@@ -34,18 +34,20 @@ export default function LoginForm({ dict, isRtl, locale }) {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        window.location.href = `/${locale}/home`;
+        router.push(`/${locale}/home`);
+        router.refresh();
       }
     };
     checkSession();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
-        window.location.href = `/${locale}/home`;
+        router.push(`/${locale}/home`);
+        router.refresh();
       }
     });
     return () => subscription.unsubscribe();
-  }, [locale]);
+  }, [locale, router]);
 
   const schema = z.object({
     email: z.string().email({ message: dict.auth.errors.invalidEmail }),
@@ -86,7 +88,8 @@ export default function LoginForm({ dict, isRtl, locale }) {
           : error.message);
       }
     } else {
-      window.location.href = `/${locale}/home`;
+      router.push(`/${locale}/home`);
+      router.refresh();
     }
   };
 

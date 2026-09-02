@@ -48,7 +48,13 @@ export async function updateSession(request) {
     
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}/login`
-    return NextResponse.redirect(url)
+    
+    const redirectResponse = NextResponse.redirect(url)
+    // Persist cookies (e.g. cleared session) to the redirect
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    return redirectResponse
   }
 
   if (user && (isAuthPath || isBaseRoute)) {
@@ -58,7 +64,13 @@ export async function updateSession(request) {
     
     const url = request.nextUrl.clone()
     url.pathname = `/${locale}/home`
-    return NextResponse.redirect(url)
+    
+    const redirectResponse = NextResponse.redirect(url)
+    // Persist refreshed session cookies to the redirect
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    return redirectResponse
   }
 
   return supabaseResponse
