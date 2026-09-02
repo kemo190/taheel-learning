@@ -55,9 +55,12 @@ export default function AuthNav({ dict, locale }) {
       const { data: { session } } = await supabase.auth.getSession();
       const currentUser = session?.user || null;
       setUser(currentUser);
+      // Immediately stop loading as soon as we know auth state!
+      setLoading(false); 
+      
       handleAuthRedirect(currentUser);
-      await fetchProfile(currentUser);
-      setLoading(false);
+      // Fetch profile in the background
+      fetchProfile(currentUser);
     };
     getUser();
 
