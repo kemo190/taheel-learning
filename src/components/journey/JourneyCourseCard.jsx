@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function JourneyCourseCard({
   title = "السرد القصصي",
@@ -13,20 +15,17 @@ export default function JourneyCourseCard({
 }) {
   return (
     <div className="flex min-h-full w-full flex-col space-y-3 overflow-hidden rounded-3xl border border-[#D6D6D6] bg-white pb-3 shadow-lg shadow-[#0b264626]">
-      <a
-        className="relative h-[211px] w-full rounded-lg bg-gray-50"
+      <Link
+        className="relative h-[211px] w-full rounded-lg bg-gray-50 overflow-hidden block"
         href={href}
       >
         <div className="relative h-full w-full overflow-hidden">
-          <img
+          <Image
             alt={title}
-            loading="lazy"
-            width="300"
-            height="211"
-            decoding="async"
-            className="h-full w-full object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            className="object-cover"
             src={imageSrc}
-            style={{ color: "transparent" }}
           />
         </div>
         <span className="flex h-fit w-fit gap-2 rounded-full rounded-ss-none rounded-es-none px-3 py-2 text-center text-sm font-bold text-white [&>svg]:size-5 bg-primary-mainBlue absolute start-0 bottom-0 z-10">
@@ -50,7 +49,7 @@ export default function JourneyCourseCard({
           </svg>
           {type}
         </span>
-      </a>
+      </Link>
       <div className="flex flex-1 flex-col px-4">
         <a href={courseHref}>
           <h2 className="text-primary-darkBlue line-clamp-2 text-base font-medium">

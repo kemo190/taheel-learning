@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function FavoriteCourseCard({
   dict,
@@ -21,11 +22,12 @@ export default function FavoriteCourseCard({
   return (
     <div className="flex w-full flex-col overflow-hidden rounded-[20px] border border-[#D6D6D6] bg-white shadow-sm hover:shadow-md transition-shadow">
       {/* Image Section */}
-      <div className="relative h-[200px] w-full bg-gray-50">
-        <img
+      <div className="relative h-[200px] w-full bg-gray-50 overflow-hidden">
+        <Image
           alt={title}
-          loading="lazy"
-          className="h-full w-full object-cover"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+          className="object-cover"
           src={imageSrc}
         />
         <span

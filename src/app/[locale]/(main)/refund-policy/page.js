@@ -18,4 +18,3 @@ export default async function RefundPolicyPage({ params }) {
   );
 }
 
-// Trigger CodeRabbit review

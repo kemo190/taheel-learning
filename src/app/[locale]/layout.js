@@ -37,4 +37,3 @@ export default async function RootLayout({ children, params }) {
   );
 }
 
-// Trigger CodeRabbit review

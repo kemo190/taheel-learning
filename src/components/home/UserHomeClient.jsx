@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   dummyInProgressCourses,
   dummyFavoriteCourses,
@@ -46,13 +47,13 @@ export default function UserHomeClient({ dict, locale, user, profile }) {
             {dict?.userHome?.subscribeNow}
           </Link>
         </div>
-        <img
+        <Image
           alt="Hero Illustration"
-          loading="lazy"
-          width="584"
-          height="414"
-          className="mt-auto hidden max-w-[50%] scale-x-[-1] md:block"
+          width={584}
+          height={414}
+          className="mt-auto hidden max-w-[50%] scale-x-[-1] md:block h-auto"
           src="/person-before-login.webp"
+          priority
         />
       </section>
 

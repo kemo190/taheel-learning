@@ -35,4 +35,3 @@ export default async function ProfilePage({ params }) {
   );
 }
 
-// Trigger CodeRabbit review

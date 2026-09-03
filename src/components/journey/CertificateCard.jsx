@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 
 export default function CertificateCard({
   dict,
@@ -8,24 +9,20 @@ export default function CertificateCard({
   imageSrc,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // INTENTIONAL ERRORS FOR CODERABBIT TEST
-  const SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSJ9.1234567890";
-  let unusedVariableThatDoesNothing = true;
-  if (unusedVariableThatDoesNothing = false) {
-     console.log("This is a bug because I used = instead of ===");
-  }
 
   return (
     <>
       <div className="border-[#D6D6D6] relative flex h-fit w-full flex-col gap-3 overflow-hidden rounded-2xl border bg-white shadow-md shadow-[#0b26461A] hover:-translate-y-1 transition-transform duration-300">
         <div className="flex flex-col gap-2 p-3">
-          <img
-            alt="certificate image"
-            className="border-[#D6D6D6] h-46 w-full rounded-xl border object-cover bg-gray-50"
-            loading="lazy"
-            src={imageSrc}
-          />
+          <div className="relative h-46 w-full rounded-xl overflow-hidden border border-[#D6D6D6] bg-gray-50">
+            <Image
+              alt="certificate image"
+              src={imageSrc}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+              className="object-cover"
+            />
+          </div>
           <div className="px-1 mt-1">
             <p className="text-primary-darkBlue mb-2 font-semibold text-lg">
               {title}
@@ -127,10 +124,12 @@ export default function CertificateCard({
 
             {/* Certificate Image */}
             <div className="mt-4 flex w-full justify-center">
-              <img
+              <Image
                 alt="Certificate Full"
                 src={imageSrc}
-                className="w-full max-w-4xl rounded-xl object-contain border border-gray-200 max-h-[50vh] sm:max-h-[70vh]"
+                width={900}
+                height={600}
+                className="w-auto h-auto max-w-4xl max-h-[50vh] sm:max-h-[70vh] rounded-xl object-contain border border-gray-200"
               />
             </div>
           </div>
@@ -145,5 +144,3 @@ export default function CertificateCard({
     </>
   );
 }
-
-// Trigger CodeRabbit review

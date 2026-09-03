@@ -47,4 +47,3 @@ export default async function ProfileLayout({ children, params }) {
   );
 }
 
-// Trigger CodeRabbit review

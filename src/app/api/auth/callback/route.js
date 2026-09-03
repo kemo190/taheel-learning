@@ -34,10 +34,15 @@ export async function GET(request) {
     if (!error) {
       // Upon successful exchange, redirect to the target page (e.g. /ar/home)
       // If next is /ar/login, we might want to redirect to /ar/home since they are now logged in.
-      const target =
+      let target =
         next.includes("login") || next.includes("register")
           ? next.replace(/login|register/, "home")
           : next;
+
+      // Prevent Open Redirect: ensure target is a relative path and doesn't redirect externally
+      if (!target.startsWith("/") || target.startsWith("//") || target.includes("://")) {
+        target = "/ar/home";
+      }
 
       return NextResponse.redirect(`${origin}${target}`);
     } else {
@@ -49,6 +54,4 @@ export async function GET(request) {
   return NextResponse.redirect(`${origin}/ar/login`);
 }
 
-// Trigger CodeRabbit review
 
-// Trigger CodeRabbit review

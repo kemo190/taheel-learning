@@ -42,4 +42,3 @@ export default async function UserHomePage({ params }) {
   );
 }
 
-// Trigger CodeRabbit review

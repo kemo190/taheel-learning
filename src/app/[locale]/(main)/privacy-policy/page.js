@@ -18,4 +18,3 @@ export default async function PrivacyPolicyPage({ params }) {
   );
 }
 
-// Trigger CodeRabbit review

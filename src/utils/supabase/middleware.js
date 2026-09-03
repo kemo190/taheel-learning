@@ -39,7 +39,9 @@ export async function updateSession(request) {
 
   const { pathname } = request.nextUrl;
   const isProtectedPath =
-    pathname.includes("/profile") || pathname.includes("/home");
+    pathname.includes("/profile") ||
+    pathname.includes("/home") ||
+    pathname.includes("/journey");
   const isAuthPath =
     pathname.includes("/login") || pathname.includes("/register");
   const isBaseRoute =

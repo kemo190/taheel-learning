@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function FeaturedCourse({ dict, locale }) {
   const isRtl = locale === "ar";
@@ -34,11 +35,12 @@ export default function FeaturedCourse({ dict, locale }) {
         dir={isRtl ? "rtl" : "ltr"}
       >
         {/* 1. Image Wrapper (MUST be relative) */}
-        <div className="relative w-full md:w-[45%] lg:w-[478px] shrink-0">
-          <img
+        <div className="relative w-full md:w-[45%] lg:w-[478px] shrink-0 aspect-video rounded-xl overflow-hidden">
+          <Image
             alt={featured.title}
-            loading="lazy"
-            className="w-full aspect-video object-cover rounded-xl"
+            fill
+            sizes="(max-width: 768px) 100vw, 478px"
+            className="object-cover"
             src={featured.imageSrc}
           />
           <div className="flex h-fit w-fit gap-2 rounded-full rtl:rounded-r-none ltr:rounded-l-none px-3 py-2 text-center text-sm font-bold text-white [&_svg]:size-5 bg-[#0b2646] absolute bottom-0 rtl:right-0 ltr:left-0 z-10">
