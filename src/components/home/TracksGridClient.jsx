@@ -45,7 +45,7 @@ export default function TracksGridClient({ tracks, locale }) {
       onClick={() => setActiveCategory(cat)}
       className={`px-5 py-2.5 md:px-8 md:py-3.5 rounded-full text-[13px] md:text-[15px] font-bold border transition-colors ${
         activeCategory === cat
-          ? "bg-[#1d1f2e] text-white border-[#1d1f2e]"
+          ? "bg-[#0b2646] text-white border-[#0b2646]"
           : "bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
       }`}
     >

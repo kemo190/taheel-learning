@@ -404,7 +404,7 @@ export default function AuthNav({
       </Link>
       <Link
         href={`/${locale}/register`}
-        className="bg-transparent border border-slate-300 hover:border-[#0b2646] text-[#0b2646] hover:bg-slate-50 px-5 py-2.5 flex items-center justify-center rounded-full text-[15px] font-bold transition-all whitespace-nowrap"
+        className="bg-transparent border border-slate-300 hover:border-[#0b2646] text-[#0b2646] hover:bg-slate-50 w-[148px] h-[58px] flex items-center justify-center rounded-full text-[16px] font-bold transition-all whitespace-nowrap"
       >
         إنشاء حساب
       </Link>

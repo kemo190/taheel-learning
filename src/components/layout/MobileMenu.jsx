@@ -160,6 +160,7 @@ const ChevronDownIcon = () => (
 
 export default function MobileMenu({ dict, locale }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isTracksOpen, setIsTracksOpen] = useState(false);
   const router = useRouter();
   const targetLocale = locale === "ar" ? "en" : "ar";
 
@@ -175,12 +176,12 @@ export default function MobileMenu({ dict, locale }) {
   return (
     <>
       <button
-        className="p-1 text-[#0b2646] hover:bg-[#f0f4ff] rounded-md transition-colors"
+        className="p-2 text-[#0b2646] bg-transparent rounded-lg active:scale-95 transition-transform"
         onClick={() => setIsOpen(true)}
         aria-label={dict.navbar.openMenu}
         aria-expanded={isOpen}
       >
-        <MenuIcon />
+        <MenuIcon className="w-7 h-7" />
       </button>
 
       {/* Full Screen Mobile Overlay */}
@@ -217,13 +218,32 @@ export default function MobileMenu({ dict, locale }) {
               {dict.navbar.courses}
             </Link>
 
-            <Link
-              href={`/${locale}`}
-              className="text-lg font-medium text-[#718096] hover:text-[#0b2646] transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              مسارات التعلم
-            </Link>
+            <div className="w-full flex flex-col items-center">
+              <button
+                className="flex items-center gap-2 text-lg font-medium text-[#718096] hover:text-[#0b2646] transition-colors"
+                onClick={() => setIsTracksOpen(!isTracksOpen)}
+              >
+                مسارات التعلم
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 ${isTracksOpen ? "rotate-180" : ""}`}>
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              
+              {isTracksOpen && (
+                <div className="flex flex-col items-center gap-4 mt-6 animate-in slide-in-from-top-2 duration-200">
+                  {["محاسبة", "تحليل مالى", "تسويق", "المراجعة", "HR", "Business information systems (bis)"].map((cat) => (
+                    <Link
+                      key={cat}
+                      href={`/${locale}/tracks?category=${encodeURIComponent(cat)}`}
+                      className="text-base text-slate-500 hover:text-[#0b2646]"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {cat}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
 
             <Link
               href={`/${locale}/login`}

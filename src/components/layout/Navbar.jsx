@@ -59,7 +59,7 @@ const CartIcon = (props) => (
 
 // --- Logo Component ---
 const Logo = () => (
-  <img src="/images/logo.png" alt="Ta'hel" className="h-14 md:h-24 object-contain w-auto" />
+  <img src="/images/logo.png" alt="Ta'hel" className="h-20 md:h-28 object-contain w-auto" />
 );
 
 // --- Main Header Component ---
@@ -91,12 +91,12 @@ export default async function Navbar({ locale = "ar" }) {
   const toggleLabel = locale === "ar" ? "EN" : "AR";
 
   return (
-    <header className="bg-[#e8eef5] sticky top-0 z-50">
+    <header className="bg-white sticky top-0 z-50">
       
       {/* =========================================
           DESKTOP LAYOUT (Hidden on Mobile)
       ========================================= */}
-      <div className="hidden md:flex mx-auto max-w-[1200px] items-center justify-between gap-x-4 py-5 px-4">
+      <div className="hidden md:flex mx-auto max-w-[1200px] items-center justify-between gap-x-4 py-2 px-4">
         
         {/* Right Section: Logo */}
         <div className="flex items-center shrink-0">
@@ -136,14 +136,15 @@ export default async function Navbar({ locale = "ar" }) {
 
                 {/* Dropdown Menu */}
                 {link.hasDropdown && (
-                  <div className="absolute top-full right-0 w-64 bg-white shadow-xl rounded-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
-                    <div className="p-2">
+                  <div className="absolute top-full right-0 w-72 bg-white shadow-2xl rounded-none border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 z-50 overflow-hidden">
+                    <div className="p-3 flex flex-col gap-1">
                       {["محاسبة", "تحليل مالى", "تسويق", "المراجعة", "HR", "Business information systems (bis)"].map((cat) => (
                         <Link
                           key={cat}
                           href={`/${locale}/tracks?category=${encodeURIComponent(cat)}`}
-                          className="block px-4 py-3 hover:bg-slate-50 text-slate-700 hover:text-[#0b2646] rounded-md transition-colors text-[14px]"
+                          className="group/link flex items-center gap-3 px-4 py-3 hover:bg-[#f8fafd] text-slate-600 hover:text-[#0b2646] rounded-none transition-all duration-200 text-[15px] font-medium"
                         >
+                          <div className="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover/link:bg-[#FBBC04] transition-colors"></div>
                           {cat}
                         </Link>
                       ))}
@@ -172,7 +173,7 @@ export default async function Navbar({ locale = "ar" }) {
       {/* =========================================
           MOBILE LAYOUT (Hidden on Desktop)
       ========================================= */}
-      <div className="md:hidden flex items-center justify-between px-4 py-4 w-full relative">
+      <div className="md:hidden flex items-center justify-between px-4 py-1 w-full relative">
         {/* Invisible spacer for flex balance */}
         <div className="w-10 shrink-0"></div>
 

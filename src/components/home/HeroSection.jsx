@@ -15,14 +15,13 @@ export default function HeroSection({
     <section
       className="w-full pt-10 pb-10 md:pt-16 md:pb-14 px-4"
       style={{
-        background: "linear-gradient(180deg, #e8eef5 0%, #ffffff 100%)",
+        background: "linear-gradient(180deg, rgba(251, 188, 4, 0.05) 0%, #ffffff 100%)",
       }}
       dir={isRtl ? "rtl" : "ltr"}
     >
       <div className="max-w-3xl mx-auto text-center">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-[#0b2646]/5 border border-[#0b2646]/10 text-[#0b2646] text-sm font-semibold px-4 py-1.5 rounded-full mb-8">
-          <span className="w-2 h-2 rounded-full bg-[#0b2646] animate-pulse"></span>
+        <div className="inline-flex items-center gap-2 bg-transparent border border-[#0b2646]/10 text-[#0b2646] text-sm font-semibold px-4 py-1.5 rounded-full mb-8">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
           منصة تدريبية متخصصة في التطوير المهني
         </div>
 
@@ -41,13 +40,13 @@ export default function HeroSection({
         <div className="flex flex-row justify-center items-center gap-3 max-w-[400px] sm:max-w-none mx-auto w-full">
           <Link
             href={`/${locale}/register`}
-            className="flex-1 sm:flex-none text-center bg-[#0b2646] hover:bg-[#0d2e55] text-white px-3 py-3.5 sm:px-10 sm:py-4 rounded-full font-bold text-[14px] sm:text-lg transition-all"
+            className="flex-1 sm:flex-none text-center bg-[#FBBC04] hover:bg-[#e0a800] text-[#0b2646] px-3 py-3.5 sm:px-10 sm:py-4 rounded-full font-bold text-[14px] sm:text-lg transition-all"
           >
             {primaryButtonText || "اشترك الآن"}
           </Link>
           <Link
             href={`/${locale}/tracks`}
-            className="flex-1 sm:flex-none text-center bg-white border-2 border-slate-300 text-slate-700 hover:border-[#0b2646] hover:text-[#0b2646] px-3 py-3.5 sm:px-10 sm:py-4 rounded-full font-bold text-[14px] sm:text-lg transition-all"
+            className="flex-1 sm:flex-none text-center bg-white border-2 border-slate-300 text-slate-700 hover:border-[#FBBC04] hover:text-[#0b2646] px-3 py-3.5 sm:px-10 sm:py-4 rounded-full font-bold text-[14px] sm:text-lg transition-all"
           >
             {secondaryButtonText || "عرض الدورات"}
           </Link>
