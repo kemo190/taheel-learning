@@ -59,7 +59,7 @@ const CartIcon = (props) => (
 
 // --- Logo Component ---
 const Logo = () => (
-  <img src="/images/logo.png" alt="Ta'hel" className="h-12 md:h-20 object-contain w-auto" />
+  <img src="/images/logo.png" alt="Ta'hel" className="h-14 md:h-24 object-contain w-auto" />
 );
 
 // --- Main Header Component ---
@@ -172,11 +172,16 @@ export default async function Navbar({ locale = "ar" }) {
       {/* =========================================
           MOBILE LAYOUT (Hidden on Desktop)
       ========================================= */}
-      <div className="md:hidden flex items-center justify-between px-4 py-4 w-full">
-        {/* Logo (Right side in RTL) */}
-        <Link href={`/${locale}`} aria-label="Home" className="flex items-center shrink-0">
-          <Logo />
-        </Link>
+      <div className="md:hidden flex items-center justify-between px-4 py-4 w-full relative">
+        {/* Invisible spacer for flex balance */}
+        <div className="w-10 shrink-0"></div>
+
+        {/* Logo (Centered) */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <Link href={`/${locale}`} aria-label="Home" className="flex items-center shrink-0">
+            <Logo />
+          </Link>
+        </div>
 
         {/* Hamburger Menu (Left side in RTL) */}
         <div className="shrink-0">
