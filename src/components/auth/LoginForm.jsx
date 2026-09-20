@@ -77,7 +77,7 @@ export default function LoginForm({ dict, isRtl, locale }) {
   };
 
   return (
-    <div className="relative z-30 mt-4 sm:mt-6 flex w-full flex-col gap-4 px-0 sm:px-6">
+    <div className="relative z-30 flex w-full max-w-[450px] mx-auto flex-col gap-2 px-0">
       {serverError && (
         <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm text-center">
           {serverError}
@@ -99,28 +99,19 @@ export default function LoginForm({ dict, isRtl, locale }) {
         <div className="flex-1 border-t border-gray-200"></div>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 w-full mt-2">
         {/* Email */}
-        <div className="space-y-2">
-          <label
-            htmlFor="login_email"
-            className="block text-sm font-bold text-[#4b5563] rtl:text-right ltr:text-left"
-          >
-            {dict.auth.email}
+        <div>
+          <label htmlFor="login_email" className="block text-sm font-medium text-gray-600 mb-1.5 rtl:text-right ltr:text-left">
+            {dict.auth.emailPlaceholder}
           </label>
-          <div className="relative">
-            <input
-              id="login_email"
-              {...register("email")}
-              type="email"
-              placeholder={dict.auth.emailPlaceholder}
-              className={`w-full bg-[#f8f9fb] border ${errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-3 px-12 text-sm focus:outline-none focus:ring-1 transition-all placeholder:text-gray-400 rtl:text-right ltr:text-left`}
-              dir={isRtl ? "rtl" : "ltr"}
-            />
-            <div className="absolute top-1/2 -translate-y-1/2 ltr:left-4 rtl:right-4 text-gray-400 pointer-events-none">
-              <MailIcon />
-            </div>
-          </div>
+          <input
+            id="login_email"
+            {...register("email")}
+            type="email"
+            className={`w-full bg-white border ${errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-3 sm:py-3 sm:px-4 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent rtl:text-right ltr:text-left`}
+            dir={isRtl ? "rtl" : "ltr"}
+          />
           {errors.email && (
             <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">
               {errors.email.message}
@@ -129,19 +120,15 @@ export default function LoginForm({ dict, isRtl, locale }) {
         </div>
 
         {/* Password */}
-        <div className="space-y-2">
-          <label
-            htmlFor="login_password"
-            className="block text-sm font-bold text-[#4b5563] rtl:text-right ltr:text-left"
-          >
+        <div>
+          <label htmlFor="login_password" className="block text-sm font-medium text-gray-600 mb-1.5 rtl:text-right ltr:text-left">
             {dict.auth.password}
           </label>
           <PasswordInput
             id="login_password"
             {...register("password")}
-            placeholder={dict.auth.passwordPlaceholder}
             isRtl={isRtl}
-            className={`w-full bg-[#f8f9fb] border ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-3 px-12 text-sm focus:outline-none focus:ring-1 transition-all placeholder:text-gray-400 rtl:text-right ltr:text-left`}
+            className={`w-full bg-white border ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-3 sm:py-3 sm:px-4 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent rtl:text-right ltr:text-left`}
           />
           {errors.password && (
             <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">
@@ -150,25 +137,27 @@ export default function LoginForm({ dict, isRtl, locale }) {
           )}
         </div>
 
-        <div className="flex rtl:justify-end ltr:justify-end mt-2">
+        <div className="flex rtl:justify-end ltr:justify-end mt-1">
           <Link
             href={`/${locale}/forgot-password`}
-            className="text-sm font-bold text-[#0b2646] hover:opacity-80 transition-colors"
+            className="text-sm font-medium text-gray-500 hover:text-[#0b2646] transition-colors underline underline-offset-4"
           >
             {dict.auth.forgotPassword}
           </Link>
         </div>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-[#0b2646] text-white font-bold py-3.5 rounded-xl hover:bg-[#061528] transition-colors mt-2 text-sm shadow-md disabled:opacity-70 flex items-center justify-center"
-        >
-          {isSubmitting ? (
-            <span className="animate-spin border-2 border-white/20 border-t-white w-5 h-5 rounded-full mr-2 rtl:ml-2 rtl:mr-0"></span>
-          ) : null}
-          {dict.auth.loginBtn}
-        </button>
+        <div className="flex justify-center mt-3">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full max-w-[280px] bg-[#FBBC04] text-[#0b2646] font-bold py-3 sm:py-3.5 rounded-full hover:bg-[#f5b300] transition-colors text-[16px] disabled:opacity-70 flex items-center justify-center"
+          >
+            {isSubmitting ? (
+              <span className="animate-spin border-2 border-[#0b2646]/20 border-t-[#0b2646] w-5 h-5 rounded-full mr-2 rtl:ml-2 rtl:mr-0"></span>
+            ) : null}
+            {dict.auth.loginBtn}
+          </button>
+        </div>
       </form>
     </div>
   );
