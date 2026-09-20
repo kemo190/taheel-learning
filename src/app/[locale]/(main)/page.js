@@ -13,7 +13,7 @@ export default async function Home({ params }) {
   return (
     <main className="min-h-screen bg-white">
       {/* 1. Hero: big centered headline + CTAs */}
-      <ScrollReveal direction="up" delay={0.1}>
+      <ScrollReveal direction="none" delay={0.1}>
         <HeroSection
           title={dict.hero?.title}
           subtitle={dict.hero?.subtitle}

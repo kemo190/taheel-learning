@@ -96,7 +96,7 @@ export default async function Navbar({ locale = "ar" }) {
       {/* =========================================
           DESKTOP LAYOUT (Hidden on Mobile)
       ========================================= */}
-      <div className="hidden md:flex mx-auto max-w-[1200px] items-center justify-between gap-x-4 py-2 px-4">
+      <div className="hidden md:flex mx-auto max-w-[1200px] items-center justify-between gap-x-4 py-3 px-4">
         
         {/* Right Section: Logo */}
         <div className="flex items-center shrink-0">
@@ -173,7 +173,7 @@ export default async function Navbar({ locale = "ar" }) {
       {/* =========================================
           MOBILE LAYOUT (Hidden on Desktop)
       ========================================= */}
-      <div className="md:hidden flex items-center justify-between px-4 py-1 w-full relative">
+      <div className="md:hidden flex items-center justify-between px-4 py-4 w-full relative">
         {/* Invisible spacer for flex balance */}
         <div className="w-10 shrink-0"></div>
 
