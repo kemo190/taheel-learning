@@ -13,201 +13,28 @@ import PhoneInput, { isSupportedCountry } from "react-phone-number-input";
 import countriesTranslations from "i18n-iso-countries";
 import arabicCountries from "i18n-iso-countries/langs/ar.json";
 import englishCountries from "i18n-iso-countries/langs/en.json";
+import { createProfileServerAction } from "@/app/actions/profileActions";
 
 countriesTranslations.registerLocale(arabicCountries);
 countriesTranslations.registerLocale(englishCountries);
 
-// --- Icons ---
-const MailIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-  </svg>
-);
-
-const UserIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-    <circle cx="12" cy="7" r="4"></circle>
-  </svg>
-);
-
-const GlobeIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <circle cx="12" cy="12" r="10"></circle>
-    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-    <path d="M2 12h20"></path>
-  </svg>
-);
-
-const BuildingIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
-    <path d="M9 22v-4h6v4"></path>
-    <path d="M8 6h.01"></path>
-    <path d="M16 6h.01"></path>
-    <path d="M12 6h.01"></path>
-    <path d="M12 10h.01"></path>
-    <path d="M12 14h.01"></path>
-    <path d="M16 10h.01"></path>
-    <path d="M16 14h.01"></path>
-    <path d="M8 10h.01"></path>
-    <path d="M8 14h.01"></path>
-  </svg>
-);
-
-const GenderIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <circle cx="11" cy="11" r="5"></circle>
-    <line x1="14.53" y1="7.47" x2="19" y2="3"></line>
-    <line x1="15" y1="3" x2="19" y2="3"></line>
-    <line x1="19" y1="7" x2="19" y2="3"></line>
-    <line x1="11" y1="16" x2="11" y2="21"></line>
-    <line x1="8" y1="19" x2="14" y2="19"></line>
-  </svg>
-);
-
-const PhoneIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-  </svg>
-);
-
-const ChevronDownIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <polyline points="6 9 12 15 18 9"></polyline>
-  </svg>
-);
-
-const GoogleIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="20"
-    height="20"
-    viewBox="0 0 48 48"
-  >
-    <path
-      fill="#FFC107"
-      d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-    />
-    <path
-      fill="#FF3D00"
-      d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-    />
-    <path
-      fill="#4CAF50"
-      d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-    />
-    <path
-      fill="#1976D2"
-      d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-    />
-  </svg>
-);
+import { useAuthRedirect } from "@/hooks/useAuthRedirect";
+import { SocialLoginButton } from "@/components/auth/SocialLoginButton";
+import {
+  MailIcon,
+  UserIcon,
+  GlobeIcon,
+  BuildingIcon,
+  GenderIcon,
+  PhoneIcon,
+  ChevronDownIcon,
+} from "@/components/icons";
 
 export default function RegisterForm({ dict, isRtl, locale }) {
   const router = useRouter();
 
-  // Aggressively check for session on mount (to catch OAuth hash parsing) and listen for auth changes
-  useEffect(() => {
-    const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session) {
-        router.replace(`/${locale}/home`);
-        router.refresh();
-      }
-    };
-    checkSession();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        router.replace(`/${locale}/home`);
-        router.refresh();
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [locale, router]);
+  // Use extracted auth redirect hook
+  useAuthRedirect(locale);
 
   const schema = z
     .object({
@@ -278,51 +105,44 @@ export default function RegisterForm({ dict, isRtl, locale }) {
     setServerError(null);
     setSuccess(null);
 
-    const { data, error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-    });
-
-    if (error) {
-      if (
-        error.message.includes("already registered") ||
-        error.status === 422
-      ) {
-        setServerError(dict.auth.messages.emailAlreadyRegistered);
-      } else {
-        setServerError(error.message);
-      }
-    } else if (data?.user?.identities?.length === 0) {
-      // Supabase returns an empty identities array if the email already exists and enumeration protection is on
-      // The user explicitly requested to show an error message in this case instead of a neutral message.
-      setServerError(dict.auth.messages.emailAlreadyRegistered);
-    } else if (data?.user) {
-      // User created successfully, provision profile
-      const { error: profileError } = await supabase.from("profiles").upsert({
-        id: data.user.id,
-        full_name: formData.name,
-        country: formData.country,
-        governorate: formData.governorate,
-        gender: formData.gender,
-        phone: formData.phone,
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
       });
 
-      if (profileError) {
-        setServerError(profileError.message);
-      } else {
-        setSuccess(dict.auth.messages.checkEmailToContinue);
-      }
-    }
-  };
+      if (error) {
+        if (
+          error.message.includes("already registered") ||
+          error.status === 422
+        ) {
+          setServerError(dict.auth.messages.emailAlreadyRegistered);
+        } else {
+          setServerError(error.message);
+        }
+      } else if (data?.user?.identities?.length === 0) {
+        // Supabase returns an empty identities array if the email already exists and enumeration protection is on
+        // The user explicitly requested to show an error message in this case instead of a neutral message.
+        setServerError(dict.auth.messages.emailAlreadyRegistered);
+      } else if (data?.user) {
+        // User created successfully, provision profile via Server Action
+        const result = await createProfileServerAction(data.user.id, {
+          name: formData.name,
+          country: formData.country,
+          governorate: formData.governorate,
+          gender: formData.gender,
+          phone: formData.phone,
+        });
 
-  const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/api/auth/callback?next=/${locale}/register`,
-      },
-    });
-    if (error) setServerError(error.message);
+        if (!result.success) {
+          setServerError(result.error);
+        } else {
+          setSuccess(dict.auth.messages.checkEmailToContinue);
+        }
+      }
+    } catch (err) {
+      setServerError("An unexpected network error occurred. Please try again.");
+    }
   };
 
   return (
@@ -339,14 +159,12 @@ export default function RegisterForm({ dict, isRtl, locale }) {
         </div>
       )}
 
-      <button
-        onClick={handleGoogleLogin}
-        type="button"
-        className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
-      >
-        <GoogleIcon />
-        {locale === "ar" ? "التسجيل بواسطة جوجل" : "Continue with Google"}
-      </button>
+      <SocialLoginButton
+        locale={locale}
+        provider="google"
+        nextPath="/register"
+        label={locale === "ar" ? "التسجيل بواسطة جوجل" : "Continue with Google"}
+      />
 
       <div className="flex items-center my-2">
         <div className="flex-1 border-t border-gray-200"></div>

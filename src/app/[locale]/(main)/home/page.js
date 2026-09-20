@@ -30,6 +30,28 @@ export default async function UserHomePage({ params }) {
     .eq("id", user.id)
     .single();
 
+  // Fetch all active tracks with their programs and instructors
+  const { data: tracks } = await supabase
+    .from("tracks")
+    .select(`
+      *,
+      programs(id, title_ar, title_en),
+      track_instructors(
+        instructors(bio_ar)
+      )
+    `)
+    .eq("is_active", true);
+
+  const safeTracks = tracks || [];
+
+  // Group by program (filtering by title instead of hardcoded IDs so it works dynamically)
+  const aiTracks = safeTracks.filter(t => t.programs?.title_en === 'Artificial Intelligence' || t.programs?.title_ar === 'الذكاء الاصطناعي');
+  const marketingTracks = safeTracks.filter(t => t.programs?.title_en === 'Marketing & Sales' || t.programs?.title_ar === 'التسويق والمبيعات');
+  const generalTracks = safeTracks.filter(t => t.programs?.title_en === 'General Skills' || t.programs?.title_ar === 'مهارات عامة');
+
+  // Favorites (Just display the top rated ones for now)
+  const topTracks = [...safeTracks].sort((a, b) => b.rating - a.rating).slice(0, 4);
+
   return (
     <main className="min-h-screen">
       <UserHomeClient
@@ -37,6 +59,9 @@ export default async function UserHomePage({ params }) {
         locale={locale}
         user={user}
         profile={profile}
+        aiTracks={aiTracks}
+        marketingTracks={marketingTracks}
+        topTracks={topTracks}
       />
     </main>
   );

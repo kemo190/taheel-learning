@@ -96,89 +96,98 @@ export default async function Navbar({ locale = "ar" }) {
   const toggleLabel = locale === "ar" ? "EN" : "AR";
 
   return (
-    <header className="bg-[#F2F7FF] sticky top-0 z-50 md:px-4">
-      <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] flex items-center justify-between gap-x-2 py-3 md:py-4 border-b border-gray-300">
-        {/* Right Section: Mobile Menu, Logo & Nav */}
-        <div className="flex items-center gap-2 sm:gap-3 lg:gap-12 shrink-0">
-          {/* Mobile Menu (Hamburger) */}
-          <div className="md:hidden flex items-center">
-            <MobileMenu dict={dict} locale={locale} navLinks={navLinks} />
-          </div>
-
-          <Link
-            href={`/${locale}`}
-            aria-label="Home"
-            className="flex items-center"
-          >
+    <header className="bg-[#e8eef5] sticky top-0 z-50">
+      
+      {/* =========================================
+          DESKTOP LAYOUT (Hidden on Mobile)
+      ========================================= */}
+      <div className="hidden md:flex mx-auto max-w-[1200px] items-center justify-between gap-x-4 py-5 px-4">
+        
+        {/* Right Section: Logo */}
+        <div className="flex items-center shrink-0">
+          <Link href={`/${locale}`} aria-label="Home" className="flex items-center">
             <Logo />
           </Link>
-
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-6 text-[#5c6b81] font-light text-[18px] pt-1.5">
-            {navLinks.map((link, idx) => (
-              <Link
-                key={idx}
-                href={link.href}
-                className="group flex items-center gap-1.5 border-b-2 border-transparent hover:border-[#0b2646] hover:text-[#0b2646] transition-all"
-              >
-                <span>{link.name}</span>
-                {link.hasDropdown && (
-                  <ChevronDownIcon className="w-4 h-4 text-gray-400 mt-0.5 group-hover:text-[#0b2646] transition-colors" />
-                )}
-              </Link>
-            ))}
-          </nav>
         </div>
 
         {/* Center Section: Search Bar */}
-        <div className="hidden md:flex flex-1 justify-center max-w-[550px] mx-4 lg:mx-8">
-          <form
-            action={`/${locale}/search`}
-            method="GET"
-            className="relative w-full"
-          >
+        <div className="flex-1 justify-center max-w-[600px] mx-4">
+          <form action={`/${locale}/search`} method="GET" className="relative w-full flex items-center">
             <input
               type="text"
               placeholder={dict.navbar.searchPlaceholder}
-              className="w-full bg-white border border-[#c4d4fb] rounded-full py-2.5 ps-4 pe-11 text-[14px] text-gray-700 placeholder-[#a0aec0] focus:outline-none focus:border-[#0b2646] focus:ring-1 focus:ring-[#0b2646] transition-all"
+              className="w-full bg-white border border-slate-300 rounded-full py-2.5 ps-5 pe-24 text-[15px] text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#0b2646] transition-all"
             />
-            <button className="absolute end-1 top-1 bottom-1 w-9 flex items-center justify-center bg-transparent border-0 text-[#8fa7e6] hover:text-[#0b2646] transition-colors">
-              <SearchIcon className="w-5 h-5" />
+            <button className="absolute end-1.5 top-1.5 bottom-1.5 px-6 flex items-center justify-center bg-[#0b2646] hover:bg-[#0d2e55] text-white font-bold rounded-full transition-colors">
+              ابحث
             </button>
           </form>
         </div>
 
-        {/* Left Section: Actions */}
-        <div className="flex items-center justify-end flex-1 md:flex-none gap-1 sm:gap-4 shrink-0">
-          <Link
-            href={`/${locale}/business`}
-            className="hidden xl:block text-[#5c6b81] hover:text-[#0b2646] text-[15px] font-medium transition-colors"
-          >
-            Taheel Business
-          </Link>
+        {/* Left Section: Navigation & Actions */}
+        <div className="flex items-center justify-end gap-6 shrink-0">
+          
+          {/* Navigation Links */}
+          <nav className="flex items-center gap-6 text-slate-600 font-medium text-[16px]">
+            {navLinks.map((link, idx) => (
+              <Link
+                key={idx}
+                href={link.href}
+                className="hover:text-[#0b2646] transition-colors flex items-center gap-1"
+              >
+                <span>{link.name}</span>
+                {link.hasDropdown && <ChevronDownIcon className="w-4 h-4" />}
+              </Link>
+            ))}
+          </nav>
 
-          {/* Auth Buttons - Conditional rendering via AuthNav */}
-          <AuthNav
-            dict={dict}
-            locale={locale}
-            initialUser={user}
-            initialProfile={profile}
-          />
+          {/* Divider */}
+          <div className="w-px h-6 bg-slate-200"></div>
 
-          {/* Cart */}
-          <button
-            className="relative p-1.5 text-[#8fa7e6] hover:text-[#0b2646] transition-colors"
-            aria-label="Cart"
-          >
-            <CartIcon className="w-5 sm:w-[22px] h-5 sm:h-[22px]" />
-            <span className="absolute top-0 right-0 w-3.5 h-3.5 bg-red-600 text-white text-[9px] font-bold flex items-center justify-center rounded-full border border-white">
-              1
-            </span>
-          </button>
-
-          {/* Language Switcher - Hidden on mobile (moved to drawer) */}
-          <LanguageSwitcher locale={locale} />
+          {/* Auth & Cart Actions */}
+          <div className="flex items-center justify-end gap-4">
+            <AuthNav
+              dict={dict}
+              locale={locale}
+              initialUser={user}
+              initialProfile={profile}
+            />
+          </div>
         </div>
+      </div>
+
+      {/* =========================================
+          MOBILE LAYOUT (Hidden on Desktop)
+      ========================================= */}
+      <div className="md:hidden flex flex-col gap-4 px-4 py-4">
+        
+        {/* Top Row: Search & Menu */}
+        <div className="flex items-center gap-3 w-full">
+          {/* Search Bar (First -> Right in RTL) */}
+          <form action={`/${locale}/search`} method="GET" className="relative w-full flex-1">
+            <input
+              type="text"
+              placeholder={dict.navbar.searchPlaceholder}
+              className="w-full bg-white border border-slate-300 rounded-full py-2.5 ps-4 pe-20 text-[13px] text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#0b2646] transition-all shadow-sm"
+            />
+            <button className="absolute end-1.5 top-1.5 bottom-1.5 px-4 flex items-center justify-center bg-[#0b2646] hover:bg-[#0d2e55] text-white font-bold rounded-full transition-colors text-xs">
+              ابحث
+            </button>
+          </form>
+
+          {/* Hamburger (Second -> Left in RTL) */}
+          <div className="shrink-0">
+            <MobileMenu dict={dict} locale={locale} navLinks={navLinks} />
+          </div>
+        </div>
+
+        {/* Bottom Row: Logo Centered */}
+        <div className="flex justify-center w-full">
+          <Link href={`/${locale}`} aria-label="Home" className="flex items-center">
+            <Logo />
+          </Link>
+        </div>
+
       </div>
     </header>
   );

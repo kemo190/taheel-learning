@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default function FavoriteCourseCard({
+  id,
   dict,
   locale = "ar",
   title,
@@ -21,6 +22,7 @@ export default function FavoriteCourseCard({
 
   return (
     <div className="flex w-full flex-col overflow-hidden rounded-[20px] border border-[#D6D6D6] bg-white shadow-sm hover:shadow-md transition-shadow">
+      <Link href={`/${locale}/tracks/${id}`} className="contents">
       {/* Image Section */}
       <div className="relative h-[200px] w-full bg-gray-50 overflow-hidden">
         <Image
@@ -146,7 +148,10 @@ export default function FavoriteCourseCard({
           dir="rtl"
         >
           {/* Subscribe Button */}
-          <button className="relative inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer transition-colors text-[#0b2646] hover:bg-[#f0f6ff] rounded-2xl border border-[#eef2f6] bg-[#f8f8fe] font-bold text-[15px] h-11 px-4">
+          <Link
+            href={`/${locale}/tracks/${id}`}
+            className="relative inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer transition-colors text-[#0b2646] hover:bg-[#f0f6ff] rounded-2xl border border-[#eef2f6] bg-[#f8f8fe] font-bold text-[15px] h-11 px-4"
+          >
             {dict?.journey?.favoriteCard?.subscribeNow || "اشترك الآن"}
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -163,7 +168,7 @@ export default function FavoriteCourseCard({
               <path d="M5 12h14"></path>
               <path d="m12 5 7 7-7 7"></path>
             </svg>
-          </button>
+          </Link>
 
           {/* Cart & Heart */}
           <div className="flex shrink-0 gap-2 items-center">
@@ -202,6 +207,7 @@ export default function FavoriteCourseCard({
           </div>
         </div>
       </div>
+      </Link>
     </div>
   );
 }

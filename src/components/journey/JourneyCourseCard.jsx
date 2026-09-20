@@ -4,15 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function JourneyCourseCard({
+  id,
   title = "السرد القصصي",
   type = "مسجل تفاعلى",
   progress = 0,
-  imageSrc = "https://new-eyouth-learning-website.s3.us-east-2.amazonaws.com/media/courses-media/stoytelling/thumbnail/Storytelling.webp?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA3TEZMNC3TLUMTQNM%2F20260828%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20260828T122304Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=3bc7ddf2d57cad9b57f0a3924962a879a33f03ae9cfa6465f0b5db95009ef749",
-  href = "/ar/lms/r/stoytelling?lesson=objectives-2",
-  courseHref = "/ar/courses/stoytelling",
+  imageSrc = "/hero-student.jpg",
   dict,
-  locale,
+  locale = "ar",
 }) {
+  const href = `/${locale}/learn/${id}`;
+  const courseHref = `/${locale}/tracks/${id}`;
+
   return (
     <div className="flex min-h-full w-full flex-col space-y-3 overflow-hidden rounded-3xl border border-[#D6D6D6] bg-white pb-3 shadow-lg shadow-[#0b264626]">
       <Link
@@ -51,11 +53,11 @@ export default function JourneyCourseCard({
         </span>
       </Link>
       <div className="flex flex-1 flex-col px-4">
-        <a href={courseHref}>
+        <Link href={courseHref}>
           <h2 className="text-primary-darkBlue line-clamp-2 text-base font-medium">
             {title}
           </h2>
-        </a>
+        </Link>
         <div className="mt-auto h-fit w-full">
           <span className="text-darkBlue ms-auto mb-2 flex w-fit text-xs font-bold">
             {progress}%
@@ -98,7 +100,7 @@ export default function JourneyCourseCard({
                 </svg>
               </div>
             )}
-            <a
+            <Link
               className="relative inline-flex items-center justify-center gap-2 whitespace-nowrap duration-300 cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&>svg]:pointer-events-none [&>svg]:size-4 [&>svg]:shrink-0 text-mainBlue hover:bg-[#DEDEDE] rounded-2xl border border-[#E1E1E1] bg-[#F8F8FE] font-normal text-base py-3 h-10 px-8 flex-1"
               href={href}
             >
@@ -121,7 +123,7 @@ export default function JourneyCourseCard({
                 <path d="m12 19-7-7 7-7"></path>
                 <path d="M19 12H5"></path>
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -3,21 +3,19 @@ import { getDictionary } from "@/dictionaries/getDictionary";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import JourneyHeader from "@/components/journey/JourneyHeader";
-import JourneyStats from "@/components/journey/JourneyStats";
-import CoursePathComparison from "@/components/journey/CoursePathComparison";
-import JourneyTabsAndFilter from "@/components/journey/JourneyTabsAndFilter";
+import JourneyTabs from "@/components/journey/JourneyTabs";
 import JourneyCourseCard from "@/components/journey/JourneyCourseCard";
 
 import EmptyState from "@/components/journey/EmptyState";
 import FavoriteCourseCard from "@/components/journey/FavoriteCourseCard";
 import CertificateCard from "@/components/journey/CertificateCard";
-import {
-  dummyInProgressCourses,
-  dummyCompletedCourses,
-  dummyFavoriteCourses,
-  dummyCertificates,
-  dummyUserStats,
-} from "@/data/dummyCourses";
+const dummyCertificates = [];
+const dummyUserStats = {
+  achievements: 0,
+  learningMinutes: 0,
+  liveSessions: 0,
+  completedLessons: 0,
+};
 
 export default async function JourneyPage({ params, searchParams }) {
   const resolvedParams = await params;
@@ -45,6 +43,75 @@ export default async function JourneyPage({ params, searchParams }) {
     .eq("id", user.id)
     .single();
 
+  // Fetch student enrollments
+  const { data: enrollments } = await supabase
+    .from("enrollments")
+    .select(`
+      *,
+      tracks (
+        id, title_ar, image_url, delivery_mode, price, rating, learners_count, original_price,
+        programs (title_ar),
+        track_instructors (
+          instructors (bio)
+        )
+      )
+    `)
+    .eq("student_id", user.id)
+    .eq("status", "approved");
+
+  const safeEnrollments = enrollments || [];
+
+  // Map to UI format and fetch progress for each
+  const allEnrolledCourses = await Promise.all(safeEnrollments.map(async (enroll) => {
+    const t = enroll.tracks;
+    
+    // Call the database function to calculate progress percentage
+    const { data: progress } = await supabase.rpc("get_track_completion", {
+      p_student_id: user.id,
+      p_track_id: t.id,
+    });
+
+    return {
+      id: t.id,
+      title: t.title_ar,
+      progress: progress || 0,
+      imageSrc: t.image_url || '/hero-student.jpg',
+      type: t.delivery_mode === 'live' ? 'بث مباشر' : t.delivery_mode === 'hybrid' ? 'مدمج' : 'مسجل تفاعلي',
+    };
+  }));
+
+  const inProgressCourses = allEnrolledCourses.filter(c => c.progress < 100);
+  const completedCourses = allEnrolledCourses.filter(c => c.progress === 100);
+
+  // Fetch real favorites
+  const { data: favoriteRecords } = await supabase
+    .from("favorites")
+    .select(`
+      tracks (
+        id, title_ar, image_url, delivery_mode, price, rating,
+        track_instructors(instructors(bio))
+      )
+    `)
+    .eq("student_id", user.id);
+
+  const favoriteCourses = (favoriteRecords || []).map(f => {
+    const t = f.tracks;
+    if (!t) return null;
+    let instructorName = "تأهيل";
+    if (t.track_instructors?.[0]?.instructors?.bio) {
+      instructorName = t.track_instructors[0].instructors.bio.split("-")[0].trim();
+    }
+    return {
+      id: t.id,
+      title: t.title_ar,
+      instructor: instructorName,
+      rating: t.rating || 0,
+      price: t.price || 0,
+      imageSrc: t.image_url || '/hero-student.jpg',
+      type: t.delivery_mode === 'live' ? 'بث مباشر' : t.delivery_mode === 'hybrid' ? 'مدمج' : 'مسجل تفاعلي',
+    };
+  }).filter(Boolean);
+
   return (
     <div className="min-h-screen bg-[#f8fbff] py-10">
       <div className="container mx-auto px-4 md:px-6 max-w-[1400px]">
@@ -54,43 +121,54 @@ export default async function JourneyPage({ params, searchParams }) {
           user={user}
           profile={profile}
           locale={locale}
-          userStats={dummyUserStats}
+          userStats={{
+            achievements: 0,
+            learningMinutes: 0,
+            liveSessions: 0,
+            completedLessons: 0,
+          }}
         />
-
-        {/* Stats Section */}
-        <JourneyStats
-          dict={dict}
-          locale={locale}
-          currentTab={currentTab}
-          inProgressCount={dummyInProgressCourses.length}
-          completedCount={dummyCompletedCourses.length}
-          favoritesCount={dummyFavoriteCourses.length}
-          certificatesCount={dummyCertificates.length}
-        />
-
-        {/* Comparison Section (Always visible as per user request) */}
-        <CoursePathComparison dict={dict} locale={locale} />
 
         {/* Main Content Area: Always shows Filters, conditionally shows Grid/EmptyState */}
         <section className="rounded-3xl bg-white p-5 shadow-xl shadow-[#0b264626] xl:p-10 mb-12">
+          
+          {/* Text Tabs for navigation */}
+          <JourneyTabs
+            dict={dict}
+            locale={locale}
+            inProgressCount={inProgressCourses.length}
+            completedCount={completedCourses.length}
+            favoritesCount={favoriteCourses.length}
+            certificatesCount={dummyCertificates.length}
+          />
           <div className="space-y-5 rounded-2xl border-gray-300 p-4 xl:p-6">
-            {/* Tabs and Filters (Always visible) */}
-            <JourneyTabsAndFilter dict={dict} locale={locale} />
-
             {/* Conditionally Render Content Based on Tab and Type */}
             {currentTab === "in-progress" && currentType === "courses" && (
               <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-6 place-items-center sm:place-items-stretch">
-                {dummyInProgressCourses.map((course) => (
-                  <JourneyCourseCard
-                    key={course.id}
-                    dict={dict}
-                    locale={locale}
-                    title={course.title}
-                    progress={course.progress}
-                    imageSrc={course.imageSrc}
-                    type={course.type}
-                  />
-                ))}
+                {inProgressCourses.length > 0 ? (
+                  inProgressCourses.map((course) => (
+                    <JourneyCourseCard
+                      key={course.id}
+                      id={course.id}
+                      dict={dict}
+                      locale={locale}
+                      title={course.title}
+                      progress={course.progress}
+                      imageSrc={course.imageSrc}
+                      type={course.type}
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-full w-full flex justify-center">
+                    <EmptyState
+                      imageSrc="/empty.png"
+                      title=""
+                      subtitle="لا توجد مسارات قيد التقدم"
+                      description="تصفح مكتبتنا واشترك في المسارات لبدء التعلم."
+                      locale={locale}
+                    />
+                  </div>
+                )}
               </div>
             )}
 
@@ -113,7 +191,7 @@ export default async function JourneyPage({ params, searchParams }) {
                     "المفضلة (الدورات التدريبية)"}
                 </h2>
                 <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-6 place-items-center sm:place-items-stretch w-full">
-                  {dummyFavoriteCourses.map((course) => (
+                  {favoriteCourses.map((course) => (
                     <FavoriteCourseCard
                       key={course.id}
                       dict={dict}
@@ -172,17 +250,30 @@ export default async function JourneyPage({ params, searchParams }) {
 
             {currentTab === "completed" && currentType === "courses" && (
               <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-6 place-items-center sm:place-items-stretch">
-                {dummyCompletedCourses.map((course) => (
-                  <JourneyCourseCard
-                    key={course.id}
-                    dict={dict}
-                    locale={locale}
-                    title={course.title}
-                    progress={course.progress}
-                    imageSrc={course.imageSrc}
-                    type={course.type}
-                  />
-                ))}
+                {completedCourses.length > 0 ? (
+                  completedCourses.map((course) => (
+                    <JourneyCourseCard
+                      key={course.id}
+                      id={course.id}
+                      dict={dict}
+                      locale={locale}
+                      title={course.title}
+                      progress={course.progress}
+                      imageSrc={course.imageSrc}
+                      type={course.type}
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-full w-full flex justify-center">
+                    <EmptyState
+                      imageSrc="/empty.png"
+                      title=""
+                      subtitle="لا توجد مسارات مكتملة بعد"
+                      description="أكمل مساراً لتراه هنا."
+                      locale={locale}
+                    />
+                  </div>
+                )}
               </div>
             )}
 

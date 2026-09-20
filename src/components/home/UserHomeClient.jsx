@@ -3,18 +3,12 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  dummyInProgressCourses,
-  dummyFavoriteCourses,
-  dummyAICourses,
-  dummyMarketingCourses,
-} from "@/data/dummyCourses";
 import JourneyCourseCard from "@/components/journey/JourneyCourseCard";
 import FavoriteCourseCard from "@/components/journey/FavoriteCourseCard";
 import FeaturedCourse from "./FeaturedCourse";
 import FeaturedCategorySection from "./FeaturedCategorySection";
 
-export default function UserHomeClient({ dict, locale, user, profile }) {
+export default function UserHomeClient({ dict, locale, user, profile, aiTracks = [], marketingTracks = [], topTracks = [] }) {
   const isRtl = locale === "ar";
 
   // Safe default name if profile isn't fully loaded
@@ -22,6 +16,32 @@ export default function UserHomeClient({ dict, locale, user, profile }) {
     profile?.full_name?.split(" ")[0] ||
     user?.user_metadata?.full_name?.split(" ")[0] ||
     (isRtl ? "صديقي" : "Friend");
+
+  // Helper function to format Supabase track to UI course format
+  const formatTrackForUI = (track) => {
+    // Extract instructor name from nested relation if exists
+    let instructorName = "تأهيل";
+    if (track.track_instructors?.[0]?.instructors?.bio_ar) {
+      instructorName = track.track_instructors[0].instructors.bio_ar.split("-")[0].trim();
+    }
+
+    return {
+      id: track.id,
+      title: track.title_ar,
+      instructor: instructorName,
+      rating: track.rating || 0,
+      learners: track.learners_count || 0,
+      price: track.price || 0,
+      oldPrice: track.original_price,
+      discount: track.original_price && track.price === 0 ? "100%" : null,
+      type: track.delivery_mode === 'live' ? 'بث مباشر' : track.delivery_mode === 'hybrid' ? 'مدمج' : 'مسجل تفاعلي',
+      imageSrc: track.image_url || '/hero-student.jpg',
+    };
+  };
+
+  const uiTopTracks = topTracks.map(formatTrackForUI);
+  const uiAiTracks = aiTracks.map(formatTrackForUI);
+  const uiMarketingTracks = marketingTracks.map(formatTrackForUI);
 
   return (
     <div
@@ -73,20 +93,24 @@ export default function UserHomeClient({ dict, locale, user, profile }) {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
           dir={isRtl ? "rtl" : "ltr"}
         >
-          {dummyFavoriteCourses.map((course) => (
-            <FavoriteCourseCard
-              key={course.id}
-              dict={dict}
-              locale={locale}
-              title={course.title}
-              instructor={course.instructor}
-              rating={course.rating}
-              learners={course.learners}
-              price={course.price}
-              type={course.type}
-              imageSrc={course.imageSrc}
-            />
-          ))}
+          {uiTopTracks.length > 0 ? (
+            uiTopTracks.map((course) => (
+              <FavoriteCourseCard
+                key={course.id}
+                dict={dict}
+                locale={locale}
+                title={course.title}
+                instructor={course.instructor}
+                rating={course.rating}
+                learners={course.learners}
+                price={course.price}
+                type={course.type}
+                imageSrc={course.imageSrc}
+              />
+            ))
+          ) : (
+            <p className="text-gray-500 text-sm">لا توجد مسارات متاحة حالياً.</p>
+          )}
         </div>
 
         <div
@@ -118,24 +142,28 @@ export default function UserHomeClient({ dict, locale, user, profile }) {
       </section>
 
       {/* 4. AI Skills Section */}
-      <FeaturedCategorySection
-        dict={dict}
-        locale={locale}
-        title={dict?.userHome?.aiSkillsTitle}
-        categoryName="ai"
-        categoryLabel={dict?.profile?.form?.workFields?.ai}
-        courses={dummyAICourses}
-      />
+      {uiAiTracks.length > 0 && (
+        <FeaturedCategorySection
+          dict={dict}
+          locale={locale}
+          title={dict?.userHome?.aiSkillsTitle}
+          categoryName="ai"
+          categoryLabel={dict?.profile?.form?.workFields?.ai || "الذكاء الاصطناعي"}
+          courses={uiAiTracks}
+        />
+      )}
 
       {/* 5. Marketing Skills Section */}
-      <FeaturedCategorySection
-        dict={dict}
-        locale={locale}
-        title={dict?.userHome?.marketingSkillsTitle}
-        categoryName="marketing"
-        categoryLabel={dict?.profile?.form?.workFields?.marketing}
-        courses={dummyMarketingCourses}
-      />
+      {uiMarketingTracks.length > 0 && (
+        <FeaturedCategorySection
+          dict={dict}
+          locale={locale}
+          title={dict?.userHome?.marketingSkillsTitle}
+          categoryName="marketing"
+          categoryLabel={dict?.profile?.form?.workFields?.marketing || "التسويق"}
+          courses={uiMarketingTracks}
+        />
+      )}
     </div>
   );
 }

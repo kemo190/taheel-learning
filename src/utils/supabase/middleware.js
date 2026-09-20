@@ -41,7 +41,8 @@ export async function updateSession(request) {
   const isProtectedPath =
     pathname.includes("/profile") ||
     pathname.includes("/home") ||
-    pathname.includes("/journey");
+    pathname.includes("/journey") ||
+    pathname.includes("/admin");
   const isAuthPath =
     pathname.includes("/login") || pathname.includes("/register");
   const isBaseRoute =
@@ -55,6 +56,7 @@ export async function updateSession(request) {
 
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}/login`;
+    url.searchParams.set("next", request.nextUrl.pathname + request.nextUrl.search);
 
     const redirectResponse = NextResponse.redirect(url);
     // Persist cookies (e.g. cleared session) to the redirect
@@ -70,7 +72,15 @@ export async function updateSession(request) {
     const locale = localeMatch ? localeMatch[1] : "ar";
 
     const url = request.nextUrl.clone();
-    url.pathname = `/${locale}/home`;
+    const nextPath = url.searchParams.get("next");
+    url.searchParams.delete("next");
+
+    if (nextPath && nextPath.startsWith("/")) {
+      // Safe relative redirect
+      url.pathname = nextPath;
+    } else {
+      url.pathname = `/${locale}/home`;
+    }
 
     const redirectResponse = NextResponse.redirect(url);
     // Persist refreshed session cookies to the redirect

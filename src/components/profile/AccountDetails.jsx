@@ -42,7 +42,7 @@ export default function AccountDetails({ locale, user, dict }) {
     if (newPassword.length < 6) {
       toast.error(
         dict?.profile?.account?.passwordMinLength ||
-          "Password must be at least 6 characters",
+        "Password must be at least 6 characters",
       );
       return;
     }
@@ -60,12 +60,12 @@ export default function AccountDetails({ locale, user, dict }) {
     if (error) {
       toast.error(
         dict?.profile?.account?.passwordUpdateFailed ||
-          "Unable to update password",
+        "Unable to update password",
       );
     } else {
       toast.success(
         dict?.profile?.account?.passwordUpdated ||
-          "Password updated successfully",
+        "Password updated successfully",
       );
       setIsEditingPassword(false);
       setNewPassword("");

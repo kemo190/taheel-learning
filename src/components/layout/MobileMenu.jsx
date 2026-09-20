@@ -183,118 +183,66 @@ export default function MobileMenu({ dict, locale }) {
         <MenuIcon />
       </button>
 
-      {/* Mobile Drawer Overlay */}
+      {/* Full Screen Mobile Overlay */}
       {isOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-[90] bg-black/40 md:hidden animate-in fade-in"
-            onClick={() => setIsOpen(false)}
-            aria-hidden="true"
-          ></div>
-
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label={dict.navbar.mainMenu}
-            className="fixed top-0 bottom-0 start-0 w-[85%] max-w-[320px] z-[100] bg-white flex flex-col p-4 md:hidden animate-in slide-in-from-start-8 duration-300 shadow-2xl overflow-y-auto"
-          >
-            <div className="flex justify-start mb-6">
-              <button
-                className="p-1 text-gray-500 hover:text-[#0b2646]"
-                onClick={() => setIsOpen(false)}
-                aria-label={dict.navbar.closeMenu}
-                autoFocus
-              >
-                <CloseIcon />
-              </button>
-            </div>
-
-            {/* Search */}
-            <form onSubmit={handleSearch} className="mb-8 relative px-2">
-              <input
-                name="search"
-                type="text"
-                placeholder={dict.navbar.searchPlaceholder}
-                className="w-full bg-[#f8fbff] border border-[#c4d4fb] rounded-xl py-3 px-12 text-sm text-[#0b2646] placeholder-[#5c6b81] focus:outline-none focus:border-[#0b2646] transition-colors"
-                aria-label={dict.navbar.searchPlaceholder}
-              />
-              <button
-                type="submit"
-                className="absolute top-3.5 right-6 rtl:right-6 rtl:left-auto ltr:left-6 ltr:right-auto text-[#8fa7e6]"
-                aria-label={dict.navbar.searchBtn}
-              >
-                <SearchIcon />
-              </button>
-            </form>
-
-            {/* Navigation Links */}
-            <nav className="flex flex-col gap-6 px-4">
-              <Link
-                href={`/${locale}`}
-                className="flex items-center justify-end gap-3 text-lg font-medium text-[#0b2646] pb-6 border-b border-gray-100"
-                onClick={() => setIsOpen(false)}
-              >
-                <span>{dict.navbar.home}</span>
-                <HomeIcon />
-              </Link>
-
-              <div className="flex items-center justify-between pb-6 border-b border-gray-100 text-[#0b2646]">
-                <ChevronDownIcon />
-                <Link
-                  href={`/${locale}`}
-                  className="flex items-center gap-3 text-lg font-medium"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <span>{dict.navbar.courses}</span>
-                  <BookIcon />
-                </Link>
-              </div>
-
-              <Link
-                href={`/${locale}`}
-                className="flex items-center justify-end gap-3 text-lg font-medium text-[#0b2646] pb-6 border-b border-gray-100"
-                onClick={() => setIsOpen(false)}
-              >
-                <span>{dict.navbar.paths}</span>
-                <FolderIcon />
-              </Link>
-
-              <div className="flex items-center justify-between pb-6 border-b border-gray-100 text-[#0b2646]">
-                {/* Custom AR/EN Toggle */}
-                <Link
-                  href={`/${targetLocale}`}
-                  className="flex items-center bg-[#f0f4ff] border border-[#c4d4fb] rounded-full overflow-hidden text-[13px] font-bold"
-                  onClick={() => setIsOpen(false)}
-                  aria-label={dict.navbar.switchLang}
-                >
-                  <span
-                    className={`px-3 py-1 ${locale === "ar" ? "bg-[#0b2646] text-white shadow-sm rounded-full" : "text-[#0b2646]"}`}
-                  >
-                    AR
-                  </span>
-                  <span
-                    className={`px-3 py-1 ${locale === "en" ? "bg-[#0b2646] text-white shadow-sm rounded-full" : "text-[#0b2646]"}`}
-                  >
-                    EN
-                  </span>
-                </Link>
-                <div className="flex items-center gap-3 text-lg font-medium">
-                  <span>{dict.navbar.language}</span>
-                  <GlobeIcon />
-                </div>
-              </div>
-
-              <Link
-                href={`/${locale}/business`}
-                className="flex items-center justify-end gap-3 text-lg font-medium text-[#0b2646] pb-6 border-b border-gray-100"
-                onClick={() => setIsOpen(false)}
-              >
-                <span>{dict.navbar.business}</span>
-                <BriefcaseIcon />
-              </Link>
-            </nav>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={dict.navbar.mainMenu}
+          className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center p-6 md:hidden animate-in fade-in zoom-in-95 duration-200"
+        >
+          {/* Close Button at Top Center */}
+          <div className="absolute top-10 flex justify-center w-full">
+            <button
+              className="p-2 text-[#2d3748] hover:text-[#0b2646] transition-colors"
+              onClick={() => setIsOpen(false)}
+              aria-label={dict.navbar.closeMenu}
+              autoFocus
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
           </div>
-        </>
+
+          {/* Centered Links */}
+          <nav className="flex flex-col items-center gap-8 w-full max-w-sm mt-12">
+            
+            <Link
+              href={`/${locale}`}
+              className="text-lg font-medium text-[#718096] hover:text-[#0b2646] transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              {dict.navbar.courses}
+            </Link>
+
+            <Link
+              href={`/${locale}`}
+              className="text-lg font-medium text-[#718096] hover:text-[#0b2646] transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              مسارات التعلم
+            </Link>
+
+            <Link
+              href={`/${locale}/login`}
+              className="text-lg font-medium text-[#718096] hover:text-[#0b2646] transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              {dict.navbar.login}
+            </Link>
+
+            <Link
+              href={`/${locale}/register`}
+              className="w-48 text-center py-3.5 mt-2 rounded-full border border-slate-300 text-[#0b2646] font-bold text-lg hover:bg-slate-50 transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              إنشاء حساب
+            </Link>
+
+          </nav>
+        </div>
       )}
     </>
   );

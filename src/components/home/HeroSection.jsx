@@ -1,50 +1,55 @@
+"use client";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function HeroSection({
   title,
   subtitle,
   primaryButtonText,
   secondaryButtonText,
-  imageUrl = "/hero-student.jpg",
   locale = "ar",
 }) {
-  return (
-    <section className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px] md:rounded-[30px] relative mt-4 md:mt-8 flex flex-col md:flex-row min-h-[320px] md:min-h-[356px] md:h-[356px] items-center md:gap-6 overflow-hidden rounded-2xl md:px-28 lg:px-18 bg-[#f8fbff]">
-      {/* Background Image Container */}
-      <div className="absolute inset-0 w-full h-full md:inset-auto md:absolute md:top-0 md:bottom-0 md:h-full md:w-[60%] lg:w-[55%] z-0 rtl:md:left-0 ltr:md:right-0 shrink-0">
-        <div
-          className="w-full h-full bg-cover bg-[center_15%] bg-no-repeat"
-          style={{ backgroundImage: `url(${imageUrl})` }}
-        ></div>
-        {/* Mobile Gradient Overlay for text readability */}
-        <div className="absolute inset-0 bg-white/60 md:hidden pointer-events-none"></div>
-        {/* Gradient mask: soft blend on desktop only */}
-        <div className="opacity-0 md:opacity-100 absolute inset-0 md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-[#f8fbff] ltr:md:bg-gradient-to-l pointer-events-none transition-opacity"></div>
-      </div>
+  const isRtl = locale === "ar";
 
-      {/* Text Content Area */}
-      <div className="relative z-10 w-full md:basis-125 text-center md:text-start px-4 py-14 sm:py-16 md:px-0 md:py-0 flex flex-col justify-center h-full min-h-[320px] md:min-h-0">
-        <h1 className="text-3xl sm:text-4xl lg:text-[42px] xl:text-[48px] font-bold text-[#0b2646] mb-4 leading-[1.4] tracking-tight">
-          {title}
+  return (
+    <section
+      className="w-full pt-10 pb-10 md:pt-16 md:pb-14 px-4"
+      style={{
+        background: "linear-gradient(180deg, #e8eef5 0%, #ffffff 100%)",
+      }}
+      dir={isRtl ? "rtl" : "ltr"}
+    >
+      <div className="max-w-3xl mx-auto text-center">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 bg-[#0b2646]/5 border border-[#0b2646]/10 text-[#0b2646] text-sm font-semibold px-4 py-1.5 rounded-full mb-8">
+          <span className="w-2 h-2 rounded-full bg-[#0b2646] animate-pulse"></span>
+          منصة تدريبية متخصصة في التطوير المهني
+        </div>
+
+        {/* Headline */}
+        <h1 className="text-3xl sm:text-4xl md:text-[40px] font-extrabold text-[#0b2646] leading-[1.3] tracking-tight mb-5">
+          {title || "ابدأ رحلة نجاحك مع أفضل الخبراء في مجالك"}
         </h1>
 
-        <p className="text-[#4a5568] text-base md:text-lg leading-relaxed font-medium mb-8">
-          {subtitle}
+        {/* Subtitle */}
+        <p className="text-base sm:text-lg text-slate-500 font-medium leading-relaxed mb-10 max-w-2xl mx-auto">
+          {subtitle ||
+            "اكتشف مسارات تدريبية متكاملة مصممة خصيصاً لتأهيلك لسوق العمل، وابنِ مستقبلك المهني بخطوات واثقة."}
         </p>
 
-        {/* Buttons */}
-        <div className="flex flex-row justify-center md:justify-start gap-2 sm:gap-4 w-full">
+        {/* Buttons - pill shape like Yanfaa */}
+        <div className="flex flex-row justify-center items-center gap-3 max-w-[400px] sm:max-w-none mx-auto w-full">
           <Link
             href={`/${locale}/register`}
-            className="flex-1 sm:flex-none bg-[#0b2646] hover:bg-[#061528] text-white px-2 py-3 sm:px-8 rounded-xl font-bold text-[13px] sm:text-[15px] transition-colors shadow-md shadow-[#0b2646]/20 inline-flex items-center justify-center text-center"
+            className="flex-1 sm:flex-none text-center bg-[#0b2646] hover:bg-[#0d2e55] text-white px-3 py-3.5 sm:px-10 sm:py-4 rounded-full font-bold text-[14px] sm:text-lg transition-all"
           >
-            {primaryButtonText}
+            {primaryButtonText || "اشترك الآن"}
           </Link>
           <Link
-            href={`/${locale}/courses`}
-            className="flex-1 sm:flex-none bg-white text-[#0b2646] border border-[#0b2646]/30 hover:border-[#0b2646] hover:bg-[#f0f4ff] px-2 py-3 sm:px-8 rounded-xl font-bold text-[13px] sm:text-[15px] transition-colors shadow-sm inline-flex items-center justify-center text-center"
+            href={`/${locale}/tracks`}
+            className="flex-1 sm:flex-none text-center bg-white border-2 border-slate-300 text-slate-700 hover:border-[#0b2646] hover:text-[#0b2646] px-3 py-3.5 sm:px-10 sm:py-4 rounded-full font-bold text-[14px] sm:text-lg transition-all"
           >
-            {secondaryButtonText}
+            {secondaryButtonText || "عرض الدورات"}
           </Link>
         </div>
       </div>

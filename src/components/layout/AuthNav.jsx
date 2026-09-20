@@ -395,18 +395,18 @@ export default function AuthNav({
 
   // If user is NOT logged in, show Login/Register buttons
   return (
-    <div className="flex items-center gap-1.5 sm:gap-3">
+    <div className="hidden sm:flex items-center gap-3 sm:gap-4">
       <Link
         href={`/${locale}/login`}
-        className="bg-transparent border border-[#0b2646] text-[#0b2646] hover:bg-[#f0f4ff] px-1 md:px-2 py-1 md:py-2 min-w-[75px] sm:min-w-[90px] md:min-w-[120px] flex justify-center items-center rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors"
+        className="text-slate-600 hover:text-[#0b2646] text-[15px] font-bold transition-colors"
       >
         {dict.navbar.login}
       </Link>
       <Link
         href={`/${locale}/register`}
-        className="bg-[#0b2646] border border-transparent hover:bg-[#061528] text-white px-1 md:px-2 py-1 md:py-2 min-w-[75px] sm:min-w-[90px] md:min-w-[120px] flex justify-center items-center rounded md:rounded-md text-[11px] sm:text-sm md:text-[15px] font-medium transition-colors shadow-sm whitespace-nowrap"
+        className="bg-transparent border border-slate-300 hover:border-[#0b2646] text-[#0b2646] hover:bg-slate-50 px-5 py-2.5 flex items-center justify-center rounded-full text-[15px] font-bold transition-all whitespace-nowrap"
       >
-        {dict.navbar.register}
+        إنشاء حساب
       </Link>
     </div>
   );
