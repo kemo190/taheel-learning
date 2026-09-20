@@ -32,7 +32,7 @@ export default function FeaturesSection({ locale = "ar" }) {
       step: "05",
       icon: <FileText className="w-6 h-6 text-[#0b2646]" />,
       title: "ابنِ ملفك المهني",
-      description: "أضف تعليمك، مهاراتك، خبراتك، شهاداتك والـ CV الخاص بك في ملف مهني واحد متكامل.",
+      description: "بعد إتمام الدورة التدريبية، يُفتح لك حساب توظيف خاص على منصة تأهيل، لتتمكن من إنشاء ملفك التوظيفي والاستفادة من شبكة تأهيل وعلاقاتها مع الشركات والجهات التوظيفية للوصول إلى فرص التدريب والعمل المناسبة.",
     },
     {
       step: "06",
@@ -52,7 +52,7 @@ export default function FeaturesSection({ locale = "ar" }) {
             رحلتك في تأهيل
           </div>
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0b2646] mb-4 leading-tight">
-            مش مجرد كورسات.<br /> دي رحلة تأهيل لسوق العمل.
+            مش مجرد برامج تدريبية.<br /> دي رحلة تأهيل لسوق العمل.
           </h2>
           <p className="text-base md:text-lg text-slate-600 leading-relaxed">
             منذ 2017، تعمل تأهيل على سد الفجوة بين الدراسة الأكاديمية ومتطلبات سوق العمل.
@@ -70,11 +70,11 @@ export default function FeaturesSection({ locale = "ar" }) {
               <div className="flex items-center justify-between mb-4 sm:mb-8">
                 <div className="flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   {/* Clone the icon to make it have hover effects */}
-                  <div className="text-[#0b2646] group-hover:text-white transition-colors duration-300 [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6">
+                  <div className="text-[#FBBC04] transition-colors duration-300 [&>svg]:w-5 [&>svg]:h-5 sm:[&>svg]:w-6 sm:[&>svg]:h-6">
                     {step.icon}
                   </div>
                 </div>
-                <span className="text-3xl sm:text-4xl font-black text-slate-200 group-hover:text-white/20 transition-colors duration-300">
+                <span className="text-3xl sm:text-4xl font-black text-[#FBBC04] transition-colors duration-300">
                   {step.step}
                 </span>
               </div>

@@ -1,5 +1,5 @@
 const stats = [
-  { value: "12", label: "مدرب" },
+  { value: "15", label: "مدرب" },
   { value: "6", label: "مسارات تدريبية" },
   { value: "10,000", label: "طالب وخريج" },
   { value: "95%", label: "نسبة الرضا" },

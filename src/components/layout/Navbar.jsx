@@ -59,12 +59,7 @@ const CartIcon = (props) => (
 
 // --- Logo Component ---
 const Logo = () => (
-  <div
-    className="flex items-center text-[#0b2646] font-extrabold text-[32px] tracking-tight"
-    style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
-  >
-    Ta&apos;hel
-  </div>
+  <img src="/images/logo.png" alt="Ta'hel" className="h-12 md:h-20 object-contain w-auto" />
 );
 
 // --- Main Header Component ---
@@ -88,8 +83,8 @@ export default async function Navbar({ locale = "ar" }) {
   }
 
   const navLinks = [
-    { name: dict.navbar.courses, hasDropdown: true, href: `/${locale}` },
-    { name: dict.navbar.paths, hasDropdown: false, href: `/${locale}` },
+    { name: dict.navbar.paths, hasDropdown: true, href: `/${locale}/tracks` },
+    { name: dict.navbar.courses, hasDropdown: false, href: `/${locale}/courses` },
   ];
 
   const targetLocale = locale === "ar" ? "en" : "ar";
@@ -130,14 +125,32 @@ export default async function Navbar({ locale = "ar" }) {
           {/* Navigation Links */}
           <nav className="flex items-center gap-6 text-slate-600 font-medium text-[16px]">
             {navLinks.map((link, idx) => (
-              <Link
-                key={idx}
-                href={link.href}
-                className="hover:text-[#0b2646] transition-colors flex items-center gap-1"
-              >
-                <span>{link.name}</span>
-                {link.hasDropdown && <ChevronDownIcon className="w-4 h-4" />}
-              </Link>
+              <div key={idx} className="relative group">
+                <Link
+                  href={link.href}
+                  className="hover:text-[#0b2646] transition-colors flex items-center gap-1 py-4"
+                >
+                  <span>{link.name}</span>
+                  {link.hasDropdown && <ChevronDownIcon className="w-4 h-4 transition-transform group-hover:rotate-180" />}
+                </Link>
+
+                {/* Dropdown Menu */}
+                {link.hasDropdown && (
+                  <div className="absolute top-full right-0 w-64 bg-white shadow-xl rounded-lg border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+                    <div className="p-2">
+                      {["محاسبة", "تحليل مالى", "تسويق", "المراجعة", "HR", "Business information systems (bis)"].map((cat) => (
+                        <Link
+                          key={cat}
+                          href={`/${locale}/tracks?category=${encodeURIComponent(cat)}`}
+                          className="block px-4 py-3 hover:bg-slate-50 text-slate-700 hover:text-[#0b2646] rounded-md transition-colors text-[14px]"
+                        >
+                          {cat}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
 
@@ -159,35 +172,16 @@ export default async function Navbar({ locale = "ar" }) {
       {/* =========================================
           MOBILE LAYOUT (Hidden on Desktop)
       ========================================= */}
-      <div className="md:hidden flex flex-col gap-4 px-4 py-4">
-        
-        {/* Top Row: Search & Menu */}
-        <div className="flex items-center gap-3 w-full">
-          {/* Search Bar (First -> Right in RTL) */}
-          <form action={`/${locale}/search`} method="GET" className="relative w-full flex-1">
-            <input
-              type="text"
-              placeholder={dict.navbar.searchPlaceholder}
-              className="w-full bg-white border border-slate-300 rounded-full py-2.5 ps-4 pe-20 text-[13px] text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#0b2646] transition-all shadow-sm"
-            />
-            <button className="absolute end-1.5 top-1.5 bottom-1.5 px-4 flex items-center justify-center bg-[#0b2646] hover:bg-[#0d2e55] text-white font-bold rounded-full transition-colors text-xs">
-              ابحث
-            </button>
-          </form>
+      <div className="md:hidden flex items-center justify-between px-4 py-4 w-full">
+        {/* Logo (Right side in RTL) */}
+        <Link href={`/${locale}`} aria-label="Home" className="flex items-center shrink-0">
+          <Logo />
+        </Link>
 
-          {/* Hamburger (Second -> Left in RTL) */}
-          <div className="shrink-0">
-            <MobileMenu dict={dict} locale={locale} navLinks={navLinks} />
-          </div>
+        {/* Hamburger Menu (Left side in RTL) */}
+        <div className="shrink-0">
+          <MobileMenu dict={dict} locale={locale} navLinks={navLinks} />
         </div>
-
-        {/* Bottom Row: Logo Centered */}
-        <div className="flex justify-center w-full">
-          <Link href={`/${locale}`} aria-label="Home" className="flex items-center">
-            <Logo />
-          </Link>
-        </div>
-
       </div>
     </header>
   );

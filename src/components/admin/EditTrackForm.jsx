@@ -189,7 +189,7 @@ export default function EditTrackForm({ locale, programs, initialData }) {
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">نوع الكورس (Delivery Mode)</label>
+          <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">نوع البرنامج التدريبي (Delivery Mode)</label>
           <select
             name="delivery_mode"
             value={form.delivery_mode}

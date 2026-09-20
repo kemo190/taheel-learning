@@ -18,7 +18,7 @@ export default async function Footer({ locale = "ar" }) {
         src="/footer.webp"
       />
       <div className="mx-auto max-w-[1232px] w-full px-4 xl:px-0 relative z-10 flex flex-col justify-between h-full">
-        <div className="relative grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-8 pb-6 md:pt-12">
+        <div className="relative grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-8 pb-6 md:pt-12">
           <div className="relative order-0">
             <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">
               {dict.footer.platform}
@@ -68,31 +68,7 @@ export default async function Footer({ locale = "ar" }) {
               </li>
             </ul>
           </div>
-          <div className="relative order-1 sm:order-2 lg:order-1 lg:col-span-1">
-            <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">
-              {dict.footer.businessTitle}
-            </h2>
-            <ul className="flex flex-col gap-6">
-              <li>
-                <a
-                  href="#"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="rounded-full border border-[#FBBC04] px-4 py-1 text-[#FBBC04] md:rounded-lg md:px-4 md:py-1 whitespace-nowrap w-fit"
-                >
-                  {dict.footer.businessLink}
-                </a>
-              </li>
-              <li>
-                <Link
-                  className="border-primary-mainBlue text-primary-mainBlue rounded-full border px-4 py-1 md:rounded-lg md:px-4 md:py-1 whitespace-nowrap w-fit"
-                  href={`/${locale}/join-as-instructor`}
-                >
-                  {dict.footer.becomeExpert}
-                </Link>
-              </li>
-            </ul>
-          </div>
+
           <div className="relative order-2 sm:order-1 lg:order-2">
             <h2 className="text-primary-darkBlue mb-3 text-[1.375rem] font-bold">
               {dict.footer.policiesTitle}
@@ -114,14 +90,7 @@ export default async function Footer({ locale = "ar" }) {
                   {dict.footer.platformPolicy}
                 </Link>
               </li>
-              <li>
-                <Link
-                  className="text-primary-darkBlue"
-                  href={`/${locale}/refund-policy`}
-                >
-                  {dict.footer.refundPolicy}
-                </Link>
-              </li>
+
               <li>
                 <Link
                   className="text-primary-darkBlue"
@@ -130,14 +99,7 @@ export default async function Footer({ locale = "ar" }) {
                   {dict.footer.termsConditions}
                 </Link>
               </li>
-              <li>
-                <Link
-                  className="text-primary-darkBlue"
-                  href={`/${locale}/trainers-terms-and-conditions`}
-                >
-                  {dict.footer.trainerTerms}
-                </Link>
-              </li>
+
               <li>
                 <Link
                   className="text-primary-darkBlue"
@@ -146,22 +108,7 @@ export default async function Footer({ locale = "ar" }) {
                   {dict.footer.faqs}
                 </Link>
               </li>
-              <li>
-                <Link
-                  className="text-primary-darkBlue"
-                  href={`/${locale}/user-guide`}
-                >
-                  {dict.footer.userGuide}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="text-primary-darkBlue"
-                  href={`/${locale}/trainer-guide`}
-                >
-                  {dict.footer.trainerGuide}
-                </Link>
-              </li>
+
             </ul>
           </div>
           <div className="order-3 flex flex-col justify-start">
