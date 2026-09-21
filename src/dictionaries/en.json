@@ -148,6 +148,13 @@
     },
     "welcome": "Welcome to Ta'hel",
     "welcomeSub": "Continue your learning and achieve\nyour goals with our experts",
+    "forgotPasswordTitle": "Reset your password",
+    "forgotPasswordSubtitle": "Enter your email address and we will send you a link to reset your password.",
+    "sendResetLink": "Send Reset Link",
+    "backToLogin": "Back to Login",
+    "resetPasswordTitle": "Set a new password",
+    "resetPasswordSubtitle": "Please enter your new password below.",
+    "resetPasswordBtn": "Update Password",
     "errors": {
       "invalidEmail": "Invalid email address",
       "invalidPassword": "Invalid password",
