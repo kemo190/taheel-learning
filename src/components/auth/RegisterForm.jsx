@@ -112,6 +112,17 @@ export default function RegisterForm({ dict, isRtl, locale }) {
         return;
       }
 
+      // Supabase returns a fake success when email already exists.
+      // We detect this by checking if the user has an empty identities array.
+      if (authData?.user?.identities?.length === 0) {
+        setServerError(
+          locale === "ar"
+            ? "هذا البريد الإلكتروني مرتبط بحساب جوجل بالفعل. يرجى تسجيل الدخول باستخدام زر جوجل."
+            : "This email is already linked to a Google account. Please log in with Google."
+        );
+        return;
+      }
+
       setSuccess(dict.auth.messages.checkEmailToContinue || "Success");
 
       setTimeout(() => {
@@ -251,7 +262,7 @@ export default function RegisterForm({ dict, isRtl, locale }) {
             id="password"
             {...register("password")}
             isRtl={isRtl}
-            className={`w-full bg-white border ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-3 sm:py-3 sm:px-4 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent ${isRtl ? "text-right" : "text-left"}`}
+            className={`w-full bg-white border ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-11 sm:py-3 sm:px-11 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent ${isRtl ? "text-right" : "text-left"}`}
           />
           {errors.password && (
             <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">
@@ -269,7 +280,7 @@ export default function RegisterForm({ dict, isRtl, locale }) {
             id="confirmPassword"
             {...register("confirmPassword")}
             isRtl={isRtl}
-            className={`w-full bg-white border ${errors.confirmPassword ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-3 sm:py-3 sm:px-4 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent ${isRtl ? "text-right" : "text-left"}`}
+            className={`w-full bg-white border ${errors.confirmPassword ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-11 sm:py-3 sm:px-11 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent ${isRtl ? "text-right" : "text-left"}`}
           />
           {errors.confirmPassword && (
             <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">
