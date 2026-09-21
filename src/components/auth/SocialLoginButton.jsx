@@ -12,13 +12,19 @@ export function SocialLoginButton({ locale, provider, nextPath, label }) {
     const nextParam = searchParams.get("next");
     const redirectTarget = nextParam || `/${locale}/home`;
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: provider,
-      options: {
-        redirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(redirectTarget)}`,
-      },
-    });
-    if (error) setServerError(error.message);
+    if (provider === "google") {
+      // Redirect to our custom Google OAuth route
+      window.location.href = `/api/auth/google?next=${encodeURIComponent(redirectTarget)}`;
+    } else {
+      // Fallback for other providers if added in future
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: provider,
+        options: {
+          redirectTo: `${window.location.origin}/api/auth/callback?next=${encodeURIComponent(redirectTarget)}`,
+        },
+      });
+      if (error) setServerError(error.message);
+    }
   };
 
   return (

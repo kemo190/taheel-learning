@@ -3,19 +3,12 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import JourneyCourseCard from "@/components/journey/JourneyCourseCard";
 import FavoriteCourseCard from "@/components/journey/FavoriteCourseCard";
 import FeaturedCourse from "./FeaturedCourse";
 import FeaturedCategorySection from "./FeaturedCategorySection";
 
 export default function UserHomeClient({ dict, locale, user, profile, aiTracks = [], marketingTracks = [], topTracks = [] }) {
   const isRtl = locale === "ar";
-
-  // Safe default name if profile isn't fully loaded
-  const firstName =
-    profile?.full_name?.split(" ")[0] ||
-    user?.user_metadata?.full_name?.split(" ")[0] ||
-    (isRtl ? "صديقي" : "Friend");
 
   // Helper function to format Supabase track to UI course format
   const formatTrackForUI = (track) => {
