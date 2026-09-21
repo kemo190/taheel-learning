@@ -14,7 +14,7 @@ export function useAuthRedirect(locale) {
       if (nextPath && nextPath.startsWith("/")) {
         router.replace(nextPath);
       } else {
-        router.replace(`/${locale}/home`);
+        router.replace(`/${locale}`);
       }
       router.refresh();
     };

@@ -104,6 +104,7 @@ export default function RegisterForm({ dict, isRtl, locale }) {
             governorate: data.governorate,
             role: "student",
           },
+          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
         },
       });
 

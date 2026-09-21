@@ -40,7 +40,6 @@ export async function updateSession(request) {
   const { pathname } = request.nextUrl;
   const isProtectedPath =
     pathname.includes("/profile") ||
-    pathname.includes("/home") ||
     pathname.includes("/journey") ||
     pathname.includes("/admin");
   const isAuthPath =
@@ -66,8 +65,28 @@ export async function updateSession(request) {
     return redirectResponse;
   }
 
-  if (user && (isAuthPath || isBaseRoute)) {
-    // If user is logged in and tries to access login/register or landing page, redirect to home
+  // Redirect legacy /journey to /profile
+  if (pathname.includes("/journey")) {
+    const localeMatch = pathname.match(/^\/(en|ar)/);
+    const locale = localeMatch ? localeMatch[1] : "ar";
+    
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}/profile`;
+    
+    // Copy any query params (e.g. ?tab=favorites)
+    request.nextUrl.searchParams.forEach((value, key) => {
+      url.searchParams.set(key, value);
+    });
+
+    const redirectResponse = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
+  }
+
+  if (user && isAuthPath) {
+    // If user is logged in and tries to access login/register, redirect to landing page
     const localeMatch = pathname.match(/^\/(en|ar)/);
     const locale = localeMatch ? localeMatch[1] : "ar";
 
@@ -79,7 +98,7 @@ export async function updateSession(request) {
       // Safe relative redirect
       url.pathname = nextPath;
     } else {
-      url.pathname = `/${locale}/home`;
+      url.pathname = `/${locale}`;
     }
 
     const redirectResponse = NextResponse.redirect(url);

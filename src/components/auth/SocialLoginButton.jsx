@@ -10,7 +10,7 @@ export function SocialLoginButton({ locale, provider, nextPath, label }) {
   const handleLogin = async () => {
     const searchParams = new URLSearchParams(window.location.search);
     const nextParam = searchParams.get("next");
-    const redirectTarget = nextParam || `/${locale}/home`;
+    const redirectTarget = nextParam || `/${locale}`;
 
     if (provider === "google") {
       // Redirect to our custom Google OAuth route

@@ -35,6 +35,7 @@ export default function ProfileForm({
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
+
   // Helper arrays/objects
   const countries = Country.getAllCountries();
   const states = formData.country
@@ -102,6 +103,7 @@ export default function ProfileForm({
     },
     { id: "other", label: dict?.profile?.form?.workFields?.other || "Other" },
   ];
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -174,39 +176,40 @@ export default function ProfileForm({
     if (!userId) {
       toast.error(
         dict?.profile?.form?.messages?.profileNotFound ||
-          "Profile not found to update",
+        "Profile not found to update",
       );
       return;
     }
 
     setLoading(true);
 
-    const updatePayload = {
-      full_name: formData.nameEn,
-      arabic_name: formData.nameAr,
-      certificate_name: formData.certificateName,
-      gender: formData.gender,
-      dob: formData.dob,
-      country: formData.country,
-      governorate: formData.governorate,
-      phone: formData.phone,
-      education_status: formData.educationStatus,
-      work_field: formData.workField,
-      updated_at: new Date().toISOString(),
-    };
+    try {
 
-    const { error } = await supabase
-      .from("profiles")
-      .update(updatePayload)
-      .eq("id", userId);
 
-    setLoading(false);
+      const updatePayload = {
+        full_name: formData.nameEn,
+        arabic_name: formData.nameAr,
+        certificate_name: formData.certificateName,
+        gender: formData.gender,
+        dob: formData.dob,
+        country: formData.country,
+        governorate: formData.governorate,
+        phone: formData.phone,
+        education_status: formData.educationStatus,
+        work_field: formData.workField,
 
-    if (error) {
-      toast.error(error.message);
-    } else {
+        updated_at: new Date().toISOString(),
+      };
+
+      const { error } = await supabase
+        .from("profiles")
+        .update(updatePayload)
+        .eq("id", userId);
+
+      if (error) throw error;
+
       toast.success(
-        dict?.profile?.form?.messages?.saveSuccess || "Data saved successfully",
+        dict?.profile?.form?.messages?.saveSuccess || "تم حفظ البيانات بنجاح",
       );
 
       // Update local state in parent
@@ -216,16 +219,22 @@ export default function ProfileForm({
           ...updatePayload,
         });
       }
+    } catch (error) {
+      toast.error(error.message || "حدث خطأ أثناء حفظ البيانات");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full flex flex-col gap-4 md:gap-5 pb-4"
+      className="w-full flex flex-col gap-6 md:gap-8 pb-4"
       dir={isRtl ? "rtl" : "ltr"}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 pt-1">
+
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {/* Row 1 */}
         {/* Right: Name in Arabic */}
         <div className="flex flex-col gap-1.5">

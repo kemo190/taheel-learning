@@ -67,9 +67,12 @@ export default function LoginForm({ dict, isRtl, locale }) {
         if (nextPath && nextPath.startsWith("/")) {
           router.replace(nextPath);
         } else {
-          router.replace(`/${locale}/home`);
+          router.replace(`/${locale}`);
         }
         router.refresh();
+        
+        // Keep the button in a loading state until the page unmounts
+        await new Promise(() => {});
       }
     } catch (err) {
       setServerError("An unexpected network error occurred. Please try again.");

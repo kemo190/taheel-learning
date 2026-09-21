@@ -6,7 +6,7 @@ export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const state = searchParams.get("state"); // this is our 'next' url
-  const next = state ? decodeURIComponent(state) : "/ar/home";
+  const next = state ? decodeURIComponent(state) : "/ar";
 
   if (!code) {
     return NextResponse.redirect(`${origin}/ar/login?error=NoCode`);
@@ -74,11 +74,11 @@ export async function GET(request) {
     }
 
     // Success! Redirect to the target page
-    let target = next.includes("login") || next.includes("register") ? next.replace(/login|register/, "home") : next;
+    let target = next.includes("login") || next.includes("register") ? next.replace(/login|register/, "") : next;
     
     // Prevent Open Redirect: ensure target is a relative path
     if (!target.startsWith("/") || target.startsWith("//") || target.includes("://")) {
-      target = "/ar/home";
+      target = "/ar";
     }
 
     return NextResponse.redirect(`${origin}${target}`);

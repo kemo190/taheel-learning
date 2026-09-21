@@ -16,9 +16,9 @@ export default function JourneyCourseCard({
   const courseHref = `/${locale}/tracks/${id}`;
 
   return (
-    <div className="flex min-h-full w-full flex-col space-y-3 overflow-hidden rounded-3xl border border-[#D6D6D6] bg-white pb-3 shadow-lg shadow-[#0b264626]">
+    <div className="flex min-h-full w-full flex-col space-y-3 overflow-hidden rounded-2xl border border-slate-100 bg-white pb-3 shadow-sm hover:shadow-md transition-shadow">
       <Link
-        className="relative h-[211px] w-full rounded-lg bg-gray-50 overflow-hidden block"
+        className="relative h-[211px] w-full bg-gray-50 overflow-hidden block"
         href={href}
       >
         <div className="relative h-full w-full overflow-hidden">
@@ -26,15 +26,15 @@ export default function JourneyCourseCard({
             alt={title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-            className="object-cover"
+            className="object-cover transition-transform duration-500 hover:scale-105"
             src={imageSrc}
           />
         </div>
-        <span className="flex h-fit w-fit gap-2 rounded-full rounded-ss-none rounded-es-none px-3 py-2 text-center text-sm font-bold text-white [&>svg]:size-5 bg-primary-mainBlue absolute start-0 bottom-0 z-10">
+        <span className="flex h-fit w-fit gap-2 rounded-tl-2xl rounded-br-2xl px-3 py-2 text-center text-sm font-bold text-[#0b2646] bg-white/90 backdrop-blur-sm shadow-sm absolute start-0 bottom-0 z-10">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -52,37 +52,30 @@ export default function JourneyCourseCard({
           {type}
         </span>
       </Link>
-      <div className="flex flex-1 flex-col px-4">
+      <div className="flex flex-1 flex-col px-5 py-2">
         <Link href={courseHref}>
-          <h2 className="text-primary-darkBlue line-clamp-2 text-base font-medium">
+          <h2 className="text-[#0b2646] line-clamp-2 text-[17px] font-bold hover:text-blue-600 transition-colors">
             {title}
           </h2>
         </Link>
-        <div className="mt-auto h-fit w-full">
-          <span className="text-darkBlue ms-auto mb-2 flex w-fit text-xs font-bold">
-            {progress}%
+        <div className="mt-auto h-fit w-full pt-4">
+          <span className="text-slate-500 ms-auto mb-2 flex w-fit text-xs font-bold">
+            {progress}% مكتمل
           </span>
           <div
             aria-valuemax="100"
             aria-valuemin="0"
             role="progressbar"
-            data-state="indeterminate"
-            data-max="100"
-            data-slot="progress"
-            className="relative h-2 w-full overflow-hidden rounded-full bg-gray-200"
+            className="relative h-2 w-full overflow-hidden rounded-full bg-slate-100"
           >
             <div
-              data-state="indeterminate"
-              data-value={`${progress}%`}
-              data-max="100"
-              data-slot="progress-indicator"
-              className="relative h-full w-full flex-1 transition-all bg-darkBlue"
-              style={{ transform: `translateX(-${100 - progress}%)` }}
+              className="absolute top-0 bottom-0 right-0 h-full transition-all bg-[#FBBC04] rounded-full"
+              style={{ width: `${progress}%` }}
             ></div>
           </div>
           <div className="mt-4 flex items-center justify-between gap-2">
             {progress === 100 && (
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-mainBlue text-white">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -90,13 +83,12 @@ export default function JourneyCourseCard({
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="lucide lucide-award"
+                  className="lucide lucide-check"
                 >
-                  <circle cx="12" cy="8" r="6" />
-                  <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+                  <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
               </div>
             )}

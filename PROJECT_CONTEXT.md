@@ -81,7 +81,9 @@ The project follows a standard Next.js 16 App Router architecture:
 
 ## 10. UI / Design System
 - **Styling:** Tailwind CSS v4.
-- **Aesthetic:** Corporate, clean, minimal, trustworthy. Heavy use of whitespace, rounded corners (`rounded-2xl`, `rounded-3xl`), and subtle borders.
+- **Aesthetic:** Corporate, clean, minimal, trustworthy. Flat UI is strictly preferred. Do NOT use prominent shadows (`shadow-md`, `shadow-lg`) or boxy rounded cards (`rounded-3xl` with borders/backgrounds) for main layout sections. Use pure white backgrounds and seamless transitions.
+- **Layout:** For dashboard pages, use Split-Pane Scrolling (where the body has `overflow-hidden` and specific columns use `overflow-y-auto`). Avoid vertical grey gaps between headers and main content.
+- **Icons/Avatars:** Kept to an absolute minimum. User profile avatars have been removed for simplicity.
 - **Colors:** Dominant deep navy blue (`#0b2646`), white backgrounds, gray for subtle texts, standard success/error indicators.
 - **Direction:** RTL is deeply integrated for the Arabic default locale.
 

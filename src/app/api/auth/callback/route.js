@@ -36,12 +36,12 @@ export async function GET(request) {
       // If next is /ar/login, we might want to redirect to /ar/home since they are now logged in.
       let target =
         next.includes("login") || next.includes("register")
-          ? next.replace(/login|register/, "home")
+          ? next.replace(/login|register/, "")
           : next;
 
       // Prevent Open Redirect: ensure target is a relative path and doesn't redirect externally
       if (!target.startsWith("/") || target.startsWith("//") || target.includes("://")) {
-        target = "/ar/home";
+        target = "/ar";
       }
 
       return NextResponse.redirect(`${origin}${target}`);

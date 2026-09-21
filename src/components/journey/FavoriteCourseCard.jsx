@@ -21,7 +21,7 @@ export default function FavoriteCourseCard({
   const badgeColor = isLive ? "bg-[#c1131c]" : "bg-[#0b2646]";
 
   return (
-    <div className="flex w-full flex-col overflow-hidden rounded-[20px] border border-[#D6D6D6] bg-white shadow-sm hover:shadow-md transition-shadow">
+    <div className="flex w-full flex-col overflow-hidden rounded-[20px] border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow">
       <Link href={`/${locale}/tracks/${id}`} className="contents">
       {/* Image Section */}
       <div className="relative h-[200px] w-full bg-gray-50 overflow-hidden">
@@ -29,7 +29,7 @@ export default function FavoriteCourseCard({
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          className="object-cover"
+          className="object-cover transition-transform duration-500 hover:scale-105"
           src={imageSrc}
         />
         <span
@@ -76,13 +76,13 @@ export default function FavoriteCourseCard({
       {/* Content Section */}
       <div className="flex flex-col px-4 py-4 w-full flex-1">
         <h2
-          className="text-[#0b2646] text-lg font-bold line-clamp-1 text-right w-full"
+          className="text-[#0b2646] text-lg font-bold line-clamp-1 text-right w-full hover:text-blue-600 transition-colors"
           dir="rtl"
         >
           {title}
         </h2>
         <p
-          className="text-[#5e6c84] text-xs mt-1 mb-4 text-right w-full"
+          className="text-slate-500 text-xs mt-1 mb-4 text-right w-full font-medium"
           dir="rtl"
         >
           {dict?.journey?.courseCard?.instructorPrefix || "مع"} {instructor}
@@ -94,25 +94,42 @@ export default function FavoriteCourseCard({
         >
           {/* Right side (badges) */}
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#D6D6D6] px-2 py-1 text-xs font-bold text-[#0b2646]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-slate-100 bg-slate-50 px-2 py-1 text-xs font-bold text-[#0b2646]">
               {Number(rating).toFixed(1)}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
+                width="14"
+                height="14"
                 viewBox="0 0 24 24"
-                fill="#FFC107"
-                stroke="#FFC107"
+                fill="#FBBC04"
+                stroke="#FBBC04"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="ms-0.5"
+                className="lucide lucide-star"
               >
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
               </svg>
             </span>
-            <span className="inline-flex items-center rounded-full border border-[#D6D6D6] px-2 py-1 text-xs font-medium text-[#0b2646]">
+            <span className="inline-flex items-center gap-1 rounded-full border border-slate-100 bg-slate-50 px-2 py-1 text-xs font-bold text-slate-500">
               {learners} {dict?.userHome?.featuredCourse?.learners || "متعلم"}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-users"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+              </svg>
             </span>
           </div>
           {/* Left side (price) */}

@@ -12,25 +12,25 @@ export default function CertificateCard({
 
   return (
     <>
-      <div className="border-[#D6D6D6] relative flex h-fit w-full flex-col gap-3 overflow-hidden rounded-2xl border bg-white shadow-md shadow-[#0b26461A] hover:-translate-y-1 transition-transform duration-300">
+      <div className="relative flex h-fit w-full flex-col gap-3 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow">
         <div className="flex flex-col gap-2 p-3">
-          <div className="relative h-46 w-full rounded-xl overflow-hidden border border-[#D6D6D6] bg-gray-50">
+          <div className="relative h-46 w-full rounded-xl overflow-hidden border border-slate-100 bg-gray-50">
             <Image
               alt="certificate image"
               src={imageSrc}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-              className="object-cover"
+              className="object-cover transition-transform duration-500 hover:scale-105"
             />
           </div>
           <div className="px-1 mt-1">
-            <p className="text-primary-darkBlue mb-2 font-semibold text-lg">
+            <p className="text-[#0b2646] mb-2 font-bold text-[17px]">
               {title}
             </p>
-            <p className="text-primary-darkBlue text-sm font-semibold flex items-center gap-1">
+            <p className="text-slate-500 text-[13px] font-bold flex items-center gap-1">
               {dict?.journey?.certificateCard?.completionDate ||
                 "تاريخ الاكتمال:"}
-              <span className="text-primary-mainBlue" dir="ltr">
+              <span className="text-[#0b2646]" dir="ltr">
                 {completionDate}
               </span>
             </p>
@@ -38,7 +38,7 @@ export default function CertificateCard({
         </div>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="block w-full cursor-pointer bg-[#0b2646] hover:bg-[#061528] transition-colors py-4 text-center text-sm font-bold text-white"
+          className="block w-full cursor-pointer bg-slate-50 hover:bg-[#0b2646] hover:text-white text-[#0b2646] transition-colors py-3 text-center text-[15px] font-bold border-t border-slate-100"
         >
           {dict?.journey?.certificateCard?.viewCertificate || "عرض الشهادة"}
         </button>

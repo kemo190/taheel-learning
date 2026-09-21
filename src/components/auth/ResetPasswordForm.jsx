@@ -47,6 +47,7 @@ export default function ResetPasswordForm({ dict, isRtl, locale }) {
       } else {
         // Redirect to login or home after successful password reset
         router.replace(`/${locale}/login`);
+        await new Promise(() => {});
       }
     } catch (err) {
       setServerError("An unexpected network error occurred. Please try again.");

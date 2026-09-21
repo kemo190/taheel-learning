@@ -84,7 +84,7 @@ export default function AccountDetails({ locale, user, dict }) {
           <h3 className="text-center font-bold text-[#0b2646] text-lg">
             {dict?.profile?.account?.emailLabel || "Email Address"}
           </h3>
-          <div className="bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-5 border border-gray-100 flex items-center h-[72px]">
+          <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 flex items-center h-[72px]">
             <span className="text-[#0b2646] font-medium text-[15px] rtl:ml-auto ltr:mr-auto">
               {user?.email || "user@example.com"}
             </span>
@@ -97,7 +97,7 @@ export default function AccountDetails({ locale, user, dict }) {
             {dict?.profile?.account?.passwordLabel || "Password"}
           </h3>
 
-          <div className="bg-white rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-5 border border-gray-100 relative min-h-[72px]">
+          <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 relative min-h-[72px]">
             {/* Password Display / Actions */}
             <div className="flex items-center w-full h-8">
               {!isEditingPassword && !isGoogleProvider && (

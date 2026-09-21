@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import ProfileHeader from "@/components/profile/ProfileHeader";
+
 import { getDictionary } from "@/dictionaries/getDictionary";
 
 export const metadata = {
@@ -31,18 +31,8 @@ export default async function ProfileLayout({ children, params }) {
     .single();
 
   return (
-    <div className="bg-[#f8fafc] min-h-screen py-10 px-4">
-      <div className="mx-auto max-w-[96%] min-[1410px]:max-w-[1400px]">
-        {/* Header */}
-        <ProfileHeader
-          user={user}
-          profile={profile}
-          locale={locale}
-          dict={dict}
-        />
-
-        {children}
-      </div>
+    <div className="w-full bg-white">
+      {children}
     </div>
   );
 }

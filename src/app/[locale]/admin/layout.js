@@ -25,7 +25,7 @@ export default async function AdminLayout({ children, params }) {
     .single();
 
   if (!profile || profile.role !== "admin") {
-    redirect(`/${locale}/home`);
+    redirect(`/${locale}`);
   }
 
   return (

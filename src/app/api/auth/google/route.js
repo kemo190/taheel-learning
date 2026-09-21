@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request) {
   const { searchParams, origin } = new URL(request.url);
-  const next = searchParams.get("next") ?? "/ar/home";
+  const next = searchParams.get("next") ?? "/ar";
 
   // Google OAuth URL construction
   const clientId = process.env.GOOGLE_CLIENT_ID;
