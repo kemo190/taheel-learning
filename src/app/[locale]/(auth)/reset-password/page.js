@@ -2,7 +2,8 @@ import React from "react";
 import { getDictionary } from "@/dictionaries/getDictionary";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
 
-export async function generateMetadata({ params: { locale } }) {
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
   const dict = await getDictionary(locale);
   return {
     title: `${dict.auth.resetPasswordTitle} | Taheel`,
@@ -10,7 +11,8 @@ export async function generateMetadata({ params: { locale } }) {
   };
 }
 
-export default async function ResetPasswordPage({ params: { locale } }) {
+export default async function ResetPasswordPage({ params }) {
+  const { locale } = await params;
   const dict = await getDictionary(locale);
   const isRtl = locale === "ar";
 
