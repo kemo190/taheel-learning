@@ -34,7 +34,7 @@ const createRegisterSchema = (dict) =>
       .string()
       .min(1, { message: dict.auth.errors.required })
       .email({ message: dict.auth.errors.invalidEmail }),
-    
+
     phone: z
       .string()
       .min(1, { message: dict.auth.errors.required })
@@ -42,8 +42,8 @@ const createRegisterSchema = (dict) =>
         message: dict.auth.errors.invalidPhone,
       }),
     governorate: z.string().min(1, { message: dict.auth.errors.required }),
-    
-    
+
+
     password: z
       .string()
       .min(1, { message: dict.auth.errors.required })
@@ -75,7 +75,7 @@ export default function RegisterForm({ dict, isRtl, locale }) {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      
+
       governorate: "",
       terms: false,
     },
@@ -85,7 +85,7 @@ export default function RegisterForm({ dict, isRtl, locale }) {
   const [success, setSuccess] = useState(null);
   const statesList = governorates;
 
-  
+
 
   const onSubmit = async (data) => {
     setServerError(null);
@@ -315,13 +315,6 @@ export default function RegisterForm({ dict, isRtl, locale }) {
                 className="text-[#0b2646] hover:underline mx-1 font-bold"
               >
                 {dict.auth.terms.conditions}
-              </Link>
-              {dict.auth.terms.and2}
-              <Link
-                href={`/${locale}/refund-policy`}
-                className="text-[#0b2646] hover:underline mx-1 font-bold"
-              >
-                {dict.auth.terms.refund}
               </Link>
               {dict.auth.terms.of}
             </label>

@@ -16,5 +16,12 @@ export default async function ForgotPasswordPage({ params }) {
   const dict = await getDictionary(locale);
   const isRtl = locale === "ar";
 
-  return <ForgotPasswordForm dict={dict} isRtl={isRtl} locale={locale} />;
+  return (
+    <div
+      className="flex flex-col flex-grow relative p-4 pt-4 pb-12 sm:px-12 sm:pt-4 sm:pb-16 bg-white"
+      dir={isRtl ? "rtl" : "ltr"}
+    >
+      <ForgotPasswordForm dict={dict} isRtl={isRtl} locale={locale} />
+    </div>
+  );
 }

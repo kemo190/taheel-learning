@@ -76,7 +76,7 @@ export default function ResetPasswordForm({ dict, isRtl, locale }) {
             id="reset_password"
             {...register("password")}
             isRtl={isRtl}
-            className={`w-full bg-white border ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-3 sm:py-3 sm:px-4 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent rtl:text-right ltr:text-left`}
+            className={`w-full bg-white border ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-11 sm:py-3 sm:px-11 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent rtl:text-right ltr:text-left`}
           />
           {errors.password && (
             <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">
@@ -94,7 +94,7 @@ export default function ResetPasswordForm({ dict, isRtl, locale }) {
             id="reset_confirm_password"
             {...register("confirmPassword")}
             isRtl={isRtl}
-            className={`w-full bg-white border ${errors.confirmPassword ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-3 sm:py-3 sm:px-4 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent rtl:text-right ltr:text-left`}
+            className={`w-full bg-white border ${errors.confirmPassword ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-11 sm:py-3 sm:px-11 text-[15px] focus:outline-none focus:ring-1 transition-all placeholder:text-transparent rtl:text-right ltr:text-left`}
           />
           {errors.confirmPassword && (
             <p className="text-red-500 text-xs mt-1.5 px-2 font-medium">

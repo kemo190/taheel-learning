@@ -6,7 +6,7 @@ export default async function AuthLayout({ children, params }) {
   return (
     <div className="flex flex-col min-h-screen bg-white">
       <Navbar locale={locale} />
-      <main className="flex-grow">{children}</main>
+      <main className="flex-grow flex flex-col">{children}</main>
       <Footer locale={locale} />
     </div>
   );
