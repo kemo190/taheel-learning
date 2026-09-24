@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { notFound, redirect } from "next/navigation";
-import EnrollmentForm from "@/components/journey/EnrollmentForm";
+import EnrollmentForm from "@/components/courses/EnrollmentForm";
 import Link from "next/link";
 
 export const metadata = { title: "تأكيد الاشتراك | تأهيل" };

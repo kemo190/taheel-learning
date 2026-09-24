@@ -17,14 +17,19 @@ export default async function NewTrackPage({ params }) {
     .eq("is_active", true)
     .order("title_ar");
 
+  const { data: instructors } = await supabase
+    .from("instructors")
+    .select("id, name")
+    .order("name");
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#0b2646]">إضافة مسار جديد</h1>
-        <p className="text-gray-500 text-sm mt-1">أضف مسار تدريبي جديد للمنصة</p>
+        <h1 className="text-2xl font-extrabold text-[#0b2646]">إضافة مسار جديد</h1>
+        <p className="text-slate-500 text-sm mt-1.5 font-medium">أضف مسار تدريبي جديد للمنصة</p>
       </div>
-      <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-        <NewTrackForm locale={locale} programs={programs || []} />
+      <div className="bg-white rounded-sm p-8 border border-slate-200">
+        <NewTrackForm locale={locale} programs={programs || []} instructors={instructors || []} />
       </div>
     </div>
   );

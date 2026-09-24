@@ -3,7 +3,6 @@ import { getDictionary } from "@/dictionaries/getDictionary";
 import { createClient } from "@/utils/supabase/server";
 import MobileMenu from "./MobileMenu";
 import AuthNav from "./AuthNav";
-import LanguageSwitcher from "./LanguageSwitcher";
 
 const ChevronDownIcon = (props) => (
   <svg
@@ -87,8 +86,6 @@ export default async function Navbar({ locale = "ar" }) {
     { name: dict.navbar.courses, hasDropdown: false, href: `/${locale}/courses` },
   ];
 
-  const targetLocale = locale === "ar" ? "en" : "ar";
-  const toggleLabel = locale === "ar" ? "EN" : "AR";
 
   return (
     <header className="bg-white sticky top-0 z-50">
@@ -110,6 +107,7 @@ export default async function Navbar({ locale = "ar" }) {
           <form action={`/${locale}/search`} method="GET" className="relative w-full flex items-center">
             <input
               type="text"
+              name="q"
               placeholder={dict.navbar.searchPlaceholder}
               className="w-full bg-white border border-slate-300 rounded-full py-2.5 ps-5 pe-24 text-[15px] text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#0b2646] transition-all"
             />
@@ -186,7 +184,7 @@ export default async function Navbar({ locale = "ar" }) {
 
         {/* Hamburger Menu (Left side in RTL) */}
         <div className="shrink-0">
-          <MobileMenu dict={dict} locale={locale} navLinks={navLinks} />
+          <MobileMenu dict={dict} locale={locale} navLinks={navLinks} user={user} />
         </div>
       </div>
     </header>

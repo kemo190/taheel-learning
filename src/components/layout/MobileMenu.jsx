@@ -158,18 +158,21 @@ const ChevronDownIcon = () => (
   </svg>
 );
 
-export default function MobileMenu({ dict, locale }) {
+export default function MobileMenu({ dict, locale, user }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isTracksOpen, setIsTracksOpen] = useState(false);
   const router = useRouter();
-  const targetLocale = locale === "ar" ? "en" : "ar";
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const q = e.target.search.value;
-    if (q) {
-      router.push(`/${locale}/search?q=${encodeURIComponent(q)}`);
+  const handleSignOut = async () => {
+    try {
+      const { createClient } = await import("@/utils/supabase/client");
+      const supabase = createClient();
+      await supabase.auth.signOut();
+      router.push(`/${locale}`);
+      router.refresh();
       setIsOpen(false);
+    } catch (error) {
+      console.error("Error signing out:", error);
     }
   };
 
@@ -211,7 +214,7 @@ export default function MobileMenu({ dict, locale }) {
           <nav className="flex flex-col items-center gap-8 w-full max-w-sm mt-12">
             
             <Link
-              href={`/${locale}`}
+              href={`/${locale}/courses`}
               className="text-lg font-medium text-[#718096] hover:text-[#0b2646] transition-colors"
               onClick={() => setIsOpen(false)}
             >
@@ -245,21 +248,42 @@ export default function MobileMenu({ dict, locale }) {
               )}
             </div>
 
-            <Link
-              href={`/${locale}/login`}
-              className="text-lg font-medium text-[#718096] hover:text-[#0b2646] transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              {dict.navbar.login}
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  href={`/${locale}/profile`}
+                  className="text-lg font-medium text-[#718096] hover:text-[#0b2646] transition-colors mt-4"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {dict?.navbar?.userMenu?.journey || "رحلتي التعليمية"}
+                </Link>
 
-            <Link
-              href={`/${locale}/register`}
-              className="w-48 text-center py-3.5 mt-2 rounded-full border border-slate-300 text-[#0b2646] font-bold text-lg hover:bg-slate-50 transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              إنشاء حساب
-            </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="w-48 text-center py-3.5 mt-2 rounded-full border border-slate-300 text-[#0b2646] font-bold text-lg hover:bg-slate-50 transition-colors"
+                >
+                  {dict?.navbar?.userMenu?.logout || "تسجيل الخروج"}
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href={`/${locale}/login`}
+                  className="text-lg font-medium text-[#718096] hover:text-[#0b2646] transition-colors mt-4"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {dict.navbar.login}
+                </Link>
+
+                <Link
+                  href={`/${locale}/register`}
+                  className="w-48 text-center py-3.5 mt-2 rounded-full border border-slate-300 text-[#0b2646] font-bold text-lg hover:bg-slate-50 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  إنشاء حساب
+                </Link>
+              </>
+            )}
 
           </nav>
         </div>

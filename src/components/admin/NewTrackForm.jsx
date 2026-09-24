@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "react-toastify";
 
-export default function NewTrackForm({ locale, programs }) {
+export default function NewTrackForm({ locale, programs, instructors }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -20,6 +20,12 @@ export default function NewTrackForm({ locale, programs }) {
     level: "beginner",
     delivery_mode: "recorded",
     is_active: true,
+    type: "course",
+    image_url: "",
+    instructor_id: "",
+    promo_video_url: "",
+    what_you_will_learn: [""],
+    target_audience: [""],
   });
 
   const handleChange = (e) => {
@@ -27,17 +33,37 @@ export default function NewTrackForm({ locale, programs }) {
     setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
+  const handleArrayChange = (index, field, value) => {
+    setForm((prev) => {
+      const newArray = [...prev[field]];
+      newArray[index] = value;
+      return { ...prev, [field]: newArray };
+    });
+  };
+
+  const addArrayItem = (field) => {
+    setForm((prev) => ({ ...prev, [field]: [...prev[field], ""] }));
+  };
+
+  const removeArrayItem = (index, field) => {
+    setForm((prev) => {
+      const newArray = [...prev[field]];
+      newArray.splice(index, 1);
+      return { ...prev, [field]: newArray };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.title_ar.trim()) return toast.error("اسم المسار بالعربي مطلوب");
+    if (!form.title_ar.trim()) return toast.error("اسم المحتوى مطلوب");
 
     setLoading(true);
     try {
-      const { error } = await supabase.from("tracks").insert({
+      const { data, error } = await supabase.from("tracks").insert({
         title_ar: form.title_ar.trim(),
-        title_en: form.title_en.trim() || null,
-        description_ar: form.description_ar.trim() || null,
-        description_en: form.description_en.trim() || null,
+        title_en: form.title_en.trim() || "",
+        description_ar: form.description_ar.trim() || "",
+        description_en: form.description_en.trim() || "",
         program_id: form.program_id || null,
         price: parseFloat(form.price) || 0,
         original_price: form.original_price ? parseFloat(form.original_price) : null,
@@ -45,10 +71,33 @@ export default function NewTrackForm({ locale, programs }) {
         level: form.level,
         delivery_mode: form.delivery_mode,
         is_active: form.is_active,
-      });
+        type: form.type,
+        image_url: form.image_url.trim() || null,
+        promo_video_url: form.promo_video_url.trim() || null,
+        what_you_will_learn: form.what_you_will_learn.filter(item => item.trim() !== ""),
+        target_audience: form.target_audience.filter(item => item.trim() !== ""),
+      }).select();
 
       if (error) throw error;
-      toast.success("تم إضافة المسار بنجاح ✅");
+      
+      const newTrackId = data?.[0]?.id;
+      
+      // Link instructor if selected
+      if (newTrackId && form.instructor_id) {
+        const { error: instructorError } = await supabase
+          .from("track_instructors")
+          .insert({
+            track_id: newTrackId,
+            instructor_id: form.instructor_id
+          });
+          
+        if (instructorError) {
+          console.error("Error linking instructor:", instructorError);
+          // We don't throw to not interrupt the track creation flow, but it's good to log
+        }
+      }
+
+      toast.success("تم إضافة المحتوى بنجاح ✅");
       router.push(`/${locale}/admin/tracks`);
       router.refresh();
     } catch (err) {
@@ -58,90 +107,185 @@ export default function NewTrackForm({ locale, programs }) {
     }
   };
 
+  const inputClass = "w-full border border-slate-300 rounded-sm px-4 py-3 text-sm focus:outline-none focus:border-[#0b2646] focus:ring-1 focus:ring-[#0b2646] bg-slate-50 transition-all";
+  const labelClass = "block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2";
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl">
       {/* Arabic Title */}
       <div>
-        <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">
-          اسم المسار (عربي) <span className="text-red-500">*</span>
+        <label className={labelClass}>
+          اسم المحتوى <span className="text-red-500">*</span>
         </label>
         <input
           name="title_ar"
           value={form.title_ar}
           onChange={handleChange}
-          placeholder="مثال: مسار المحاسبة المالية"
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646]/20 focus:border-[#0b2646] bg-white transition-all"
+          placeholder="مثال: دورة المحاسبة المالية"
+          className={inputClass}
           dir="rtl"
           required
         />
       </div>
 
-      {/* English Title */}
+      {/* Content Type */}
       <div>
-        <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">
-          اسم المسار (إنجليزي)
+        <label className={labelClass}>
+          نوع المحتوى <span className="text-red-500">*</span>
         </label>
-        <input
-          name="title_en"
-          value={form.title_en}
+        <select
+          name="type"
+          value={form.type}
           onChange={handleChange}
-          placeholder="e.g. Financial Accounting Track"
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646]/20 focus:border-[#0b2646] bg-white transition-all"
-          dir="ltr"
-        />
+          className={`${inputClass} appearance-none`}
+        >
+          <option value="course">دورة (Course - محتوى مركز قصير)</option>
+          <option value="track">مسار (Track - محتوى طويل مقسم لأقسام)</option>
+        </select>
+      </div>
+
+      {/* Instructor Selection */}
+      <div>
+        <label className={labelClass}>
+          المدرب المسؤول
+        </label>
+        <select
+          name="instructor_id"
+          value={form.instructor_id}
+          onChange={handleChange}
+          className={`${inputClass} appearance-none`}
+        >
+          <option value="">بدون مدرب (اختياري)</option>
+          {instructors?.map((inst) => (
+            <option key={inst.id} value={inst.id}>
+              {inst.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* English Title (Hidden) */}
+
+      {/* Image and Video URLs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className={labelClass}>
+            رابط صورة الغلاف
+          </label>
+          <input
+            name="image_url"
+            value={form.image_url}
+            onChange={handleChange}
+            placeholder="مثال: https://images.unsplash.com/..."
+            className={inputClass}
+            dir="ltr"
+          />
+        </div>
+        <div>
+          <label className={labelClass}>
+            رابط الفيديو التعريفي (Promo Video) - اختياري
+          </label>
+          <input
+            name="promo_video_url"
+            value={form.promo_video_url}
+            onChange={handleChange}
+            placeholder="مثال: https://www.youtube.com/watch?v=..."
+            className={inputClass}
+            dir="ltr"
+          />
+        </div>
       </div>
 
       {/* Arabic Description */}
       <div>
-        <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">
-          وصف المسار (عربي)
+        <label className={labelClass}>
+          وصف المحتوى
         </label>
         <textarea
           name="description_ar"
           value={form.description_ar}
           onChange={handleChange}
-          placeholder="اكتب وصفاً شاملاً للمسار..."
-          rows={3}
-          className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646]/20 focus:border-[#0b2646] bg-white transition-all resize-none"
+          placeholder="اكتب وصفاً شاملاً للمحتوى..."
+          rows={4}
+          className={`${inputClass} resize-none`}
           dir="rtl"
         />
       </div>
 
-      {/* Program + Level */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">البرنامج</label>
-          <select
-            name="program_id"
-            value={form.program_id}
-            onChange={handleChange}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646]/20 focus:border-[#0b2646] bg-white transition-all appearance-none"
+      {/* What You Will Learn */}
+      <div>
+        <label className={labelClass}>
+          ماذا ستتعلم في هذا المحتوى؟
+        </label>
+        <div className="space-y-3">
+          {form.what_you_will_learn.map((item, index) => (
+            <div key={index} className="flex gap-2">
+              <input
+                value={item}
+                onChange={(e) => handleArrayChange(index, 'what_you_will_learn', e.target.value)}
+                placeholder="مثال: بناء تطبيقات ويب متكاملة..."
+                className={inputClass}
+                dir="rtl"
+              />
+              <button
+                type="button"
+                onClick={() => removeArrayItem(index, 'what_you_will_learn')}
+                className="px-4 py-2 text-red-500 border border-red-200 hover:bg-red-50 rounded-sm transition-colors shrink-0"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addArrayItem('what_you_will_learn')}
+            className="text-sm text-[#0b2646] font-bold hover:text-[#FBBC04] flex items-center gap-1 mt-3"
           >
-            <option value="">— بدون برنامج —</option>
-            {programs?.map((p) => (
-              <option key={p.id} value={p.id}>{p.title_ar}</option>
-            ))}
-          </select>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            إضافة نقطة جديدة
+          </button>
         </div>
-        <div>
-          <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">المستوى</label>
-          <select
-            name="level"
-            value={form.level}
-            onChange={handleChange}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646]/20 focus:border-[#0b2646] bg-white transition-all appearance-none"
+      </div>
+
+      {/* Target Audience */}
+      <div>
+        <label className={labelClass}>
+          لمن هذا المحتوى؟ (الجمهور المستهدف)
+        </label>
+        <div className="space-y-3">
+          {form.target_audience.map((item, index) => (
+            <div key={index} className="flex gap-2">
+              <input
+                value={item}
+                onChange={(e) => handleArrayChange(index, 'target_audience', e.target.value)}
+                placeholder="مثال: المبتدئين الراغبين في اكتساب مهارات جديدة..."
+                className={inputClass}
+                dir="rtl"
+              />
+              <button
+                type="button"
+                onClick={() => removeArrayItem(index, 'target_audience')}
+                className="px-4 py-2 text-red-500 border border-red-200 hover:bg-red-50 rounded-sm transition-colors shrink-0"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => addArrayItem('target_audience')}
+            className="text-sm text-[#0b2646] font-bold hover:text-[#FBBC04] flex items-center gap-1 mt-3"
           >
-            <option value="beginner">مبتدئ</option>
-            <option value="intermediate">متوسط</option>
-            <option value="advanced">متقدم</option>
-          </select>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            إضافة نقطة جديدة
+          </button>
         </div>
       </div>
 
       {/* Price + Duration */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">
+          <label className={labelClass}>
             السعر الحالي (ج.م) — 0 للمجاني
           </label>
           <input
@@ -151,11 +295,11 @@ export default function NewTrackForm({ locale, programs }) {
             value={form.price}
             onChange={handleChange}
             placeholder="0"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646]/20 focus:border-[#0b2646] bg-white transition-all"
+            className={inputClass}
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">
+          <label className={labelClass}>
             السعر القديم (ج.م) — اختياري
           </label>
           <input
@@ -165,15 +309,15 @@ export default function NewTrackForm({ locale, programs }) {
             value={form.original_price}
             onChange={handleChange}
             placeholder="اتركه فارغاً إذا لم يكن هناك خصم"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646]/20 focus:border-[#0b2646] bg-white transition-all"
+            className={inputClass}
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">
-            المدة (أسابيع)
+          <label className={labelClass}>
+            المدة (ساعات)
           </label>
           <input
             name="duration_weeks"
@@ -181,17 +325,17 @@ export default function NewTrackForm({ locale, programs }) {
             min="1"
             value={form.duration_weeks}
             onChange={handleChange}
-            placeholder="مثال: 8"
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646]/20 focus:border-[#0b2646] bg-white transition-all"
+            placeholder="مثال: 12"
+            className={inputClass}
           />
         </div>
         <div>
-          <label className="block text-sm font-semibold text-[#0b2646] mb-1.5">نوع الكورس (Delivery Mode)</label>
+          <label className={labelClass}>طريقة تقديم المحتوى</label>
           <select
             name="delivery_mode"
             value={form.delivery_mode}
             onChange={handleChange}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646]/20 focus:border-[#0b2646] bg-white transition-all appearance-none"
+            className={`${inputClass} appearance-none`}
           >
             <option value="recorded">مسجل تفاعلي</option>
             <option value="live">بث مباشر</option>
@@ -201,40 +345,40 @@ export default function NewTrackForm({ locale, programs }) {
       </div>
 
       {/* Active Toggle */}
-      <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+      <div className="flex items-center gap-3 p-5 bg-slate-50 border border-slate-200 rounded-sm">
         <input
           type="checkbox"
           id="is_active"
           name="is_active"
           checked={form.is_active}
           onChange={handleChange}
-          className="w-5 h-5 rounded text-[#0b2646] cursor-pointer"
+          className="w-5 h-5 rounded-sm text-[#0b2646] cursor-pointer"
         />
-        <label htmlFor="is_active" className="text-sm font-medium text-[#0b2646] cursor-pointer">
-          المسار نشط ومتاح للطلاب
+        <label htmlFor="is_active" className="text-sm font-bold text-[#0b2646] cursor-pointer">
+          المحتوى نشط ومتاح للطلاب للتسجيل
         </label>
       </div>
 
       {/* Submit */}
-      <div className="flex gap-3 pt-2">
+      <div className="flex gap-3 pt-6 border-t border-slate-200">
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2 bg-[#0b2646] text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-[#061528] transition-colors disabled:opacity-60 shadow-md"
+          className="flex items-center gap-2 bg-[#0b2646] text-white px-8 py-3 rounded-sm text-sm font-bold hover:bg-[#FBBC04] hover:text-[#0b2646] transition-colors disabled:opacity-60"
         >
           {loading ? (
-            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
           ) : (
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12"/>
             </svg>
           )}
-          {loading ? "جارٍ الحفظ..." : "حفظ المسار"}
+          {loading ? "جارٍ الحفظ..." : "حفظ المحتوى"}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-6 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-100 transition-colors border border-gray-200"
+          className="px-8 py-3 rounded-sm text-sm font-bold text-slate-500 hover:bg-slate-100 transition-colors border border-transparent hover:border-slate-300"
         >
           إلغاء
         </button>

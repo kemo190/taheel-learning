@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export const metadata = { title: "إدارة الجلسات | تأهيل Admin" };
+export const metadata = { title: "إدارة الدروس | تأهيل Admin" };
 
 export default async function SessionsPage({ params, searchParams }) {
   const { locale } = await params;
@@ -31,19 +31,19 @@ export default async function SessionsPage({ params, searchParams }) {
   return (
     <div className="space-y-6 pb-10 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gray-200">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">إدارة الجلسات (Sessions)</h1>
-          <p className="text-gray-500 text-sm mt-1">الدروس والمحاضرات الخاصة بالمسارات.</p>
+          <h1 className="text-2xl font-extrabold text-[#0b2646]">إدارة الدروس (Lessons)</h1>
+          <p className="text-slate-500 text-sm mt-1.5 font-medium">الدروس والمحاضرات الخاصة بالدورات والمسارات.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 items-center">
           {tracks && tracks.length > 0 && (
             <div className="relative w-full sm:w-auto">
               <select 
-                className="appearance-none w-full bg-white border border-gray-200 text-gray-700 py-2 pl-8 pr-10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0b2646] focus:border-transparent transition-shadow cursor-pointer"
+                className="appearance-none w-full bg-slate-50 border border-slate-200 text-[#0b2646] py-2 pl-8 pr-10 rounded-sm text-sm focus:outline-none focus:ring-1 focus:ring-[#0b2646] focus:border-[#0b2646] transition-all cursor-pointer font-medium"
                 defaultValue={filterTrack || ""}
               >
-                <option value="">كل المسارات</option>
+                <option value="">كل المحتوى</option>
                 {tracks.map(t => (
                   <option key={t.id} value={t.id}>{t.title_ar}</option>
                 ))}
@@ -54,19 +54,22 @@ export default async function SessionsPage({ params, searchParams }) {
             </div>
           )}
           
-          <button className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#0b2646] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#081b33] transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-[#0b2646]">
+          <Link
+            href={`/${locale}/admin/sessions/new`}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#0b2646] text-white px-6 py-2.5 rounded-sm text-sm font-bold hover:bg-[#FBBC04] hover:text-[#0b2646] transition-colors"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
-            إضافة جلسة
-          </button>
+            إضافة درس
+          </Link>
         </div>
       </div>
 
       {/* Sessions Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-sm border border-slate-200 overflow-hidden">
         {!sessions || sessions.length === 0 ? (
           <div className="p-16 text-center flex flex-col items-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-300 mb-3" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            <p className="text-gray-500 text-sm">لا توجد جلسات مسجلة بعد.</p>
+            <p className="text-gray-500 text-sm">لا توجد دروس مسجلة بعد.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -74,11 +77,12 @@ export default async function SessionsPage({ params, searchParams }) {
               <thead className="bg-gray-50 border-b border-gray-200 text-gray-500 font-medium">
                 <tr>
                   <th className="px-6 py-4">الترتيب</th>
-                  <th className="px-6 py-4">عنوان الجلسة</th>
-                  <th className="px-6 py-4">المسار التابع</th>
+                  <th className="px-6 py-4">عنوان الدرس</th>
+                  <th className="px-6 py-4">المحتوى التابع</th>
                   <th className="px-6 py-4">النوع</th>
                   <th className="px-6 py-4">المدة</th>
                   <th className="px-6 py-4">الحالة</th>
+                  <th className="px-6 py-4">إجراءات</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -111,6 +115,11 @@ export default async function SessionsPage({ params, searchParams }) {
                       }`}>
                         {session.is_active ? 'نشط' : 'مخفي'}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                      <Link href={`/${locale}/admin/sessions/${session.id}`} className="text-[#0b2646] hover:text-[#0b2646]/80 bg-slate-50 hover:bg-slate-100 px-4 py-2 rounded-sm font-bold transition-colors border border-slate-200">
+                        تعديل
+                      </Link>
                     </td>
                   </tr>
                 ))}

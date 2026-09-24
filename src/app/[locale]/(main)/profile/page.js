@@ -83,29 +83,12 @@ export default async function ProfilePage({ params, searchParams }) {
     .from("favorites")
     .select(`
       tracks (
-        id, title_ar, image_url, delivery_mode, price, rating,
-        track_instructors(instructors(bio))
+        id, title_ar, title_en, description_ar, image_url, delivery_mode, price, original_price, duration_weeks, type, rating
       )
     `)
     .eq("student_id", user.id);
 
-  const favoriteCourses = (favoriteRecords || []).map(f => {
-    const t = f.tracks;
-    if (!t) return null;
-    let instructorName = "تأهيل";
-    if (t.track_instructors?.[0]?.instructors?.bio) {
-      instructorName = t.track_instructors[0].instructors.bio.split("-")[0].trim();
-    }
-    return {
-      id: t.id,
-      title: t.title_ar,
-      instructor: instructorName,
-      rating: t.rating || 0,
-      price: t.price || 0,
-      imageSrc: t.image_url || '/hero-student.jpg',
-      type: t.delivery_mode === 'live' ? 'بث مباشر' : t.delivery_mode === 'hybrid' ? 'مدمج' : 'مسجل تفاعلي',
-    };
-  }).filter(Boolean);
+  const favoriteTracks = (favoriteRecords || []).map(f => f.tracks).filter(Boolean);
 
   // Dummy certificates for now (can map from DB later)
   const certificates = [];
@@ -119,7 +102,7 @@ export default async function ProfilePage({ params, searchParams }) {
       initialTab={initialTab}
       inProgressCourses={inProgressCourses}
       completedCourses={completedCourses}
-      favoriteCourses={favoriteCourses}
+      favoriteTracks={favoriteTracks}
       certificates={certificates}
     />
   );

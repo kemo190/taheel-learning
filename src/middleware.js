@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
 
-const locales = ["ar", "en"];
+const locales = ["ar"];
 
 export async function middleware(request) {
   // First, update session and check auth rules (e.g. protecting /dashboard)

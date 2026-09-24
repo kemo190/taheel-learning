@@ -12,7 +12,7 @@ export default function FreeEnrollButton({ trackId, locale }) {
   const handleEnroll = () => {
     startTransition(async () => {
       const result = await enrollInFreeTrack(trackId, locale);
-      
+
       if (result.success) {
         toast.success("تم الاشتراك بنجاح! يمكنك الآن بدء التعلم 🎉");
         router.push(`/${locale}/journey`);
@@ -31,7 +31,7 @@ export default function FreeEnrollButton({ trackId, locale }) {
       {isPending ? (
         <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
       ) : (
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
       )}
       اشترك مجاناً وابدأ التعلم
     </button>

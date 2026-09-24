@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export const metadata = { title: "لوحة التحكم | تأهيل Admin" };
+export const metadata = { title: "لوحة التحكم | تأهيل" };
 
 export default async function AdminDashboardPage({ params }) {
   const { locale } = await params;
@@ -26,14 +26,14 @@ export default async function AdminDashboardPage({ params }) {
       .from("enrollments")
       .select("id, status, created_at, amount_paid, profiles(full_name), tracks(title_ar)")
       .order("created_at", { ascending: false })
-      .limit(5),
+      .limit(6),
   ]);
 
   const statusColor = {
-    pending: "bg-orange-50 text-orange-700 border-orange-200",
-    approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    rejected: "bg-red-50 text-red-700 border-red-200",
-    cancelled: "bg-gray-50 text-gray-700 border-gray-200",
+    pending: "text-amber-700 bg-amber-50 border-amber-200",
+    approved: "text-emerald-700 bg-emerald-50 border-emerald-200",
+    rejected: "text-red-700 bg-red-50 border-red-200",
+    cancelled: "text-slate-700 bg-slate-50 border-slate-200",
   };
 
   const statusLabel = {
@@ -44,135 +44,147 @@ export default async function AdminDashboardPage({ params }) {
   };
 
   return (
-    <div className="space-y-6 pb-10 max-w-7xl mx-auto">
-      {/* Clean Corporate Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gray-200">
+    <div className="max-w-7xl mx-auto space-y-8 pb-12">
+
+      {/* Page Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">لوحة التحكم</h1>
-          <p className="text-gray-500 text-sm mt-1">نظرة عامة على أداء المنصة والنشاطات الأخيرة.</p>
-        </div>
-        <div className="flex gap-3">
-          <Link href={`/${locale}/admin/tracks/new`} className="inline-flex items-center justify-center gap-2 bg-[#0b2646] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#081b33] transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-[#0b2646]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
-            إضافة مسار
-          </Link>
+          <h1 className="text-3xl font-extrabold text-[#0b2646] tracking-tight">نظرة عامة</h1>
+          <p className="text-slate-500 text-sm mt-2 font-medium">مرحباً بك، إليك ملخص أداء المنصة لهذا اليوم.</p>
         </div>
       </div>
 
-      {/* Enterprise Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Stat Card 1 */}
-        <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm flex flex-col justify-between">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-sm font-medium text-gray-500">إجمالي الطلاب</h3>
-            <span className="p-2 bg-gray-50 rounded-lg text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </span>
+      {/* Stats - Enterprise Style (Flat, Borders) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0 border-y sm:border border-slate-200 sm:rounded-sm bg-white divide-y sm:divide-y-0 sm:divide-x sm:divide-x-reverse divide-slate-200">
+
+        <div className="p-6">
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">إجمالي الطلاب</p>
+          <div className="flex items-end gap-3">
+            <p className="text-5xl font-black text-[#0b2646] leading-none">{studentsCount ?? 0}</p>
           </div>
-          <div>
-            <p className="text-3xl font-semibold text-gray-900">{studentsCount ?? 0}</p>
-          </div>
+          <p className="text-xs text-slate-400 mt-3 font-medium">طالب مسجل في المنصة</p>
         </div>
 
-        {/* Stat Card 2 */}
-        <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm flex flex-col justify-between">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-sm font-medium text-gray-500">المسارات النشطة</h3>
-            <span className="p-2 bg-gray-50 rounded-lg text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            </span>
+        <div className="p-6">
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">المحتوى النشط</p>
+          <div className="flex items-end gap-3">
+            <p className="text-5xl font-black text-[#0b2646] leading-none">{tracksCount ?? 0}</p>
           </div>
-          <div>
-            <p className="text-3xl font-semibold text-gray-900">{tracksCount ?? 0}</p>
-          </div>
+          <p className="text-xs text-slate-400 mt-3 font-medium">مسار ودورة منشورة</p>
         </div>
 
-        {/* Stat Card 3 */}
-        <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm flex flex-col justify-between relative overflow-hidden">
+        <div className={`p-6 ${(pendingEnrollments ?? 0) > 0 ? "bg-amber-50/30 relative overflow-hidden" : ""}`}>
           {(pendingEnrollments ?? 0) > 0 && (
-            <div className="absolute top-0 right-0 w-1 h-full bg-orange-500"></div>
+            <div className="absolute top-0 right-0 w-full h-1 bg-[#FBBC04]" />
           )}
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-sm font-medium text-gray-500">طلبات للتسجيل</h3>
-            <span className={`p-2 rounded-lg ${(pendingEnrollments ?? 0) > 0 ? "bg-orange-50 text-orange-600" : "bg-gray-50 text-gray-400"}`}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            </span>
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">طلبات معلقة</p>
+          <div className="flex items-end gap-3">
+            <p className={`text-5xl font-black leading-none ${(pendingEnrollments ?? 0) > 0 ? "text-amber-600" : "text-[#0b2646]"}`}>
+              {pendingEnrollments ?? 0}
+            </p>
           </div>
-          <div className="flex items-baseline gap-2">
-            <p className="text-3xl font-semibold text-gray-900">{pendingEnrollments ?? 0}</p>
+          <div className="flex items-center justify-between mt-3">
+            <p className="text-xs text-slate-400 font-medium">تحتاج إلى مراجعة</p>
             {(pendingEnrollments ?? 0) > 0 && (
-              <Link href={`/${locale}/admin/enrollments`} className="text-xs font-medium text-orange-600 hover:underline">المراجعة الآن &larr;</Link>
+              <Link href={`/${locale}/admin/enrollments`} className="text-xs font-bold text-[#0b2646] hover:text-[#FBBC04] underline underline-offset-2">مراجعة</Link>
             )}
           </div>
         </div>
 
-        {/* Stat Card 4 */}
-        <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm flex flex-col justify-between">
-          <div className="flex justify-between items-start mb-4">
-            <h3 className="text-sm font-medium text-gray-500">الشهادات الممنوحة</h3>
-            <span className="p-2 bg-gray-50 rounded-lg text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 0 0 4.561 21h14.878a2 2 0 0 0 1.94-1.515L22 17"></path></svg>
-            </span>
+        <div className="p-6">
+          <p className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">الشهادات</p>
+          <div className="flex items-end gap-3">
+            <p className="text-5xl font-black text-[#0b2646] leading-none">{certificatesCount ?? 0}</p>
           </div>
-          <div>
-            <p className="text-3xl font-semibold text-gray-900">{certificatesCount ?? 0}</p>
-          </div>
+          <p className="text-xs text-slate-400 mt-3 font-medium">شهادة إتمام ممنوحة</p>
+        </div>
+
+      </div>
+
+      {/* Quick Links */}
+      <div>
+        <h2 className="text-lg font-extrabold text-[#0b2646] mb-4">وصول سريع</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <Link href={`/${locale}/admin/tracks/new`} className="group flex flex-col p-5 bg-white border border-slate-200 hover:border-[#0b2646] transition-all rounded-sm">
+            <div className="w-10 h-10 bg-slate-50 text-[#0b2646] flex items-center justify-center mb-4 group-hover:bg-[#0b2646] group-hover:text-white transition-colors rounded-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" x2="12" y1="5" y2="19"/><line x1="5" x2="19" y1="12" y2="12"/></svg>
+            </div>
+            <p className="text-sm font-bold text-slate-900">إضافة محتوى</p>
+            <p className="text-xs text-slate-500 mt-1">إنشاء محتوى تعليمي جديد</p>
+          </Link>
+          <Link href={`/${locale}/admin/instructors`} className="group flex flex-col p-5 bg-white border border-slate-200 hover:border-[#0b2646] transition-all rounded-sm">
+            <div className="w-10 h-10 bg-slate-50 text-[#0b2646] flex items-center justify-center mb-4 group-hover:bg-[#0b2646] group-hover:text-white transition-colors rounded-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <p className="text-sm font-bold text-slate-900">المدربون</p>
+            <p className="text-xs text-slate-500 mt-1">إدارة كادر التعليم</p>
+          </Link>
+          <Link href={`/${locale}/admin/enrollments`} className="group flex flex-col p-5 bg-white border border-slate-200 hover:border-[#FBBC04] transition-all rounded-sm relative overflow-hidden">
+            <div className="w-10 h-10 bg-slate-50 text-[#0b2646] flex items-center justify-center mb-4 group-hover:bg-[#FBBC04] group-hover:text-[#0b2646] transition-colors rounded-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <p className="text-sm font-bold text-slate-900">التسجيلات</p>
+            <p className="text-xs text-slate-500 mt-1">مراجعة واعتماد الطلبات</p>
+          </Link>
+          <Link href={`/${locale}/admin/students`} className="group flex flex-col p-5 bg-white border border-slate-200 hover:border-[#0b2646] transition-all rounded-sm">
+            <div className="w-10 h-10 bg-slate-50 text-[#0b2646] flex items-center justify-center mb-4 group-hover:bg-[#0b2646] group-hover:text-white transition-colors rounded-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <p className="text-sm font-bold text-slate-900">الطلاب</p>
+            <p className="text-xs text-slate-500 mt-1">عرض قائمة المسجلين</p>
+          </Link>
         </div>
       </div>
 
-      {/* Clean Table Section */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div className="px-6 py-5 border-b border-gray-200 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-gray-900">أحدث طلبات التسجيل</h2>
-          <Link href={`/${locale}/admin/enrollments`} className="text-sm font-medium text-[#0b2646] hover:text-[#081b33]">
+      {/* Recent Enrollments Table */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-extrabold text-[#0b2646]">أحدث التسجيلات</h2>
+          <Link href={`/${locale}/admin/enrollments`} className="text-sm font-bold text-slate-500 hover:text-[#0b2646] transition-colors underline underline-offset-4">
             عرض الكل
           </Link>
         </div>
-        
-        {!recentEnrollments || recentEnrollments.length === 0 ? (
-          <div className="p-12 text-center flex flex-col items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-gray-300 mb-3" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><line x1="3" x2="21" y1="9" y2="9"/><line x1="9" x2="9" y1="21" y2="9"/></svg>
-            <p className="text-gray-500 text-sm">لا توجد طلبات تسجيل حتى الآن.</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-right">
-              <thead className="bg-gray-50 border-b border-gray-200 text-gray-500 font-medium">
-                <tr>
-                  <th className="px-6 py-3">الطالب</th>
-                  <th className="px-6 py-3">المسار</th>
-                  <th className="px-6 py-3">المبلغ</th>
-                  <th className="px-6 py-3">الحالة</th>
-                  <th className="px-6 py-3">التاريخ</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {recentEnrollments.map((e) => (
-                  <tr key={e.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="font-medium text-gray-900">{e.profiles?.full_name || "—"}</span>
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">
-                      {e.tracks?.title_ar || "—"}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600">
-                      {e.amount_paid ? `${e.amount_paid} ج.م` : "—"}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border ${statusColor[e.status]}`}>
-                        {statusLabel[e.status]}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-500 text-xs">
-                      {new Date(e.created_at).toLocaleDateString("ar-EG")}
-                    </td>
+
+        <div className="bg-white border border-slate-200 rounded-sm">
+          {!recentEnrollments || recentEnrollments.length === 0 ? (
+            <div className="p-12 text-center">
+              <p className="text-slate-400 font-medium text-sm">لا توجد طلبات تسجيل حتى الآن.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-right">
+                <thead>
+                  <tr className="border-b border-slate-200 bg-slate-50">
+                    <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">الطالب</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">المسار</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">المبلغ</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">الحالة</th>
+                    <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">التاريخ</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {recentEnrollments.map((e) => (
+                    <tr key={e.id} className="hover:bg-slate-50/50 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="font-bold text-[#0b2646]">{e.profiles?.full_name || "—"}</span>
+                      </td>
+                      <td className="px-6 py-4 text-slate-600 max-w-[200px] truncate">{e.tracks?.title_ar || "—"}</td>
+                      <td className="px-6 py-4 font-bold text-slate-900">{e.amount_paid ? `${e.amount_paid} ج.م` : "—"}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-block px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider border rounded-sm ${statusColor[e.status]}`}>
+                          {statusLabel[e.status]}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-slate-400 text-xs font-medium">{new Date(e.created_at).toLocaleDateString("ar-EG")}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
+
     </div>
   );
 }

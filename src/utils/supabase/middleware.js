@@ -45,13 +45,23 @@ export async function updateSession(request) {
   const isAuthPath =
     pathname.includes("/login") || pathname.includes("/register");
   const isBaseRoute =
-    pathname === "/" || pathname === "/ar" || pathname === "/en";
+    pathname === "/" || pathname === "/ar";
+
+  // Redirect /en/... to /ar/...
+  if (pathname.startsWith("/en")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/ar" + pathname.slice(3);
+    const redirectResponse = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectResponse.cookies.set(cookie.name, cookie.value, cookie);
+    });
+    return redirectResponse;
+  }
 
   if (!user && isProtectedPath) {
     // If user is not logged in and trying to access a protected route, redirect to login
     // Extract locale to maintain it in redirect, or default to ar
-    const localeMatch = pathname.match(/^\/(en|ar)/);
-    const locale = localeMatch ? localeMatch[1] : "ar";
+    const locale = "ar";
 
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}/login`;
@@ -67,8 +77,7 @@ export async function updateSession(request) {
 
   // Redirect legacy /journey to /profile
   if (pathname.includes("/journey")) {
-    const localeMatch = pathname.match(/^\/(en|ar)/);
-    const locale = localeMatch ? localeMatch[1] : "ar";
+    const locale = "ar";
     
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}/profile`;
@@ -87,8 +96,7 @@ export async function updateSession(request) {
 
   if (user && isAuthPath) {
     // If user is logged in and tries to access login/register, redirect to landing page
-    const localeMatch = pathname.match(/^\/(en|ar)/);
-    const locale = localeMatch ? localeMatch[1] : "ar";
+    const locale = "ar";
 
     const url = request.nextUrl.clone();
     const nextPath = url.searchParams.get("next");

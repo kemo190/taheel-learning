@@ -29,10 +29,10 @@ export default async function AdminLayout({ children, params }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#f0f4f8]" dir="rtl">
+    <div className="flex min-h-screen" style={{ background: "linear-gradient(180deg, rgba(251, 188, 4, 0.05) 0%, #ffffff 100%)" }} dir="rtl">
       <AdminSidebar locale={locale} adminName={profile.full_name} />
       <main className="flex-1 overflow-auto">
-        <div className="p-6 max-w-[1400px] mx-auto">{children}</div>
+        <div className="p-6 md:p-8 max-w-[1400px] mx-auto">{children}</div>
       </main>
     </div>
   );

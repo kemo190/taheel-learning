@@ -5,10 +5,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import ProfileForm from "./ProfileForm";
 import AccountDetails from "./AccountDetails";
-import JourneyCourseCard from "@/components/journey/JourneyCourseCard";
-import FavoriteCourseCard from "@/components/journey/FavoriteCourseCard";
-import CertificateCard from "@/components/journey/CertificateCard";
-import EmptyState from "@/components/journey/EmptyState";
+import JourneyCourseCard from "./JourneyCourseCard";
+import TrackCard from "@/components/courses/TrackCard";
+import CertificateCard from "./CertificateCard";
+import EmptyState from "./EmptyState";
 
 export default function AccountDashboardClient({
   locale,
@@ -18,7 +18,7 @@ export default function AccountDashboardClient({
   initialTab,
   inProgressCourses,
   completedCourses,
-  favoriteCourses,
+  favoriteTracks,
   certificates
 }) {
   const isRtl = locale === "ar";
@@ -154,19 +154,13 @@ export default function AccountDashboardClient({
       case "favorites":
         return (
           <div className="space-y-6 animate-in fade-in duration-300">
-            <h3 className="text-xl font-bold text-[#0b2646] mb-6">المفضلة ({favoriteCourses.length})</h3>
-            {favoriteCourses.length > 0 ? (
+            {favoriteTracks?.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
-                {favoriteCourses.map((course) => (
-                  <FavoriteCourseCard
-                    key={course.id}
-                    dict={dict}
-                    title={course.title}
-                    instructor={course.instructor}
-                    rating={course.rating}
-                    price={course.price}
-                    type={course.type}
-                    imageSrc={course.imageSrc}
+                {favoriteTracks.map((track) => (
+                  <TrackCard
+                    key={track.id}
+                    track={track}
+                    locale={locale}
                   />
                 ))}
               </div>
@@ -299,7 +293,7 @@ export default function AccountDashboardClient({
         <main className="flex-1 min-w-0 md:h-full md:overflow-y-auto pt-2 md:pt-10 pb-24 md:pb-10 scrollbar-hide">
           <div className="min-h-full">
             {/* Header of Content Area */}
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0b2646] mb-8 pb-6 border-b border-slate-100 flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0b2646] mb-8 flex items-center gap-3">
               {getIcon(activeTab, true)}
               {tabs.find(t => t.id === activeTab)?.name}
             </h1>
