@@ -14,7 +14,7 @@ export default async function RegisterPage({ params }) {
   const isRtl = locale === "ar";
 
   return (
-    <div className="flex flex-col relative p-4 pt-4 pb-8 sm:px-12 sm:pt-4 bg-white" dir={isRtl ? "rtl" : "ltr"}>
+    <div className="flex flex-col relative p-4 pt-4 pb-8 sm:px-12 sm:pt-4 bg-transparent" dir={isRtl ? "rtl" : "ltr"}>
       <div className="w-full max-w-[800px] mx-auto relative z-10 flex flex-col">
         {/* Form Container */}
         <ScrollReveal direction="none" delay={0.1} className="w-full">

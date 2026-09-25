@@ -9,15 +9,16 @@ export default async function Footer({ locale = "ar" }) {
   return (
     <footer
       dir={isRtl ? "rtl" : "ltr"}
-      className="relative mt-auto overflow-hidden bg-white text-[#0b2646] border-t border-gray-200"
+      className="relative mt-auto overflow-hidden text-[#0b2646] border-t border-slate-200"
+      style={{ backgroundColor: '#fffefc' }}
     >
-      <div className="relative z-10 mx-auto max-w-[1400px] w-full px-4 md:px-6 pt-16 pb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
+      <div className="relative z-10 mx-auto max-w-[1400px] w-full px-4 md:px-6 pt-8 pb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
           
           {/* Column 1: Logo & About */}
           <div className="flex flex-col items-center text-center gap-4">
-            <Link href={`/${locale}`} className="inline-block mb-2 mt-2">
-              <div className="relative w-56 h-20">
+            <Link href={`/${locale}`} className="inline-block mb-1 mt-1">
+              <div className="relative w-48 h-14">
                 <Image 
                   src="/images/logo.png" 
                   alt="Taheel Logo" 
@@ -115,7 +116,7 @@ export default async function Footer({ locale = "ar" }) {
         </div>
         
         {/* Bottom Bar: Social Icons & Copyright */}
-        <div className="mt-16 flex flex-col md:flex-row justify-center items-center gap-6 border-t border-gray-100 pt-6">
+        <div className="mt-8 flex flex-col md:flex-row justify-center items-center gap-4 border-t border-gray-100 pt-4">
           
           <p className="text-[#0b2646]/70 text-sm font-medium">
             {dict.footer?.copyright || "جميع الحقوق محفوظة © تأهيل."}

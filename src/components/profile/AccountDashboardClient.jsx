@@ -24,19 +24,10 @@ export default function AccountDashboardClient({
   const isRtl = locale === "ar";
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState(initialTab);
+  const activeTab = searchParams.get("tab") || initialTab;
   const [localProfile, setLocalProfile] = useState(profile);
 
-  // Sync tab state with URL
-  useEffect(() => {
-    const tab = searchParams.get("tab");
-    if (tab && tab !== activeTab) {
-      setActiveTab(tab);
-    }
-  }, [searchParams]);
-
   const handleTabChange = (tabId) => {
-    setActiveTab(tabId);
     router.push(`/${locale}/profile?tab=${tabId}`, { scroll: false });
   };
 
@@ -251,7 +242,7 @@ export default function AccountDashboardClient({
   };
 
   return (
-    <div className="w-full bg-white md:h-[calc(100vh-85px)] overflow-hidden" dir={isRtl ? "rtl" : "ltr"}>
+    <div className="w-full bg-transparent md:h-[calc(100vh-85px)] overflow-hidden" dir={isRtl ? "rtl" : "ltr"}>
       <div className="max-w-[1400px] w-full mx-auto px-4 sm:px-6 flex flex-col md:flex-row gap-8 lg:gap-12 md:h-full">
 
         {/* Sidebar Navigation */}

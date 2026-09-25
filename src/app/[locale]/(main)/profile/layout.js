@@ -31,7 +31,7 @@ export default async function ProfileLayout({ children, params }) {
     .single();
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-transparent">
       {children}
     </div>
   );

@@ -98,7 +98,7 @@ export default function AuthNav({
     });
 
     return () => subscription.unsubscribe();
-  }, [pathname, locale]);
+  }, [pathname, locale, router]);
 
   // Listen for custom profile update events (e.g. from ProfileHeader)
   useEffect(() => {

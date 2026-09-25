@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { supabase } from "@/lib/supabaseClient";
@@ -80,6 +80,8 @@ export default function RegisterForm({ dict, isRtl, locale }) {
       terms: false,
     },
   });
+
+  const watchedGovernorate = useWatch({ control, name: "governorate" });
 
   const [serverError, setServerError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -231,7 +233,7 @@ export default function RegisterForm({ dict, isRtl, locale }) {
             <select
               id="governorate"
               {...register("governorate")}
-              className={`w-full appearance-none bg-white border ${errors.governorate ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-3 sm:py-3 sm:px-4 text-[15px] focus:outline-none focus:ring-1 transition-all rtl:text-right ltr:text-left cursor-pointer ${watch("governorate") ? "text-gray-900" : "text-gray-400"}`}
+              className={`w-full appearance-none bg-white border ${errors.governorate ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-gray-200 focus:border-[#0b2646] focus:ring-[#0b2646]"} rounded-xl py-2.5 px-3 sm:py-3 sm:px-4 text-[15px] focus:outline-none focus:ring-1 transition-all rtl:text-right ltr:text-left cursor-pointer ${watchedGovernorate ? "text-gray-900" : "text-gray-400"}`}
               dir={isRtl ? "rtl" : "ltr"}
             >
               <option value="" disabled>

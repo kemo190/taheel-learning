@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient";
 
 const getExpressiveImage = (title = "") => {
@@ -25,6 +27,7 @@ const getExpressiveImage = (title = "") => {
 };
 
 export default function TrackCard({ track, locale }) {
+  const router = useRouter();
   const [isFavorited, setIsFavorited] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -51,7 +54,7 @@ export default function TrackCard({ track, locale }) {
     e.stopPropagation();
 
     if (!user) {
-      window.location.href = `/${locale}/login`;
+      router.push(`/${locale}/login`);
       return;
     }
 
@@ -80,10 +83,12 @@ export default function TrackCard({ track, locale }) {
         
         {/* Image Header */}
         <div className="relative h-48 sm:h-52 w-full overflow-hidden shrink-0 border-b border-slate-100">
-          <img
+          <Image
             src={track.image_url || getExpressiveImage(track.title_ar)}
             alt={track.title_ar}
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-700"
+            unoptimized
           />
           {/* Delivery Mode Badge */}
           <span className="flex h-fit w-fit gap-2 rounded-bl-2xl rounded-tr-2xl px-3 py-1.5 text-center text-xs font-bold text-[#FBBC04] bg-[#0b2646]/95 backdrop-blur-md shadow-sm absolute top-0 right-0 z-10 border-b border-l border-[#0b2646]">

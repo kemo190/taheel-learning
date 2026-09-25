@@ -2,10 +2,12 @@
 
 import React, { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
 import { GoogleIcon } from "@/components/icons";
 
 export function SocialLoginButton({ locale, provider, nextPath, label }) {
   const [serverError, setServerError] = useState(null);
+  const router = useRouter();
 
   const handleLogin = async () => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -13,8 +15,8 @@ export function SocialLoginButton({ locale, provider, nextPath, label }) {
     const redirectTarget = nextParam || `/${locale}`;
 
     if (provider === "google") {
-      // Redirect to our custom Google OAuth route
-      window.location.href = `/api/auth/google?next=${encodeURIComponent(redirectTarget)}`;
+      // Must use full browser navigation, NOT router.push, because this goes to external Google OAuth.
+      window.location.assign(`${window.location.origin}/api/auth/google?next=${encodeURIComponent(redirectTarget)}`);
     } else {
       // Fallback for other providers if added in future
       const { error } = await supabase.auth.signInWithOAuth({

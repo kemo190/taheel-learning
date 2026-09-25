@@ -28,11 +28,11 @@ async function getAdminSupabase() {
 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, is_active")
     .eq("id", authData.user.id)
     .single();
 
-  if (profileError || profile?.role !== "admin") return { supabase: null, error: "Forbidden" };
+  if (profileError || profile?.role !== "admin" || !profile?.is_active) return { supabase: null, error: "Forbidden" };
 
   return { supabase, user: authData.user };
 }

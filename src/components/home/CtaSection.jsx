@@ -6,7 +6,7 @@ export default function CtaSection({ locale = "ar" }) {
   return (
     <section
       className="relative w-full py-14 lg:py-24 overflow-hidden"
-      style={{ background: "linear-gradient(180deg, #ffffff 0%, rgba(251, 188, 4, 0.05) 100%)" }}
+      style={{ background: "linear-gradient(180deg, #ffffff 0%, rgba(251, 188, 4, 0.01) 100%)" }}
       dir={isRtl ? "rtl" : "ltr"}
     >
       <div className="relative z-10 max-w-[1000px] mx-auto px-4 sm:px-6 text-center">
@@ -14,7 +14,7 @@ export default function CtaSection({ locale = "ar" }) {
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
           مستقبلك بيبدأ من هنا
         </div>
-        
+
         <h2 className="text-3xl sm:text-4xl md:text-[40px] font-extrabold text-[#0b2646] mb-6 leading-tight">
           جاهز تبدأ رحلتك؟
         </h2>

@@ -22,9 +22,7 @@ export default async function RootLayout({ children, params }) {
 
   return (
     <html lang={locale} dir={dir}>
-      <body
-        className={`${ibmPlexSansArabic.className} bg-[#f3f7ff] text-gray-900 antialiased min-h-screen`}
-      >
+      <body className={`${ibmPlexSansArabic.className} bg-[#fffefc] text-gray-900 antialiased min-h-screen`}>
         <main>{children}</main>
         <ToastContainer
           position="top-center"

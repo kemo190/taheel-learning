@@ -1,7 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import UserRoleSelect from "@/components/admin/UserRoleSelect";
 
-export const metadata = { title: "إدارة الطلاب | تأهيل Admin" };
+export const metadata = { title: "إدارة المستخدمين | تأهيل Admin" };
 
 export default async function StudentsPage({ params }) {
   const { locale } = await params;
@@ -13,7 +14,6 @@ export default async function StudentsPage({ params }) {
   const { data: students } = await supabase
     .from("profiles")
     .select("*")
-    .eq("role", "student")
     .order("created_at", { ascending: false });
 
   return (
@@ -21,8 +21,8 @@ export default async function StudentsPage({ params }) {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
-          <h1 className="text-2xl font-extrabold text-[#0b2646]">إدارة الطلاب</h1>
-          <p className="text-slate-500 text-sm mt-1.5 font-medium">سجل جميع الطلاب المنضمين للمنصة.</p>
+          <h1 className="text-2xl font-extrabold text-[#0b2646]">إدارة المستخدمين</h1>
+          <p className="text-slate-500 text-sm mt-1.5 font-medium">سجل جميع المستخدمين المنضمين للمنصة.</p>
         </div>
       </div>
 
@@ -39,6 +39,7 @@ export default async function StudentsPage({ params }) {
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">البلد</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">الجنس</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">تاريخ التسجيل</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">الدور (الصلاحية)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -56,6 +57,9 @@ export default async function StudentsPage({ params }) {
                     <td className="px-6 py-4 text-slate-600 font-medium">{s.country || "—"}</td>
                     <td className="px-6 py-4 text-slate-600 font-medium">{s.gender === "male" ? "ذكر" : s.gender === "female" ? "أنثى" : "—"}</td>
                     <td className="px-6 py-4 text-slate-400 text-xs font-medium">{s.created_at ? new Date(s.created_at).toLocaleDateString("ar-EG") : "—"}</td>
+                    <td className="px-6 py-4">
+                      <UserRoleSelect userId={s.id} initialRole={s.role} />
+                    </td>
                   </tr>
                 ))}
               </tbody>

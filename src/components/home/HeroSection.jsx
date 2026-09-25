@@ -14,7 +14,7 @@ export default function HeroSection({
     <section
       className="w-full pt-10 pb-10 md:pt-16 md:pb-14 px-4"
       style={{
-        background: "linear-gradient(180deg, rgba(251, 188, 4, 0.05) 0%, #ffffff 100%)",
+        background: "linear-gradient(180deg, rgba(251, 188, 4, 0.01) 0%, #ffffff 100%)",
       }}
       dir={isRtl ? "rtl" : "ltr"}
     >

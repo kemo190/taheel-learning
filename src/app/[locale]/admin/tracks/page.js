@@ -77,10 +77,12 @@ export default async function TracksPage({ params, searchParams }) {
               {/* Card Image Area */}
               <div className="relative h-44 bg-slate-100 overflow-hidden">
                 {track.image_url ? (
-                  <img
+                  <Image
                     src={track.image_url}
                     alt={track.title_ar}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    unoptimized
                   />
                 ) : (
                   <div className="w-full h-full bg-[#0b2646]/5 flex items-center justify-center">

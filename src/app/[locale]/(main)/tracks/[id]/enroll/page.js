@@ -48,7 +48,7 @@ export default async function EnrollPage({ params }) {
             تراجع عن الاشتراك
           </Link>
           <h1 className="text-3xl font-black text-[#0b2646] mb-2">تأكيد الاشتراك والدفع</h1>
-          <p className="text-gray-600">أنت على وشك الاشتراك في مسار <span className="font-bold text-[#0b2646]">"{track.title_ar}"</span></p>
+          <p className="text-gray-600">أنت على وشك الاشتراك في مسار <span className="font-bold text-[#0b2646]">&quot;{track.title_ar}&quot;</span></p>
         </div>
 
         {/* Main Card */}

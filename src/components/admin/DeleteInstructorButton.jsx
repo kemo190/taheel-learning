@@ -49,7 +49,7 @@ export default function DeleteInstructorButton({ instructorId, instructorName })
             <div className="p-6 text-center">
               <h3 className="text-xl font-extrabold text-[#0b2646] mb-2">حذف المدرب</h3>
               <p className="text-slate-500 text-sm font-medium leading-relaxed">
-                هل أنت متأكد من رغبتك في حذف المدرب <span className="font-bold text-[#0b2646]">"{instructorName}"</span>؟ هذا الإجراء لا يمكن التراجع عنه.
+                هل أنت متأكد من رغبتك في حذف المدرب <span className="font-bold text-[#0b2646]">&quot;{instructorName}&quot;</span>؟ هذا الإجراء لا يمكن التراجع عنه.
               </p>
             </div>
             <div className="bg-slate-50 px-6 py-4 flex items-center justify-end gap-3 border-t border-slate-100">

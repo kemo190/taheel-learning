@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 
 export default function PromoVideoModal({ videoUrl, imageUrl, title }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,29 +32,29 @@ export default function PromoVideoModal({ videoUrl, imageUrl, title }) {
         className="relative aspect-video bg-slate-900 group cursor-pointer flex items-center justify-center block overflow-hidden"
       >
         {displayImage ? (
-          <img src={displayImage} alt={title} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity" />
+          <Image src={displayImage} alt={title} fill className="object-cover opacity-80 group-hover:opacity-60 transition-opacity" unoptimized />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-[#0b2646] to-[#1a3a60] opacity-90"></div>
         )}
         
         {/* Play Button Overlay */}
-        <div className="relative z-10 w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-[#FBBC04] transition-all duration-300 shadow-lg">
+        <div className="relative z-10 w-16 h-16 bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 group-hover:bg-[#FBBC04] transition-all duration-300">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="none" className="text-white group-hover:text-[#0b2646] ml-1"><polygon points="5 3 19 12 5 21 5 3"/></svg>
         </div>
-        <div className="absolute bottom-4 left-0 right-0 text-center text-white font-medium text-sm drop-shadow-md">
+        <div className="absolute bottom-4 left-0 right-0 text-center text-white font-bold text-sm drop-shadow-md">
           شاهد الفيديو التعريفي
         </div>
       </div>
 
       {isOpen && typeof document !== "undefined" && createPortal(
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-[#0b2646]/95 backdrop-blur-sm">
+          <div className="relative w-full max-w-4xl bg-black border border-[#FBBC04]/30 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
             {/* Close Button */}
             <button 
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-[#FBBC04] text-white hover:text-[#0b2646] rounded-full flex items-center justify-center transition-colors"
+              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-[#FBBC04] text-white hover:text-[#0b2646] flex items-center justify-center transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" strokeLinejoin="miter"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
             
             {/* Video Iframe */}

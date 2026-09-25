@@ -88,13 +88,13 @@ export default async function Navbar({ locale = "ar" }) {
 
 
   return (
-    <header className="bg-white sticky top-0 z-50">
-      
+    <header className="sticky top-0 z-50" style={{ backgroundColor: '#fffefc' }}>
+
       {/* =========================================
           DESKTOP LAYOUT (Hidden on Mobile)
       ========================================= */}
       <div className="hidden md:flex mx-auto max-w-[1200px] items-center justify-between gap-x-4 py-3 px-4">
-        
+
         {/* Right Section: Logo */}
         <div className="flex items-center shrink-0">
           <Link href={`/${locale}`} aria-label="Home" className="flex items-center">
@@ -109,7 +109,7 @@ export default async function Navbar({ locale = "ar" }) {
               type="text"
               name="q"
               placeholder={dict.navbar.searchPlaceholder}
-              className="w-full bg-white border border-slate-300 rounded-full py-2.5 ps-5 pe-24 text-[15px] text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#0b2646] transition-all"
+              className="w-full bg-transparent border border-slate-300 rounded-full py-2.5 ps-5 pe-24 text-[15px] text-slate-700 placeholder-slate-400 focus:outline-none focus:border-[#0b2646] transition-all"
             />
             <button className="absolute end-1.5 top-1.5 bottom-1.5 px-6 flex items-center justify-center bg-[#0b2646] hover:bg-[#0d2e55] text-white font-bold rounded-full transition-colors">
               ابحث
@@ -119,7 +119,7 @@ export default async function Navbar({ locale = "ar" }) {
 
         {/* Left Section: Navigation & Actions */}
         <div className="flex items-center justify-end gap-6 shrink-0">
-          
+
           {/* Navigation Links */}
           <nav className="flex items-center gap-6 text-slate-600 font-medium text-[16px]">
             {navLinks.map((link, idx) => (
@@ -184,7 +184,7 @@ export default async function Navbar({ locale = "ar" }) {
 
         {/* Hamburger Menu (Left side in RTL) */}
         <div className="shrink-0">
-          <MobileMenu dict={dict} locale={locale} navLinks={navLinks} user={user} />
+          <MobileMenu dict={dict} locale={locale} navLinks={navLinks} />
         </div>
       </div>
     </header>
